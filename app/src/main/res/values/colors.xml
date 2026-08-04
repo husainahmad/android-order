@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#1B5E20</color>
+    <color name="primary_dark">#003300</color>
+    <color name="primary_light">#4C8C4A</color>
+    <color name="secondary">#EF6C00</color>
+    <color name="secondary_dark">#B23C00</color>
+    <color name="accent">#2E7D32</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="divider">#DDDDDD</color>
+    <color name="bg_light">#F5F5F5</color>
+    <color name="bg_white">#FFFFFF</color>
+    <color name="row_even">#FFFFFF</color>
+    <color name="row_odd">#F0F4F0</color>
+    <color name="status_confirmed">#EF6C00</color>
+    <color name="status_paid">#2E7D32</color>
+    <color name="status_void">#B71C1C</color>
+    <color name="blue_action">#1976D2</color>
+    <color name="gray_button">#9E9E9E</color>
+</resources>

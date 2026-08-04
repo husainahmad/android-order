@@ -1,0 +1,43 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fragment_horizontal_margin">16dp</dimen>
+    <dimen name="item_transform_image_length">48dp</dimen>
+    <dimen name="reflow_text_block_max_percent">1</dimen>
+    <dimen name="reflow_text_block_horizontal_gap">8dp</dimen>
+    <dimen name="reflow_text_title_size">22sp</dimen>
+    <dimen name="reflow_text_description_size">13sp</dimen>
+
+    <!-- Standard text sizes following Material Design guidelines -->
+    <dimen name="text_display">34sp</dimen>
+    <dimen name="text_heading">24sp</dimen>
+    <dimen name="text_title">20sp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="text_caption">14sp</dimen>
+    <dimen name="text_button">16sp</dimen>
+    <dimen name="text_small">12sp</dimen>
+    <dimen name="text_caption_small">11sp</dimen>
+
+    <!-- Order form - using standardized sizes -->
+    <dimen name="of_text_small">@dimen/text_caption_small</dimen>
+    <dimen name="of_text_medium">@dimen/text_caption</dimen>
+    <dimen name="of_text_large">@dimen/text_body</dimen>
+    <dimen name="of_text_xlarge">@dimen/text_title</dimen>
+    <dimen name="of_button_text">@dimen/text_button</dimen>
+    <dimen name="of_button_height">56dp</dimen>
+    <dimen name="of_discount_input_width">100dp</dimen>
+
+    <!-- Spacing system -->
+    <dimen name="spacing_xsmall">4dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+
+    <!-- Component dimensions -->
+    <dimen name="height_button">56dp</dimen>
+    <dimen name="height_dense_input">48dp</dimen>
+    <dimen name="height_card">80dp</dimen>
+    <dimen name="height_tab">56dp</dimen>
+    <dimen name="width_card">420dp</dimen>
+    <dimen name="width_tab">72dp</dimen>
+</resources>

@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">Kopi Harmoni POS</string>
+    <string name="login_subtitle">Point of Sale - Tablet</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="login">Login</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="daily_order">Daily Order</string>
+    <string name="order">Order</string>
+    <string name="add_order">Add Order</string>
+    <string name="new_order">+ NEW ORDER</string>
+    <string name="orders">Orders</string>
+    <string name="no_customer">-</string>
+    <string name="item_count">%1$d item(s)</string>
+    <string name="no_open_orders">No open orders. Tap + NEW ORDER to start.</string>
+    <string name="refresh">Refresh</string>
+
+    <string name="daily_report">Daily Report</string>
+    <string name="sales_report">Sales Report</string>
+    <string name="settlement">Settlement</string>
+    <string name="logout">Logout</string>
+
+    <string name="search_products">Search products...</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="sub_total">Sub Total</string>
+    <string name="discount">Discount</string>
+    <string name="total">Total</string>
+    <string name="additional_notes">Additional notes...</string>
+    <string name="confirm">Confirm</string>
+    <string name="print">Print</string>
+    <string name="cart_empty">Cart is empty</string>
+
+    <string name="order_detail">Order Detail</string>
+    <string name="kitchen_print">Kitchen Print</string>
+    <string name="pay">Pay</string>
+    <string name="void_order">Void</string>
+    <string name="close">Close</string>
+    <string name="confirm_close">Close order</string>
+    <string name="close_order_prompt">Close %1$s? This will remove the order.</string>
+    <string name="select_payment_method">Select Payment Method</string>
+    <string name="cash">Cash</string>
+    <string name="qris">Scan QR Code</string>
+    <string name="card">Pay by Card</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="order_no">Order No</string>
+    <string name="date">Date</string>
+    <string name="customer">Customer</string>
+    <string name="payment">Payment</string>
+    <string name="status">Status</string>
+    <string name="action">Action</string>
+    <string name="qty">QTY</string>
+    <string name="gross_sales">Gross Sales</string>
+    <string name="net_sales">Net Sales</string>
+    <string name="category">Category</string>
+    <string name="product">Product</string>
+    <string name="load_report">Load Report</string>
+    <string name="back">Back</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="order_volume">Order Volume</string>
+    <string name="peak_time_orders">Peak Time Orders</string>
+    <string name="non_peak_time_orders">Non Peak Time Orders</string>
+
+    <string name="top50_best_selling">Top 50 Best-Selling Items</string>
+    <string name="all_categories">All Categories</string>
+    <string name="select_category">Select Category</string>
+    <string name="select_variant">Select Variant</string>
+    <string name="confirm_order">Confirm Order</string>
+    <string name="review_before_pay">Review your order before paying</string>
+    <string name="order_num">Order #%1$d</string>
+    <string name="customer_line">Customer: %1$s</string>
+    <string name="items_count_line">Items: %1$d</string>
+    <string name="sub_total_line">Sub Total: %1$s</string>
+    <string name="discount_line">Discount: %1$s</string>
+    <string name="total_line">Total: %1$s</string>
+    <string name="proceed_to_payment">Proceed to payment?</string>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="@color/row_even"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="4dp">
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/productText"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/text_primary"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/qtyText"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/netText"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textColor="@color/text_primary"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/discountText"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textColor="@color/status_void"
+        android:textSize="13sp" />
+</LinearLayout>

@@ -1,0 +1,52 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.KopiHarmoni" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Theme.KopiHarmoni.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Widget.KopiHarmoni.ActionButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/height_button</item>
+        <item name="android:textSize">@dimen/text_button</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <style name="Widget.KopiHarmoni.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="android:minHeight">@dimen/height_button</item>
+        <item name="android:textSize">@dimen/text_button</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:layout_marginEnd">@dimen/spacing_small</item>
+        <item name="android:layout_marginStart">@dimen/spacing_small</item>
+    </style>
+
+    <style name="Widget.KopiHarmoni.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/height_button</item>
+        <item name="android:textSize">@dimen/text_button</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:layout_marginEnd">@dimen/spacing_small</item>
+        <item name="android:layout_marginStart">@dimen/spacing_small</item>
+    </style>
+
+    <style name="Widget.KopiHarmoni.InputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_dense_input</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_small</item>
+    </style>
+
+    <style name="Widget.KopiHarmoni.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:paddingStart">@dimen/spacing_medium</item>
+        <item name="android:paddingEnd">@dimen/spacing_medium</item>
+        <item name="android:imeOptions">actionNext</item>
+    </style>
+</resources>

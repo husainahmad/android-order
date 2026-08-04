@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_login">
+
+    <fragment
+        android:id="@+id/nav_login"
+        android:name="com.harmoni.pos.order.ui.login.LoginFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_login_to_orders"
+            app:destination="@id/nav_order_pager"
+            app:popUpTo="@id/nav_login"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_order_pager"
+        android:name="com.harmoni.pos.order.ui.orderpager.OrderPagerFragment"
+        android:label="@string/order">
+
+        <action
+            android:id="@+id/action_order_pager_to_login"
+            app:destination="@id/nav_login"
+            app:popUpTo="@id/nav_order_pager"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_orders_to_sales_report"
+            app:destination="@id/nav_sales_report" />
+
+        <action
+            android:id="@+id/action_orders_to_daily_report"
+            app:destination="@id/nav_daily_report" />
+
+        <action
+            android:id="@+id/action_orders_to_settings"
+            app:destination="@id/nav_settings" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_sales_report"
+        android:name="com.harmoni.pos.order.ui.reports.SalesReportFragment"
+        android:label="@string/sales_report"
+        tools:layout="@layout/fragment_sales_report" />
+
+    <fragment
+        android:id="@+id/nav_daily_report"
+        android:name="com.harmoni.pos.order.ui.reports.DailyReportFragment"
+        android:label="@string/daily_report"
+        tools:layout="@layout/fragment_daily_report" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.harmoni.pos.order.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/action_settings_to_login"
+            app:destination="@id/nav_login"
+            app:popUpTo="@id/nav_order_pager"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

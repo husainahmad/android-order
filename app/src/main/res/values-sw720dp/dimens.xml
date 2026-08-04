@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Larger order-form sizes for 7"+ tablets / large screens -->
+    <dimen name="of_text_small">@dimen/text_caption</dimen>
+    <dimen name="of_text_medium">@dimen/text_body</dimen>
+    <dimen name="of_text_large">@dimen/text_title</dimen>
+    <dimen name="of_text_xlarge">@dimen/text_heading</dimen>
+    <dimen name="of_button_text">@dimen/text_button</dimen>
+    <dimen name="of_button_height">@dimen/height_button</dimen>
+    <dimen name="of_discount_input_width">120dp</dimen>
+</resources>
