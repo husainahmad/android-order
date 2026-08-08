@@ -1,8 +1,6 @@
 package com.harmoni.pos.order.ui.orderform;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,13 +19,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.harmoni.pos.order.R;
 import com.harmoni.pos.order.data.model.CartItem;
 import com.harmoni.pos.order.data.model.Category;
-import com.harmoni.pos.order.data.model.Order;
 import com.harmoni.pos.order.data.model.Product;
 import com.harmoni.pos.order.data.model.Sku;
 import com.harmoni.pos.order.data.repository.MenuRepository;
 import com.harmoni.pos.order.databinding.FragmentOrderFormBinding;
 import com.harmoni.pos.order.print.PrinterManager;
-import com.harmoni.pos.order.ui.payment.PaymentDialog;
 import com.harmoni.pos.order.util.CurrencyUtils;
 
 import java.util.ArrayList;
@@ -56,6 +50,7 @@ public class OrderFormFragment extends Fragment {
     private int tabId;
     private ProductAdapter productAdapter;
     private CartAdapter cartAdapter;
+    private CategoryAdapter categoryAdapter;
     private List<Category> categories = new ArrayList<>();
     private List<Product> allProducts = new ArrayList<>();
     private int selectedCategoryId = -1;
@@ -90,6 +85,11 @@ public class OrderFormFragment extends Fragment {
         productsRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 3));
         productsRecycler.setAdapter(productAdapter);
 
+        categoryAdapter = new CategoryAdapter(category -> selectCategory(category));
+        RecyclerView categoryRecycler = binding.categoryRecycler;
+        categoryRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        categoryRecycler.setAdapter(categoryAdapter);
+
         cartAdapter = new CartAdapter(new CartAdapter.OnQuantityChangeListener() {
             @Override
             public void onIncrement(int productId, int skuId) {
@@ -106,22 +106,6 @@ public class OrderFormFragment extends Fragment {
     }
 
     private void setupActions() {
-        binding.categoryMenuButton.setOnClickListener(v -> showCategoryMenu());
-        binding.searchInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                applyProductFilter(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
         binding.confirmButton.setOnClickListener(v -> onConfirm());
         binding.printButton.setOnClickListener(v -> onPrint());
     }
@@ -143,9 +127,7 @@ public class OrderFormFragment extends Fragment {
             }
         });
         viewModel.getConfirmedOrder().observe(getViewLifecycleOwner(), order -> {
-            if (order != null) {
-                openPayment(order);
-            }
+            // PaymentDialog is opened by OrderConfirmFragment
         });
     }
 
@@ -155,6 +137,7 @@ public class OrderFormFragment extends Fragment {
             @Override
             public void onSuccess(List<Category> data) {
                 categories = data;
+                categoryAdapter.submitList(data);
                 binding.progressBar.setVisibility(View.GONE);
                 if (!data.isEmpty()) {
                     selectCategory(data.get(0));
@@ -169,22 +152,6 @@ public class OrderFormFragment extends Fragment {
         });
     }
 
-    private void showCategoryMenu() {
-        if (categories == null || categories.isEmpty()) {
-            showError(getString(R.string.select_category));
-            return;
-        }
-        String[] names = new String[categories.size()];
-        for (int i = 0; i < categories.size(); i++) {
-            names[i] = categories.get(i).getName();
-        }
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.select_category)
-                .setItems(names, (dialog, which) -> selectCategory(categories.get(which)))
-                .setNegativeButton(R.string.close, null)
-                .show();
-    }
-
     private void selectCategory(Category category) {
         selectedCategoryId = category.getId();
         binding.categoryTitleText.setText(category.getName());
@@ -197,7 +164,7 @@ public class OrderFormFragment extends Fragment {
             @Override
             public void onSuccess(List<Product> data) {
                 allProducts = data;
-                applyProductFilter(binding.searchInput.getText().toString());
+                productAdapter.submitList(allProducts);
                 binding.progressBar.setVisibility(View.GONE);
             }
 
@@ -207,20 +174,6 @@ public class OrderFormFragment extends Fragment {
                 showError(message);
             }
         });
-    }
-
-    private void applyProductFilter(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            productAdapter.submitList(allProducts);
-            return;
-        }
-        List<Product> filtered = new ArrayList<>();
-        for (Product p : allProducts) {
-            if (p.getName().toLowerCase().contains(query.trim().toLowerCase())) {
-                filtered.add(p);
-            }
-        }
-        productAdapter.submitList(filtered);
     }
 
     private void onProductClick(Product product) {
@@ -254,19 +207,6 @@ public class OrderFormFragment extends Fragment {
         }
         new OrderConfirmFragment()
                 .show(getParentFragmentManager(), "order_confirm");
-    }
-
-    private void openPayment(Order order) {
-        PaymentDialog dialog = PaymentDialog.newInstance(order);
-        dialog.setOnPaymentSuccessListener(paid -> {
-            int nextId = viewModel.removeActiveTab();
-            if (nextId == -1) {
-                NavController navController = Navigation.findNavController(requireView());
-                navController.popBackStack();
-            }
-        });
-        dialog.setOnPaymentDismissedListener(order1 -> viewModel.resetConfirmedOrder());
-        dialog.show(getParentFragmentManager(), "payment");
     }
 
     private void onPrint() {

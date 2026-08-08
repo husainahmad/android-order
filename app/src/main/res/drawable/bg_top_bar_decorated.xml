@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background gradient -->
+    <shape android:shape="rectangle">
+        <gradient
+            android:endColor="#E8F5E9"
+            android:startColor="#C8E6C9"
+            android:angle="90" />
+    </shape>
+
+    <!-- Bottom divider -->
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@color/divider" />
+
+</layer-list>

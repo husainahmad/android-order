@@ -127,7 +127,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/dailyReportButton"
-        style="@style/Widget.KopiHarmoni.Button.Outlined"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/height_tab"
         android:layout_marginEnd="@dimen/spacing_small"
@@ -139,7 +139,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/salesReportButton"
-        style="@style/Widget.KopiHarmoni.Button.Outlined"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/height_tab"
         android:layout_marginEnd="@dimen/spacing_small"
@@ -151,7 +151,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settlementButton"
-        style="@style/Widget.KopiHarmoni.Button.Outlined"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/height_tab"
         android:layout_marginEnd="@dimen/spacing_small"
@@ -163,7 +163,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/refreshButton"
-        style="@style/Widget.KopiHarmoni.Button.Outlined"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/height_tab"
         android:layout_marginEnd="@dimen/spacing_small"
@@ -176,7 +176,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"
-        style="@style/Widget.KopiHarmoni.Button.Outlined"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/height_tab"
         android:layout_marginEnd="@dimen/spacing_small"
@@ -189,7 +189,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/logoutButton"
-        style="@style/Widget.KopiHarmoni.Button.Outlined"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/height_tab"
         android:layout_weight="1"

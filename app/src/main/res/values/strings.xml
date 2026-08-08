@@ -21,7 +21,6 @@
     <string name="settlement">Settlement</string>
     <string name="logout">Logout</string>
 
-    <string name="search_products">Search products...</string>
     <string name="order_summary">Order Summary</string>
     <string name="customer_name">Customer Name</string>
     <string name="sub_total">Sub Total</string>
