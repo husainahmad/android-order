@@ -51,6 +51,8 @@ public class SalesReportFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(SalesReportViewModel.class);
 
+        com.harmoni.pos.order.util.UiUtils.applyStatusBarTopInset(binding.reportToolbar);
+
         adapter = new SalesReportAdapter();
         binding.reportRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.reportRecycler.setAdapter(adapter);
@@ -89,6 +91,10 @@ public class SalesReportFragment extends Fragment {
             discount += row.getDiscount();
             net += row.getNetSales();
         }
+        binding.kpiGrossText.setText(CurrencyUtils.formatRp(gross));
+        binding.kpiDiscountText.setText(CurrencyUtils.formatRp(discount));
+        binding.kpiNetText.setText(CurrencyUtils.formatRp(net));
+        binding.kpiQtyText.setText(String.valueOf(totalQty));
         binding.totalText.setText(String.format(Locale.US,
                 "TOTAL   QTY: %d   Gross: %s   Discount: %s   Net: %s",
                 totalQty,

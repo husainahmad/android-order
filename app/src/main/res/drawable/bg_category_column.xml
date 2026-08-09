@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Left border accent -->
-    <view
-        android:layout_width="4dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:background="@color/primary_light" />
 
-    <!-- Background -->
+    <!-- Right divider -->
+    <view
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="@color/divider" />
+
+    <!-- Surface background -->
     <shape android:shape="rectangle">
-        <solid android:color="@color/bg_light" />
+        <solid android:color="@color/md_surface_container" />
     </shape>
 </layer-list>

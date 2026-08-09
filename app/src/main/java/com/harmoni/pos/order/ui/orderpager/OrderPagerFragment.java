@@ -43,6 +43,8 @@ public class OrderPagerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        com.harmoni.pos.order.util.UiUtils.applyStatusBarTopInset(binding.tabScrollView);
+
         viewModel = new ViewModelProvider(requireActivity()).get(OrderFormViewModel.class);
         ordersViewModel = new ViewModelProvider(requireActivity()).get(OrdersViewModel.class);
         pagerAdapter = new OrderPagerAdapter(requireActivity());

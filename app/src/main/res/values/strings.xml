@@ -14,6 +14,7 @@
     <string name="no_customer">-</string>
     <string name="item_count">%1$d item(s)</string>
     <string name="no_open_orders">No open orders. Tap + NEW ORDER to start.</string>
+    <string name="no_open_orders_subtitle">Your completed orders will appear here.</string>
     <string name="refresh">Refresh</string>
 
     <string name="daily_report">Daily Report</string>
@@ -28,14 +29,23 @@
     <string name="total">Total</string>
     <string name="additional_notes">Additional notes...</string>
     <string name="confirm">Confirm</string>
+    <string name="add_to_cart">Add to cart</string>
     <string name="print">Print</string>
     <string name="cart_empty">Cart is empty</string>
+    <string name="no_products">No products</string>
+    <string name="no_products_subtitle">This category has no products yet.</string>
+    <string name="cart_empty_subtitle">Tap a product to start.</string>
 
     <string name="order_detail">Order Detail</string>
     <string name="kitchen_print">Kitchen Print</string>
     <string name="pay">Pay</string>
     <string name="void_order">Void</string>
     <string name="close">Close</string>
+    <string name="empty">Empty</string>
+    <string name="kpi_gross">Gross Sales</string>
+    <string name="kpi_discount">Discount</string>
+    <string name="kpi_net">Net Sales</string>
+    <string name="kpi_qty">Items Sold</string>
     <string name="confirm_close">Close order</string>
     <string name="close_order_prompt">Close %1$s? This will remove the order.</string>
     <string name="select_payment_method">Select Payment Method</string>

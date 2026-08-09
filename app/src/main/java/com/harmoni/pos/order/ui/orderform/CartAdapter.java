@@ -82,8 +82,14 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             skuHolder.skuName.setText(item.getSkuName());
             skuHolder.quantity.setText(String.valueOf(item.getQuantity()));
             skuHolder.lineTotal.setText(CurrencyUtils.formatRp(item.getLineTotal()));
-            skuHolder.minus.setOnClickListener(v -> listener.onDecrement(item.getProductId(), item.getSkuId()));
-            skuHolder.plus.setOnClickListener(v -> listener.onIncrement(item.getProductId(), item.getSkuId()));
+            skuHolder.minus.setOnClickListener(v -> {
+                v.performHapticFeedback(android.view.HapticFeedbackConstants.CLOCK_TICK);
+                listener.onDecrement(item.getProductId(), item.getSkuId());
+            });
+            skuHolder.plus.setOnClickListener(v -> {
+                v.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM);
+                listener.onIncrement(item.getProductId(), item.getSkuId());
+            });
         }
     }
 

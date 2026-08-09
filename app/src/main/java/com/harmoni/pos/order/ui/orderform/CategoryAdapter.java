@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.harmoni.pos.order.R;
@@ -68,8 +69,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
             if (selected) {
                 itemView.setBackgroundResource(R.drawable.bg_category_selected);
+                nameText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
             } else {
-                itemView.setBackgroundResource(0);
+                itemView.setBackgroundResource(R.drawable.bg_category_chip);
+                nameText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.text_primary));
             }
 
             itemView.setOnClickListener(v -> {

@@ -1,23 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#1B5E20</color>
-    <color name="primary_dark">#003300</color>
-    <color name="primary_light">#4C8C4A</color>
-    <color name="secondary">#EF6C00</color>
-    <color name="secondary_dark">#B23C00</color>
-    <color name="accent">#2E7D32</color>
+
+    <!-- ===== Material 3 color roles (warm coffee / latte palette) ===== -->
+    <color name="md_primary">#4E342E</color>
+    <color name="md_on_primary">#FFFFFF</color>
+    <color name="md_primary_container">#D7CCC8</color>
+    <color name="md_on_primary_container">#36201A</color>
+    <color name="md_secondary">#795548</color>
+    <color name="md_on_secondary">#FFFFFF</color>
+    <color name="md_secondary_container">#E3D7D2</color>
+    <color name="md_on_secondary_container">#3B2B25</color>
+    <color name="md_tertiary">#BF360C</color>
+    <color name="md_on_tertiary">#FFFFFF</color>
+    <color name="md_tertiary_container">#FFDBC8</color>
+    <color name="md_on_tertiary_container">#3B0D00</color>
+    <color name="md_error">#BA1A1A</color>
+    <color name="md_on_error">#FFFFFF</color>
+    <color name="md_error_container">#FFDAD6</color>
+    <color name="md_on_error_container">#410002</color>
+    <color name="md_surface">#FFF8F5</color>
+    <color name="md_on_surface">#221A17</color>
+    <color name="md_surface_variant">#F0E1DA</color>
+    <color name="md_on_surface_variant">#50443F</color>
+    <color name="md_outline">#83736C</color>
+    <color name="md_outline_variant">#D4C3BB</color>
+    <color name="md_background">#FFF8F5</color>
+    <color name="md_on_background">#221A17</color>
+    <color name="md_inverse_surface">#382E2A</color>
+    <color name="md_inverse_on_surface">#FFEDE5</color>
+    <color name="md_inverse_primary">#FFB59A</color>
+
+    <!-- Tonal surface elevations (M3 surfaceContainer scale) -->
+    <color name="md_surface_dim">#E8D9D3</color>
+    <color name="md_surface_bright">#FFF8F5</color>
+    <color name="md_surface_container_lowest">#FFFFFF</color>
+    <color name="md_surface_container_low">#FFF1EB</color>
+    <color name="md_surface_container">#F9E9E2</color>
+    <color name="md_surface_container_high">#F3E3DC</color>
+    <color name="md_surface_container_highest">#EDDED7</color>
+
+    <color name="shadow">#000000</color>
+    <color name="scrim">#000000</color>
+
+    <!-- ===== Brand / legacy palette (kept in sync with the M3 roles) ===== -->
+    <color name="primary">#4E342E</color>
+    <color name="primary_dark">#36201A</color>
+    <color name="primary_light">#8D6E63</color>
+    <color name="secondary">#795548</color>
+    <color name="secondary_dark">#4E342E</color>
+    <color name="accent">#BF360C</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="divider">#DDDDDD</color>
-    <color name="bg_light">#F5F5F5</color>
+    <color name="text_primary">#221A17</color>
+    <color name="text_secondary">#6E5D56</color>
+    <color name="divider">#E0D0C8</color>
+    <color name="bg_light">#F6EAE3</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="row_even">#FFFFFF</color>
-    <color name="row_odd">#F0F4F0</color>
-    <color name="status_confirmed">#EF6C00</color>
+    <color name="row_odd">#F5E9E2</color>
+    <color name="status_confirmed">#B26A00</color>
     <color name="status_paid">#2E7D32</color>
-    <color name="status_void">#B71C1C</color>
-    <color name="blue_action">#1976D2</color>
-    <color name="gray_button">#9E9E9E</color>
+    <color name="status_void">#BA1A1A</color>
+    <color name="blue_action">#00639B</color>
+    <color name="gray_button">#83736B</color>
+
+    <!-- Overlay tints -->
+    <color name="scrim_overlay">#4D000000</color>
+    <color name="accent_container">#FFDBC8</color>
 </resources>

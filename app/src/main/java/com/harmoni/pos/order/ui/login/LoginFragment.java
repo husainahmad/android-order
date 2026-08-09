@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -43,8 +44,16 @@ public class LoginFragment extends Fragment {
         ProgressBar progressBar = binding.progressBar;
         TextView errorText = binding.errorText;
 
+        binding.loginCard.startAnimation(
+                AnimationUtils.loadAnimation(requireContext(), R.anim.login_card_in));
+
         loginButton.setOnClickListener(v ->
                 viewModel.login(usernameInput.getText().toString(), passwordInput.getText().toString()));
+
+        passwordInput.setOnEditorActionListener((v, actionId, event) -> {
+            viewModel.login(usernameInput.getText().toString(), passwordInput.getText().toString());
+            return true;
+        });
 
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading -> {
             progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);

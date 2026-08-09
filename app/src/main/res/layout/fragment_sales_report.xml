@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_light"
+    android:background="@color/md_surface"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/reportToolbar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/primary"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_order_summary_header"
+        android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="16dp"
@@ -21,12 +23,12 @@
             android:layout_weight="1"
             android:text="@string/sales_report"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_heading"
             android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/backButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.KopiHarmoni.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/back"
@@ -36,6 +38,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/md_surface_container"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="12dp">
@@ -48,7 +51,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/startDateButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:layout_marginStart="8dp"
@@ -64,7 +67,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/endDateButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:layout_marginStart="8dp"
@@ -74,6 +77,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loadButton"
+            style="@style/Widget.KopiHarmoni.Button.Primary"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:text="@string/load_report"
@@ -82,18 +86,162 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/kpiRow"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/primary_dark"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/md_surface_container_high"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kpi_gross"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/kpiGrossText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/md_surface_container_high"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kpi_discount"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/kpiDiscountText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/status_void"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/primary"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kpi_net"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/kpiNetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/md_surface_container_high"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kpi_qty"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/kpiQtyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/md_surface_container"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="4dp">
+        android:paddingStart="8dp">
 
         <TextView
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:text="@string/category"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -101,7 +249,7 @@
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:text="@string/product"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -109,7 +257,7 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="@string/qty"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -117,7 +265,7 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="@string/gross_sales"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -125,7 +273,7 @@
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="@string/discount"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -133,10 +281,15 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="@string/net_sales"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="13sp"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reportRecycler"
@@ -147,12 +300,12 @@
     <TextView
         android:id="@+id/totalText"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/row_odd"
+        android:layout_height="52dp"
+        android:background="@color/md_surface_container_high"
         android:gravity="center_vertical"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
-        android:textColor="@color/primary"
+        android:textColor="@color/text_primary"
         android:textSize="14sp"
         android:textStyle="bold" />
 

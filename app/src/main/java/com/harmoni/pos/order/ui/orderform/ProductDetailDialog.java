@@ -1,12 +1,6 @@
 package com.harmoni.pos.order.ui.orderform;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +15,7 @@ import com.harmoni.pos.order.R;
 import com.harmoni.pos.order.data.model.Product;
 import com.harmoni.pos.order.data.model.Sku;
 import com.harmoni.pos.order.databinding.DialogProductDetailBinding;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.harmoni.pos.order.util.ImageLoader;
 
 public class ProductDetailDialog extends DialogFragment {
 
@@ -31,9 +23,6 @@ public class ProductDetailDialog extends DialogFragment {
         void onAdd(Product product, Sku sku);
         void onRemove(Product product, Sku sku);
     }
-
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(2);
-    private static final Handler MAIN = new Handler(Looper.getMainLooper());
 
     private DialogProductDetailBinding binding;
     private Product product;
@@ -89,33 +78,22 @@ public class ProductDetailDialog extends DialogFragment {
     }
 
     private void bindImage(Product product) {
+        binding.productNameText.setContentDescription(product.getName());
         if (product.getProductImage() == null
                 || product.getProductImage().getImageBlob().isEmpty()) {
-            binding.productImage.setImageResource(R.color.bg_light);
+            binding.productImage.setImageResource(R.drawable.bg_product_placeholder);
             binding.imageProgress.setVisibility(View.GONE);
             return;
         }
         binding.imageProgress.setVisibility(View.VISIBLE);
-        String blob = product.getProductImage().getImageBlob();
-        Context context = requireContext();
-        EXECUTOR.execute(() -> {
-            Bitmap bitmap = decodeBase64(blob);
-            MAIN.post(() -> {
-                if (bitmap != null) {
-                    binding.productImage.setImageBitmap(bitmap);
-                }
-                binding.imageProgress.setVisibility(View.GONE);
-            });
+        ImageLoader.load(product.getId(), product.getProductImage().getImageBlob(), bitmap -> {
+            if (bitmap != null) {
+                binding.productImage.setImageBitmap(bitmap);
+            } else {
+                binding.productImage.setImageResource(R.drawable.ic_image_off);
+            }
+            binding.imageProgress.setVisibility(View.GONE);
         });
-    }
-
-    private static Bitmap decodeBase64(String blob) {
-        try {
-            byte[] data = Base64.decode(blob, Base64.DEFAULT);
-            return BitmapFactory.decodeByteArray(data, 0, data.length);
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     @Override

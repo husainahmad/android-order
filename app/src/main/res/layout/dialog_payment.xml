@@ -21,8 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/select_payment_method"
-                android:textColor="@color/primary"
-                android:textSize="18sp"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:id="@+id/paymentSelector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -52,12 +52,12 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp">
 
                     <ImageView
                         android:id="@+id/qrImage"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
                         android:contentDescription="@string/qris"
                         android:src="@drawable/ic_qr"
                         android:tint="@color/accent" />
@@ -66,7 +66,7 @@
                         android:id="@+id/qrLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/qris"
                         android:textColor="@color/text_primary"
                         android:textSize="14sp"
@@ -84,12 +84,12 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp">
 
                     <ImageView
                         android:id="@+id/cardImage"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
                         android:contentDescription="@string/card"
                         android:src="@drawable/ic_card"
                         android:tint="@color/gray_button" />
@@ -98,7 +98,7 @@
                         android:id="@+id/cardLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/card"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp" />
@@ -114,12 +114,12 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp">
 
                     <ImageView
                         android:id="@+id/cashImage"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
                         android:contentDescription="@string/cash"
                         android:src="@drawable/ic_cash"
                         android:tint="@color/gray_button" />
@@ -128,7 +128,7 @@
                         android:id="@+id/cashLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/cash"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp" />
@@ -139,7 +139,7 @@
                 android:id="@+id/cashPanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -148,7 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CASH PAYMENT"
-                    android:textColor="@color/primary"
+                    android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -178,7 +178,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:textColor="@color/text_primary"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                         <GridLayout
@@ -189,7 +189,7 @@
                             android:columnCount="3">
 
                             <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_columnWeight="1"
@@ -198,10 +198,10 @@
                                 android:tag="1000"
                                 android:text="1.000"
                                 android:textSize="14sp"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_columnWeight="1"
@@ -210,10 +210,10 @@
                                 android:tag="2000"
                                 android:text="2.000"
                                 android:textSize="14sp"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_columnWeight="1"
@@ -222,10 +222,10 @@
                                 android:tag="5000"
                                 android:text="5.000"
                                 android:textSize="14sp"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_columnWeight="1"
@@ -234,10 +234,10 @@
                                 android:tag="10000"
                                 android:text="10.000"
                                 android:textSize="14sp"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_columnWeight="1"
@@ -246,10 +246,10 @@
                                 android:tag="20000"
                                 android:text="20.000"
                                 android:textSize="14sp"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_columnWeight="1"
@@ -258,10 +258,10 @@
                                 android:tag="50000"
                                 android:text="50.000"
                                 android:textSize="14sp"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_columnWeight="1"
@@ -270,10 +270,10 @@
                                 android:tag="100000"
                                 android:text="100.000"
                                 android:textSize="14sp"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_columnWeight="1"
@@ -282,10 +282,10 @@
                                 android:tag="200000"
                                 android:text="200.000"
                                 android:textSize="14sp"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_columnWeight="1"
@@ -294,7 +294,7 @@
                                 android:tag="500000"
                                 android:text="500.000"
                                 android:textSize="14sp"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
                         </GridLayout>
 
                         <LinearLayout
@@ -305,25 +305,26 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/clearButton"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_marginEnd="8dp"
                                 android:layout_weight="1"
                                 android:text="CLEAR"
                                 android:textSize="13sp"
-                                app:cornerRadius="8dp"
+                                app:cornerRadius="10dp"
                                 app:strokeColor="@color/status_void" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/exactButton"
+                                style="@style/Widget.Material3.Button"
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_weight="1"
                                 android:text="EXACT"
                                 android:textSize="13sp"
                                 app:backgroundTint="@color/accent"
-                                app:cornerRadius="8dp" />
+                                app:cornerRadius="10dp" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -347,13 +348,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:textColor="@color/text_primary"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="16dp"
                             android:text="KEMBALIAN"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
@@ -364,17 +365,19 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:textColor="@color/accent"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/bayarButton"
+                            style="@style/Widget.Material3.Button"
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
+                            android:layout_height="52dp"
                             android:layout_marginTop="16dp"
                             android:text="BAYAR"
                             android:textSize="15sp"
-                            app:backgroundTint="@color/accent" />
+                            app:backgroundTint="@color/accent"
+                            app:cornerRadius="12dp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -389,22 +392,21 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/payButton"
+            style="@style/Widget.KopiHarmoni.Button.Primary"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:text="@string/pay"
-            android:textSize="16sp"
             app:backgroundTint="@color/accent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/closeButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_weight="1"
             android:text="@string/close"
-            android:textSize="16sp"
             app:strokeColor="@color/gray_button" />
     </LinearLayout>
 </LinearLayout>

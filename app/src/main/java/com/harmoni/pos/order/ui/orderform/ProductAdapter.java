@@ -1,14 +1,9 @@
 package com.harmoni.pos.order.ui.orderform;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,23 +15,16 @@ import com.harmoni.pos.order.R;
 import com.harmoni.pos.order.data.model.Product;
 import com.harmoni.pos.order.data.model.Sku;
 import com.harmoni.pos.order.util.CurrencyUtils;
+import com.harmoni.pos.order.util.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductHolder> {
 
     public interface OnProductClickListener {
         void onProductClick(Product product);
     }
-
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(3);
-    private static final Handler MAIN = new Handler(Looper.getMainLooper());
-    private static final Map<Integer, Bitmap> IMAGE_CACHE = new HashMap<>();
 
     private final List<Product> products = new ArrayList<>();
     private final OnProductClickListener listener;
@@ -72,11 +60,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         return products.size();
     }
 
+    @Override
+    public void onViewRecycled(@NonNull ProductHolder holder) {
+        super.onViewRecycled(holder);
+        holder.imageProgress.setVisibility(View.GONE);
+        holder.imageView.setImageResource(R.drawable.bg_product_placeholder);
+        holder.imageView.setContentDescription(null);
+    }
+
     class ProductHolder extends RecyclerView.ViewHolder {
         final ImageView imageView;
         final ProgressBar imageProgress;
         final TextView nameText;
         final TextView priceText;
+        final ImageButton addButton;
 
         ProductHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,10 +81,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             imageProgress = itemView.findViewById(R.id.imageProgress);
             nameText = itemView.findViewById(R.id.productName);
             priceText = itemView.findViewById(R.id.productPrice);
+            addButton = itemView.findViewById(R.id.productAddButton);
         }
 
         void bind(Product product) {
             nameText.setText(product.getName());
+            imageView.setContentDescription(product.getName());
             Sku sku = findDefaultSku(product);
             if (sku != null) {
                 priceText.setText(CurrencyUtils.formatRp(sku.getPrice()));
@@ -95,6 +94,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                 priceText.setText("");
             }
             itemView.setOnClickListener(v -> {
+                if (listener != null) listener.onProductClick(product);
+            });
+            addButton.setOnClickListener(v -> {
+                v.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM);
                 if (listener != null) listener.onProductClick(product);
             });
             bindImage(product);
@@ -115,44 +118,27 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
         private void bindImage(Product product) {
             int productId = product.getId();
-            if (IMAGE_CACHE.containsKey(productId)) {
-                imageView.setImageBitmap(IMAGE_CACHE.get(productId));
-                imageProgress.setVisibility(View.GONE);
-                return;
-            }
             if (product.getProductImage() == null
                     || product.getProductImage().getImageBlob().isEmpty()) {
-                imageView.setImageResource(R.color.bg_light);
+                imageView.setImageResource(R.drawable.bg_product_placeholder);
                 imageProgress.setVisibility(View.GONE);
                 return;
             }
             imageProgress.setVisibility(View.VISIBLE);
-            imageView.setImageResource(android.R.color.transparent);
+            imageView.setImageResource(R.drawable.bg_product_placeholder);
             String blob = product.getProductImage().getImageBlob();
-            Context context = itemView.getContext();
-            EXECUTOR.execute(() -> {
-                Bitmap bitmap = decodeBase64(blob);
-                MAIN.post(() -> {
+            ImageLoader.load(productId, blob, bitmap -> {
+                if (getBindingAdapterPosition() >= 0
+                        && getBindingAdapterPosition() < products.size()
+                        && products.get(getBindingAdapterPosition()).getId() == productId) {
                     if (bitmap != null) {
-                        IMAGE_CACHE.put(productId, bitmap);
-                        if (getBindingAdapterPosition() >= 0
-                                && getBindingAdapterPosition() < products.size()
-                                && products.get(getBindingAdapterPosition()).getId() == productId) {
-                            imageView.setImageBitmap(bitmap);
-                        }
+                        imageView.setImageBitmap(bitmap);
+                    } else {
+                        imageView.setImageResource(R.drawable.ic_image_off);
                     }
-                    imageProgress.setVisibility(View.GONE);
-                });
+                }
+                imageProgress.setVisibility(View.GONE);
             });
-        }
-    }
-
-    private static Bitmap decodeBase64(String blob) {
-        try {
-            byte[] data = Base64.decode(blob, Base64.DEFAULT);
-            return BitmapFactory.decodeByteArray(data, 0, data.length);
-        } catch (Exception e) {
-            return null;
         }
     }
 }

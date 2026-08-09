@@ -47,6 +47,7 @@ public class OrdersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(OrdersViewModel.class);
 
+        com.harmoni.pos.order.util.UiUtils.applyStatusBarTopInset(binding.ordersToolbar);
         setupRecyclers();
         setupButtons();
         observe();
@@ -95,6 +96,14 @@ public class OrdersFragment extends Fragment {
 
     private void onOrdersLoaded(List<Order> orders) {
         orderAdapter.submitList(orders);
+        boolean empty = orders == null || orders.isEmpty();
+        binding.ordersRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
+        binding.ordersEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
+        if (empty) {
+            binding.ordersEmptyView.emptyIcon.setImageResource(R.drawable.ic_empty_orders);
+            binding.ordersEmptyView.emptyTitle.setText(R.string.no_open_orders);
+            binding.ordersEmptyView.emptySubtitle.setText(R.string.no_open_orders_subtitle);
+        }
     }
 
     private void openOrderDetail(Order order) {

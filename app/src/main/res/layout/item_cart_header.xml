@@ -3,11 +3,11 @@
     android:id="@+id/productNameText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/row_odd"
+    android:background="@drawable/bg_section_header"
     android:paddingStart="12dp"
     android:paddingTop="8dp"
     android:paddingEnd="12dp"
     android:paddingBottom="8dp"
-    android:textColor="@color/primary"
+    android:textColor="@color/text_primary"
     android:textSize="14sp"
     android:textStyle="bold" />

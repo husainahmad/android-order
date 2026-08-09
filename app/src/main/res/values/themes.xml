@@ -1,13 +1,70 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.KopiHarmoni" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorSecondaryVariant">@color/secondary_dark</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
-        <item name="android:windowLightStatusBar">false</item>
+
+    <!-- Base app theme: Material 3, warm coffee palette -->
+    <style name="Theme.KopiHarmoni" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/md_primary</item>
+        <item name="colorOnPrimary">@color/md_on_primary</item>
+        <item name="colorPrimaryContainer">@color/md_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/md_on_primary_container</item>
+        <item name="colorSecondary">@color/md_secondary</item>
+        <item name="colorOnSecondary">@color/md_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/md_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/md_on_secondary_container</item>
+        <item name="colorTertiary">@color/md_tertiary</item>
+        <item name="colorOnTertiary">@color/md_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/md_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/md_on_tertiary_container</item>
+        <item name="colorError">@color/md_error</item>
+        <item name="colorOnError">@color/md_on_error</item>
+        <item name="colorErrorContainer">@color/md_error_container</item>
+        <item name="colorOnErrorContainer">@color/md_on_error_container</item>
+
+        <item name="colorSurface">@color/md_surface</item>
+        <item name="colorOnSurface">@color/md_on_surface</item>
+        <item name="colorSurfaceVariant">@color/md_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/md_on_surface_variant</item>
+        <item name="colorSurfaceDim">@color/md_surface_dim</item>
+        <item name="colorSurfaceBright">@color/md_surface_bright</item>
+        <item name="colorSurfaceContainerLowest">@color/md_surface_container_lowest</item>
+        <item name="colorSurfaceContainerLow">@color/md_surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/md_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/md_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/md_surface_container_highest</item>
+        <item name="colorOutline">@color/md_outline</item>
+        <item name="colorOutlineVariant">@color/md_outline_variant</item>
+        <item name="colorSurfaceInverse">@color/md_inverse_surface</item>
+        <item name="colorOnSurfaceInverse">@color/md_inverse_on_surface</item>
+        <item name="colorPrimaryInverse">@color/md_inverse_primary</item>
+
+        <item name="android:colorBackground">@color/md_background</item>
+        <item name="colorOnBackground">@color/md_on_background</item>
+
+        <!-- Shape tokens -->
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.KopiHarmoni.CornerExtraLarge</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.KopiHarmoni.CornerLarge</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.KopiHarmoni.CornerMedium</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.KopiHarmoni.CornerSmall</item>
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.KopiHarmoni.CornerExtraSmall</item>
+
+        <!-- Typography tokens -->
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.KopiHarmoni.DisplaySmall</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.KopiHarmoni.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.KopiHarmoni.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.KopiHarmoni.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.KopiHarmoni.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.KopiHarmoni.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.KopiHarmoni.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.KopiHarmoni.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.KopiHarmoni.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.KopiHarmoni.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.KopiHarmoni.LabelSmall</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowBackground">@color/md_background</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
     <style name="Theme.KopiHarmoni.NoActionBar">
@@ -15,35 +72,47 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Widget.KopiHarmoni.ActionButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <!-- ===== Material 3 widget styles ===== -->
+
+    <style name="Widget.KopiHarmoni.Button.Primary" parent="Widget.Material3.Button">
         <item name="android:minHeight">@dimen/height_button</item>
         <item name="android:textSize">@dimen/text_button</item>
-        <item name="cornerRadius">8dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">@dimen/corner_medium</item>
+        <item name="android:elevation">1dp</item>
     </style>
 
-    <style name="Widget.KopiHarmoni.Button.Primary" parent="Widget.MaterialComponents.Button">
+    <style name="Widget.KopiHarmoni.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
         <item name="android:minHeight">@dimen/height_button</item>
         <item name="android:textSize">@dimen/text_button</item>
-        <item name="cornerRadius">8dp</item>
-        <item name="android:layout_marginEnd">@dimen/spacing_small</item>
-        <item name="android:layout_marginStart">@dimen/spacing_small</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">@dimen/corner_medium</item>
+        <item name="strokeWidth">1.5dp</item>
     </style>
 
-    <style name="Widget.KopiHarmoni.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:minHeight">@dimen/height_button</item>
-        <item name="android:textSize">@dimen/text_button</item>
-        <item name="cornerRadius">8dp</item>
-        <item name="android:layout_marginEnd">@dimen/spacing_small</item>
-        <item name="android:layout_marginStart">@dimen/spacing_small</item>
+    <style name="Widget.KopiHarmoni.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
     </style>
 
-    <style name="Widget.KopiHarmoni.InputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+    <style name="Widget.KopiHarmoni.InputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/height_dense_input</item>
-        <item name="android:layout_marginBottom">@dimen/spacing_small</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxCornerRadiusTopStart">@dimen/corner_medium</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/corner_medium</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/corner_medium</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/corner_medium</item>
+        <item name="boxStrokeWidth">1.5dp</item>
+        <item name="hintTextAppearance">@style/TextAppearance.KopiHarmoni.LabelLarge</item>
     </style>
 
-    <style name="Widget.KopiHarmoni.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+    <style name="Widget.KopiHarmoni.TextInputEditText" parent="Widget.Material3.TextInputEditText.OutlinedBox">
         <item name="android:textSize">@dimen/text_body</item>
         <item name="android:paddingStart">@dimen/spacing_medium</item>
         <item name="android:paddingEnd">@dimen/spacing_medium</item>

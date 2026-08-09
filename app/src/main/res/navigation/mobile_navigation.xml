@@ -31,15 +31,27 @@
 
         <action
             android:id="@+id/action_orders_to_sales_report"
-            app:destination="@id/nav_sales_report" />
+            app:destination="@id/nav_sales_report"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_pop_enter"
+            app:popExitAnim="@anim/nav_pop_exit" />
 
         <action
             android:id="@+id/action_orders_to_daily_report"
-            app:destination="@id/nav_daily_report" />
+            app:destination="@id/nav_daily_report"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_pop_enter"
+            app:popExitAnim="@anim/nav_pop_exit" />
 
         <action
             android:id="@+id/action_orders_to_settings"
-            app:destination="@id/nav_settings" />
+            app:destination="@id/nav_settings"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_pop_enter"
+            app:popExitAnim="@anim/nav_pop_exit" />
     </fragment>
 
     <fragment

@@ -1,59 +1,98 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/spacing_xsmall"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    android:foreground="?attr/selectableItemBackground"
+    android:stateListAnimator="@animator/card_lift"
+    app:cardBackgroundColor="@color/md_surface_container_high"
+    app:cardCornerRadius="@dimen/corner_large"
+    app:cardElevation="1dp"
+    app:rippleColor="@color/md_primary_container"
+    app:strokeColor="@color/md_outline_variant"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         android:orientation="vertical"
-         android:padding="@dimen/spacing_small">
+        android:orientation="vertical">
 
+        <!-- Product Image -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:background="@color/bg_light">
+            android:layout_height="@dimen/height_product_image"
+            android:background="@color/md_surface_variant">
 
             <ImageView
                 android:id="@+id/productImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/product"
-                android:scaleType="centerInside" />
+                android:padding="6dp"
+                android:scaleType="centerCrop" />
 
             <ProgressBar
                 android:id="@+id/imageProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
+
         </FrameLayout>
 
+        <!-- Product Name -->
         <TextView
             android:id="@+id/productName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_xsmall"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:layout_marginEnd="@dimen/spacing_small"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="2"
+            android:minHeight="40dp"
             android:textColor="@color/text_primary"
-            android:textSize="@dimen/text_caption"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/productPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/accent"
             android:textSize="@dimen/text_caption_small"
             android:textStyle="bold" />
+
+        <!-- Price + Add -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/spacing_small"
+            android:layout_marginBottom="@dimen/spacing_small"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/productPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/accent"
+                android:textSize="@dimen/text_caption_small"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/productAddButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="@dimen/spacing_xsmall"
+                android:background="@drawable/bg_add_button"
+                android:contentDescription="@string/add_to_cart"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_add"
+                app:tint="@color/white" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>

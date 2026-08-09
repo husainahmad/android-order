@@ -55,6 +55,7 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        com.harmoni.pos.order.util.UiUtils.applyStatusBarTopInset(binding.settingsToolbar);
         binding.usernameText.setText(TokenManager.getUsername());
         binding.storeText.setText("Store : " + TokenManager.getStoreName());
         binding.brandText.setText("Brand : " + TokenManager.getBrandName());

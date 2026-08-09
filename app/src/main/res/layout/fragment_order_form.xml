@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_surface"
     android:orientation="vertical">
 
     <!-- Main content: 3 columns: 12% category, 53% item list, 35% summary -->
@@ -19,15 +20,17 @@
             android:layout_weight="0.12"
             android:background="@drawable/bg_category_column"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_small">
+            android:paddingTop="@dimen/spacing_small">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_small"
                 android:layout_marginBottom="@dimen/spacing_small"
                 android:gravity="center"
                 android:text="@string/category"
-                android:textColor="@color/primary_dark"
+                android:textColor="@color/text_primary"
                 android:textSize="@dimen/text_caption"
                 android:textStyle="bold" />
 
@@ -36,15 +39,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:clipToPadding="false" />
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/spacing_small"
+                android:paddingEnd="@dimen/spacing_small"
+                android:paddingBottom="@dimen/spacing_small" />
         </LinearLayout>
 
-        <!-- Product list column (53%) -->
+        <!-- Product list column (55%) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.53"
-            android:background="@color/bg_white"
+            android:layout_weight="0.55"
+            android:background="@color/md_surface"
             android:orientation="vertical">
 
             <LinearLayout
@@ -52,14 +58,17 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_section_header"
                 android:orientation="vertical"
-                android:padding="@dimen/spacing_small">
+                android:paddingStart="@dimen/spacing_medium"
+                android:paddingTop="@dimen/spacing_medium"
+                android:paddingEnd="@dimen/spacing_medium"
+                android:paddingBottom="@dimen/spacing_small">
 
                 <TextView
                     android:id="@+id/categoryTitleText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/all_categories"
-                    android:textColor="@color/primary"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/text_body"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -70,7 +79,18 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:clipToPadding="false"
-                android:padding="@dimen/spacing_small" />
+                android:layoutAnimation="@anim/layout_products"
+                android:paddingStart="@dimen/spacing_small"
+                android:paddingTop="@dimen/spacing_small"
+                android:paddingEnd="@dimen/spacing_small"
+                android:paddingBottom="@dimen/spacing_small" />
+
+            <include
+                android:id="@+id/productsEmptyView"
+                layout="@layout/view_empty_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -89,12 +109,12 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <!-- Order summary column (35%) -->
+        <!-- Order summary column (33%) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.35"
-            android:background="@color/bg_white"
+            android:layout_weight="0.33"
+            android:background="@color/md_surface"
             android:orientation="vertical">
 
             <TextView
@@ -102,7 +122,10 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_order_summary_header"
                 android:gravity="center_vertical"
-                android:padding="@dimen/spacing_medium"
+                android:paddingStart="@dimen/spacing_medium"
+                android:paddingTop="@dimen/spacing_medium"
+                android:paddingEnd="@dimen/spacing_medium"
+                android:paddingBottom="@dimen/spacing_medium"
                 android:text="@string/order_summary"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_body"
@@ -114,17 +137,27 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
+            <include
+                android:id="@+id/cartEmptyView"
+                layout="@layout/view_empty_state"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/md_surface_container"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/spacing_small">
+                android:paddingTop="@dimen/spacing_medium"
+                android:paddingBottom="@dimen/spacing_medium">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_xsmall"
-                    android:layout_marginEnd="@dimen/spacing_xsmall"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_medium"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -133,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/sub_total"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_secondary"
                         android:textSize="@dimen/text_caption" />
 
                     <TextView
@@ -149,8 +182,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_xsmall"
-                    android:layout_marginEnd="@dimen/spacing_xsmall"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_small"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -178,31 +211,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="@dimen/spacing_medium">
+                    android:paddingStart="@dimen/spacing_medium"
+                    android:paddingTop="@dimen/spacing_small"
+                    android:paddingEnd="@dimen/spacing_medium">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/confirmButton"
-                        style="@style/Widget.MaterialComponents.Button"
+                        style="@style/Widget.KopiHarmoni.Button.Primary"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/height_button"
                         android:layout_marginEnd="@dimen/spacing_small"
-                        android:layout_marginStart="@dimen/spacing_small"
                         android:layout_weight="1"
                         android:text="@string/confirm"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_button"
                         app:backgroundTint="@color/accent" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/printButton"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        style="@style/Widget.KopiHarmoni.Button.Outlined"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/height_button"
-                        android:layout_marginEnd="@dimen/spacing_small"
                         android:layout_marginStart="@dimen/spacing_small"
                         android:layout_weight="1"
                         android:text="@string/print"
-                        android:textSize="@dimen/text_button"
                         app:strokeColor="@color/blue_action" />
                 </LinearLayout>
             </LinearLayout>

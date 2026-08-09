@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- ===== Material 3 shape scale ===== -->
+    <dimen name="corner_extra_small">4dp</dimen>
+    <dimen name="corner_small">8dp</dimen>
+    <dimen name="corner_medium">12dp</dimen>
+    <dimen name="corner_large">16dp</dimen>
+    <dimen name="corner_extra_large">28dp</dimen>
+    <dimen name="corner_full">100dp</dimen>
+
+    <style name="ShapeAppearance.KopiHarmoni.CornerExtraSmall" parent="ShapeAppearance.Material3.Corner.ExtraSmall" />
+    <style name="ShapeAppearance.KopiHarmoni.CornerSmall" parent="ShapeAppearance.Material3.Corner.Small" />
+    <style name="ShapeAppearance.KopiHarmoni.CornerMedium" parent="ShapeAppearance.Material3.Corner.Medium" />
+    <style name="ShapeAppearance.KopiHarmoni.CornerLarge" parent="ShapeAppearance.Material3.Corner.Large" />
+    <style name="ShapeAppearance.KopiHarmoni.CornerExtraLarge" parent="ShapeAppearance.Material3.Corner.ExtraLarge" />
+
+</resources>

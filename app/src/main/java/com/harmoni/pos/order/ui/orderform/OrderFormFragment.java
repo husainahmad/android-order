@@ -54,6 +54,7 @@ public class OrderFormFragment extends Fragment {
     private List<Category> categories = new ArrayList<>();
     private List<Product> allProducts = new ArrayList<>();
     private int selectedCategoryId = -1;
+    private boolean productsInitiallyLoaded = false;
 
     @Nullable
     @Override
@@ -82,7 +83,7 @@ public class OrderFormFragment extends Fragment {
     private void setupRecyclers() {
         productAdapter = new ProductAdapter(this::onProductClick);
         RecyclerView productsRecycler = binding.productsRecycler;
-        productsRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 3));
+        productsRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 4));
         productsRecycler.setAdapter(productAdapter);
 
         categoryAdapter = new CategoryAdapter(category -> selectCategory(category));
@@ -114,6 +115,14 @@ public class OrderFormFragment extends Fragment {
         viewModel.getActiveTabId().observe(getViewLifecycleOwner(), id -> updateTotals());
         viewModel.getCart().observe(getViewLifecycleOwner(), cart -> {
             cartAdapter.submitList(cart);
+            boolean empty = cart == null || cart.isEmpty();
+            binding.cartRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
+            binding.cartEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
+            if (empty) {
+                binding.cartEmptyView.emptyIcon.setImageResource(R.drawable.ic_empty_cart);
+                binding.cartEmptyView.emptyTitle.setText(R.string.cart_empty);
+                binding.cartEmptyView.emptySubtitle.setText(R.string.cart_empty_subtitle);
+            }
             updateTotals();
         });
         viewModel.getSubmitting().observe(getViewLifecycleOwner(), submitting ->
@@ -127,7 +136,6 @@ public class OrderFormFragment extends Fragment {
             }
         });
         viewModel.getConfirmedOrder().observe(getViewLifecycleOwner(), order -> {
-            // PaymentDialog is opened by OrderConfirmFragment
         });
     }
 
@@ -166,6 +174,18 @@ public class OrderFormFragment extends Fragment {
                 allProducts = data;
                 productAdapter.submitList(allProducts);
                 binding.progressBar.setVisibility(View.GONE);
+                boolean empty = data == null || data.isEmpty();
+                binding.productsRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
+                binding.productsEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
+                if (empty) {
+                    binding.productsEmptyView.emptyIcon.setImageResource(R.drawable.ic_empty_products);
+                    binding.productsEmptyView.emptyTitle.setText(R.string.no_products);
+                    binding.productsEmptyView.emptySubtitle.setText(R.string.no_products_subtitle);
+                }
+                if (!productsInitiallyLoaded) {
+                    productsInitiallyLoaded = true;
+                    animateProductsIn();
+                }
             }
 
             @Override
@@ -176,7 +196,20 @@ public class OrderFormFragment extends Fragment {
         });
     }
 
+    private void animateProductsIn() {
+        android.view.animation.LayoutAnimationController controller =
+                android.view.animation.AnimationUtils.loadLayoutAnimation(
+                        requireContext(), R.anim.layout_products);
+        binding.productsRecycler.setLayoutAnimation(controller);
+        binding.productsRecycler.scheduleLayoutAnimation();
+    }
+
     private void onProductClick(Product product) {
+        List<Sku> skus = product.getSkus();
+        if (skus != null && skus.size() == 1 && skus.get(0) != null) {
+            viewModel.addToCart(product, skus.get(0));
+            return;
+        }
         ProductDetailDialog dialog = new ProductDetailDialog();
         dialog.setProduct(product);
         dialog.setOnSkuListener(new ProductDetailDialog.OnSkuListener() {

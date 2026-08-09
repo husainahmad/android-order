@@ -47,6 +47,8 @@ public class DailyReportFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(DailyReportViewModel.class);
 
+        com.harmoni.pos.order.util.UiUtils.applyStatusBarTopInset(binding.reportToolbar);
+
         adapter = new DailyReportAdapter();
         binding.reportRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.reportRecycler.setAdapter(adapter);
@@ -85,6 +87,9 @@ public class DailyReportFragment extends Fragment {
             net += row.netSales;
             discount += row.discount;
         }
+        binding.kpiNetText.setText(CurrencyUtils.formatRp(net));
+        binding.kpiDiscountText.setText(CurrencyUtils.formatRp(discount));
+        binding.kpiQtyText.setText(String.valueOf(totalQty));
         binding.totalText.setText(String.format(Locale.US,
                 "TOTAL   QTY: %d   Net: %s   Discount: %s",
                 totalQty, CurrencyUtils.formatRp(net), CurrencyUtils.formatRp(discount)));

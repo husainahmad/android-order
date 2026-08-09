@@ -1,31 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_surface"
     android:orientation="vertical"
     android:padding="12dp">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/newOrderButton"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Widget.KopiHarmoni.Button.Primary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginBottom="12dp"
-        android:text="@string/new_order" />
+        android:text="@string/new_order"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_body"
+        app:backgroundTint="@color/accent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ordersRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="12dp" />
 
-    <TextView
-        android:id="@+id/emptyText"
+    <LinearLayout
+        android:id="@+id/emptyLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/no_open_orders"
-        android:textSize="16sp"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/emptyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_open_orders"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.harmoni.pos.order.data.model.User;
-import com.harmoni.pos.order.util.JwtUtils;
 
 import org.json.JSONObject;
 
@@ -28,7 +27,6 @@ public class TokenManager {
     private static final String KEY_CHAIN_NAME = "chain_name";
     private static final String KEY_BRAND_ID = "brand_id";
     private static final String KEY_BRAND_NAME = "brand_name";
-    private static final long REFRESH_BUFFER_SECONDS = 30;
 
     private static SharedPreferences prefs;
 
@@ -55,11 +53,7 @@ public class TokenManager {
 
     public static String getAccessToken() {
         if (prefs == null) return "";
-        String token = prefs.getString(KEY_ACCESS, "");
-        if (!token.isEmpty() && isAccessTokenExpired(token)) {
-            return refreshAccessToken() == null ? "" : prefs.getString(KEY_ACCESS, "");
-        }
-        return token;
+        return prefs.getString(KEY_ACCESS, "");
     }
 
     public static String getRefreshToken() {
@@ -67,11 +61,8 @@ public class TokenManager {
         return prefs.getString(KEY_REFRESH, "");
     }
 
-    public static boolean isAccessTokenExpired(String token) {
-        long exp = JwtUtils.getExp(token);
-        if (exp <= 0) return false;
-        long now = System.currentTimeMillis() / 1000;
-        return now >= exp - REFRESH_BUFFER_SECONDS;
+    public static boolean isLoggedIn() {
+        return prefs != null && !getAccessToken().isEmpty() && !getUsername().isEmpty();
     }
 
     public static synchronized String refreshAccessToken() {
@@ -137,12 +128,6 @@ public class TokenManager {
                 .apply();
     }
 
-    public static User getUser() {
-        if (prefs == null) return new User();
-        User user = new User();
-        return user;
-    }
-
     public static String getUsername() {
         if (prefs == null) return "";
         return prefs.getString(KEY_USERNAME, "");
@@ -161,9 +146,5 @@ public class TokenManager {
     public static String getBrandName() {
         if (prefs == null) return "";
         return prefs.getString(KEY_BRAND_NAME, "");
-    }
-
-    public static boolean isLoggedIn() {
-        return prefs != null && !getAccessToken().isEmpty() && !getUsername().isEmpty();
     }
 }

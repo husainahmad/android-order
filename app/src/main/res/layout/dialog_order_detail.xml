@@ -10,15 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/order_detail"
-        android:textColor="@color/primary"
-        android:textSize="18sp"
+        android:textColor="@color/text_primary"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:minHeight="300dp">
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_stepper"
+        android:minHeight="280dp"
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/detailText"
@@ -37,7 +40,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/printButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
@@ -48,7 +51,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/kitchenButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
@@ -59,6 +62,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/payButton"
+            style="@style/Widget.KopiHarmoni.Button.Primary"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
@@ -69,6 +73,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/voidButton"
+            style="@style/Widget.KopiHarmoni.Button.Primary"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
@@ -79,7 +84,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/closeButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
