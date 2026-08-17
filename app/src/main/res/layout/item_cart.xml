@@ -9,41 +9,50 @@
     android:paddingTop="6dp"
     android:paddingBottom="6dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="48dp">
 
-        <!-- Item Name - WIDER -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/minusButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:text=""
+            android:contentDescription="@string/remove"
+            app:backgroundTint="@color/md_surface_container"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_remove"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/text_secondary"
+            app:strokeColor="@color/md_outline"
+            app:strokeWidth="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/skuNameText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_marginStart="@dimen/spacing_xsmall"
+            android:drawableStart="@drawable/ic_bullet"
+            android:drawablePadding="@dimen/spacing_small"
             android:ellipsize="end"
+            android:gravity="center_vertical"
             android:maxLines="1"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_secondary"
             android:textSize="@dimen/text_caption"
-            android:textStyle="bold" />
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/quantityText"
+            app:layout_constraintStart_toEndOf="@id/minusButton"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Minus -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/minusButton"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="−"
-            android:textColor="@color/status_void"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:cornerRadius="@dimen/corner_full"
-            app:strokeColor="@color/status_void"
-            app:strokeWidth="1.5dp" />
-
-        <!-- Quantity -->
         <TextView
             android:id="@+id/quantityText"
             android:layout_width="44dp"
@@ -51,24 +60,33 @@
             android:gravity="center"
             android:textColor="@color/text_primary"
             android:textSize="@dimen/text_caption"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/plusButton"
+            app:layout_constraintStart_toEndOf="@id/skuNameText"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Plus -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/plusButton"
             style="@style/Widget.Material3.Button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:text="+"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:minWidth="0dp"
+            android:text=""
+            android:contentDescription="@string/add"
             app:backgroundTint="@color/accent"
-            app:cornerRadius="@dimen/corner_full" />
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_add"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/lineTotalText"
+            app:layout_constraintStart_toEndOf="@id/quantityText"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Total -->
         <TextView
             android:id="@+id/lineTotalText"
             android:layout_width="96dp"
@@ -76,8 +94,12 @@
             android:gravity="end"
             android:textColor="@color/text_primary"
             android:textSize="@dimen/text_caption"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/plusButton"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

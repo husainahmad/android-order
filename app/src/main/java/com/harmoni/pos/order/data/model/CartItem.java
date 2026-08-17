@@ -35,4 +35,9 @@ public class CartItem {
     public double getLineTotal() {
         return price * quantity;
     }
+
+    public CartItem copy() {
+        return new CartItem(productId, productName, categoryId, skuId,
+                skuName, price, quantity);
+    }
 }

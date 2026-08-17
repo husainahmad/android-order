@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.harmoni.pos.order.R;
 import com.harmoni.pos.order.data.model.CartItem;
 import com.harmoni.pos.order.data.model.Category;
@@ -54,7 +55,6 @@ public class OrderFormFragment extends Fragment {
     private List<Category> categories = new ArrayList<>();
     private List<Product> allProducts = new ArrayList<>();
     private int selectedCategoryId = -1;
-    private boolean productsInitiallyLoaded = false;
 
     @Nullable
     @Override
@@ -84,11 +84,13 @@ public class OrderFormFragment extends Fragment {
         productAdapter = new ProductAdapter(this::onProductClick);
         RecyclerView productsRecycler = binding.productsRecycler;
         productsRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 4));
+        productsRecycler.setHasFixedSize(true);
         productsRecycler.setAdapter(productAdapter);
 
         categoryAdapter = new CategoryAdapter(category -> selectCategory(category));
         RecyclerView categoryRecycler = binding.categoryRecycler;
-        categoryRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        categoryRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        categoryRecycler.setHasFixedSize(true);
         categoryRecycler.setAdapter(categoryAdapter);
 
         cartAdapter = new CartAdapter(new CartAdapter.OnQuantityChangeListener() {
@@ -103,6 +105,8 @@ public class OrderFormFragment extends Fragment {
             }
         });
         binding.cartRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.cartRecycler.setHasFixedSize(true);
+        binding.cartRecycler.setItemAnimator(null);
         binding.cartRecycler.setAdapter(cartAdapter);
     }
 
@@ -114,8 +118,15 @@ public class OrderFormFragment extends Fragment {
     private void observe() {
         viewModel.getActiveTabId().observe(getViewLifecycleOwner(), id -> updateTotals());
         viewModel.getCart().observe(getViewLifecycleOwner(), cart -> {
-            cartAdapter.submitList(cart);
+            int prevCount = cartAdapter.getItemCount();
             boolean empty = cart == null || cart.isEmpty();
+            cartAdapter.submitItems(cart, () -> {
+                int newCount = cartAdapter.getItemCount();
+                if (!empty && newCount > prevCount) {
+                    int last = newCount - 1;
+                    binding.cartRecycler.post(() -> binding.cartRecycler.smoothScrollToPosition(last));
+                }
+            });
             binding.cartRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
             binding.cartEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
             if (empty) {
@@ -182,10 +193,6 @@ public class OrderFormFragment extends Fragment {
                     binding.productsEmptyView.emptyTitle.setText(R.string.no_products);
                     binding.productsEmptyView.emptySubtitle.setText(R.string.no_products_subtitle);
                 }
-                if (!productsInitiallyLoaded) {
-                    productsInitiallyLoaded = true;
-                    animateProductsIn();
-                }
             }
 
             @Override
@@ -194,14 +201,6 @@ public class OrderFormFragment extends Fragment {
                 showError(message);
             }
         });
-    }
-
-    private void animateProductsIn() {
-        android.view.animation.LayoutAnimationController controller =
-                android.view.animation.AnimationUtils.loadLayoutAnimation(
-                        requireContext(), R.anim.layout_products);
-        binding.productsRecycler.setLayoutAnimation(controller);
-        binding.productsRecycler.scheduleLayoutAnimation();
     }
 
     private void onProductClick(Product product) {
@@ -238,8 +237,21 @@ public class OrderFormFragment extends Fragment {
             showError(getString(R.string.cart_empty));
             return;
         }
-        new OrderConfirmFragment()
-                .show(getParentFragmentManager(), "order_confirm");
+        String customer = binding.customerInput.getText() != null ?
+                binding.customerInput.getText().toString() : "";
+        String discount = binding.discountInput.getText() != null ?
+                binding.discountInput.getText().toString() : "0";
+        String remark = binding.remarkInput.getText() != null ?
+                binding.remarkInput.getText().toString() : "";
+        int orderType = binding.orderTypeGroup.getCheckedRadioButtonId() == R.id.takeawayRadio ? 3 : 1;
+        viewModel.setCustomer(customer);
+        viewModel.setDiscount(discount);
+        viewModel.setRemark(remark);
+        OrderConfirmFragment fragment = OrderConfirmFragment.newInstance(customer, discount, remark, orderType);
+        fragment.setOnOrderCompletedListener(paidOrder -> {
+            viewModel.removeActiveTab();
+        });
+        fragment.show(getParentFragmentManager(), "order_confirm");
     }
 
     private void onPrint() {

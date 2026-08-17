@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.harmoni.pos.order.R;
 import com.harmoni.pos.order.data.model.Category;
 
@@ -56,22 +57,38 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categories.size();
     }
 
+    private static String monogram(String name) {
+        if (name == null || name.isEmpty()) return "?";
+        return name.substring(0, 1).toUpperCase();
+    }
+
     class CategoryHolder extends RecyclerView.ViewHolder {
+        MaterialCardView card;
+        TextView iconText;
         TextView nameText;
 
         CategoryHolder(@NonNull View itemView) {
             super(itemView);
+            card = itemView.findViewById(R.id.categoryCard);
+            iconText = itemView.findViewById(R.id.categoryIcon);
             nameText = itemView.findViewById(R.id.categoryName);
         }
 
         void bind(Category category, boolean selected) {
-            nameText.setText(category.getName());
+            String name = category.getName();
+            nameText.setText(name);
+            iconText.setText(monogram(name));
+            iconText.setSelected(selected);
 
             if (selected) {
-                itemView.setBackgroundResource(R.drawable.bg_category_selected);
+                card.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.accent));
+                card.setStrokeColor(ContextCompat.getColor(itemView.getContext(), R.color.accent));
+                iconText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.accent));
                 nameText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
             } else {
-                itemView.setBackgroundResource(R.drawable.bg_category_chip);
+                card.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.md_surface_container_high));
+                card.setStrokeColor(ContextCompat.getColor(itemView.getContext(), R.color.md_outline_variant));
+                iconText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.md_on_primary_container));
                 nameText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.text_primary));
             }
 

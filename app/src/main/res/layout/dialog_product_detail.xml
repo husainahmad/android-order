@@ -29,7 +29,8 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/product"
                     android:padding="6dp"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_default_product" />
 
                 <ProgressBar
                     android:id="@+id/imageProgress"

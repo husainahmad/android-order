@@ -3,12 +3,13 @@ package com.harmoni.pos.order.ui.orderform;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.harmoni.pos.order.R;
@@ -19,26 +20,54 @@ import com.harmoni.pos.order.util.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductHolder> {
+public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductHolder> {
+
+    private static final int DEFAULT_IMAGE_RES = R.drawable.ic_default_product;
 
     public interface OnProductClickListener {
         void onProductClick(Product product);
     }
 
-    private final List<Product> products = new ArrayList<>();
     private final OnProductClickListener listener;
 
     public ProductAdapter(OnProductClickListener listener) {
+        super(DIFF);
         this.listener = listener;
     }
 
-    public void submitList(List<Product> newProducts) {
-        products.clear();
-        if (newProducts != null) {
-            products.addAll(newProducts);
+    private static final DiffUtil.ItemCallback<Product> DIFF = new DiffUtil.ItemCallback<Product>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Product o1, @NonNull Product o2) {
+            return o1.getId() == o2.getId();
         }
-        notifyDataSetChanged();
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Product o1, @NonNull Product o2) {
+            Sku s1 = defaultSku(o1);
+            Sku s2 = defaultSku(o2);
+            return Objects.equals(o1.getName(), o2.getName())
+                    && Objects.equals(s1 != null ? s1.getPrice() : null, s2 != null ? s2.getPrice() : null)
+                    && Objects.equals(imageBlob(o1), imageBlob(o2));
+        }
+    };
+
+    private static Sku defaultSku(Product product) {
+        List<Sku> skus = product.getSkus();
+        if (skus == null || skus.isEmpty()) {
+            return null;
+        }
+        for (Sku sku : skus) {
+            if (sku.getName().toLowerCase().contains("regular")) {
+                return sku;
+            }
+        }
+        return skus.get(0);
+    }
+
+    private static String imageBlob(Product product) {
+        return product.getProductImage() != null ? product.getProductImage().getImageBlob() : null;
     }
 
     @NonNull
@@ -51,20 +80,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
-        Product product = products.get(position);
-        holder.bind(product);
+        holder.bind(getItem(position));
     }
 
-    @Override
-    public int getItemCount() {
-        return products.size();
+    public void submitList(List<Product> newProducts) {
+        super.submitList(newProducts == null ? null : new ArrayList<>(newProducts));
     }
 
     @Override
     public void onViewRecycled(@NonNull ProductHolder holder) {
         super.onViewRecycled(holder);
         holder.imageProgress.setVisibility(View.GONE);
-        holder.imageView.setImageResource(R.drawable.bg_product_placeholder);
+        holder.imageView.setImageResource(DEFAULT_IMAGE_RES);
         holder.imageView.setContentDescription(null);
     }
 
@@ -73,7 +100,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         final ProgressBar imageProgress;
         final TextView nameText;
         final TextView priceText;
-        final ImageButton addButton;
+        final com.google.android.material.button.MaterialButton addButton;
 
         ProductHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,7 +114,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         void bind(Product product) {
             nameText.setText(product.getName());
             imageView.setContentDescription(product.getName());
-            Sku sku = findDefaultSku(product);
+            Sku sku = defaultSku(product);
             if (sku != null) {
                 priceText.setText(CurrencyUtils.formatRp(sku.getPrice()));
             } else {
@@ -103,38 +130,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             bindImage(product);
         }
 
-        private Sku findDefaultSku(Product product) {
-            List<Sku> skus = product.getSkus();
-            if (skus == null || skus.isEmpty()) {
-                return null;
-            }
-            for (Sku sku : skus) {
-                if (sku.getName().toLowerCase().contains("regular")) {
-                    return sku;
-                }
-            }
-            return skus.get(0);
-        }
-
         private void bindImage(Product product) {
             int productId = product.getId();
             if (product.getProductImage() == null
                     || product.getProductImage().getImageBlob().isEmpty()) {
-                imageView.setImageResource(R.drawable.bg_product_placeholder);
+                imageView.setImageResource(DEFAULT_IMAGE_RES);
                 imageProgress.setVisibility(View.GONE);
                 return;
             }
             imageProgress.setVisibility(View.VISIBLE);
-            imageView.setImageResource(R.drawable.bg_product_placeholder);
+            imageView.setImageResource(DEFAULT_IMAGE_RES);
             String blob = product.getProductImage().getImageBlob();
             ImageLoader.load(productId, blob, bitmap -> {
-                if (getBindingAdapterPosition() >= 0
-                        && getBindingAdapterPosition() < products.size()
-                        && products.get(getBindingAdapterPosition()).getId() == productId) {
+                int pos = getBindingAdapterPosition();
+                if (pos >= 0 && pos < getItemCount()
+                        && getItem(pos).getId() == productId) {
                     if (bitmap != null) {
                         imageView.setImageBitmap(bitmap);
                     } else {
-                        imageView.setImageResource(R.drawable.ic_image_off);
+                        imageView.setImageResource(DEFAULT_IMAGE_RES);
                     }
                 }
                 imageProgress.setVisibility(View.GONE);

@@ -19,6 +19,7 @@ public class PrintUtils {
         sb.append("Order  : ").append(order.getOrderNo()).append("\n");
         sb.append("Date   : ").append(TimeUtils.toJakarta(order.getCreatedAt())).append("\n");
         sb.append("Cust   : ").append(order.getCustomerName()).append("\n");
+        sb.append("Type   : ").append(order.getServiceTypeName()).append("\n");
         sb.append("----------------------------\n");
         if (order.getOrderDetails() != null) {
             for (OrderDetail detail : order.getOrderDetails()) {

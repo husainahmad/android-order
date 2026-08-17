@@ -90,7 +90,7 @@ public class OrderFormViewModel extends ViewModel {
 
     public int createNewTab() {
         sequence++;
-        OrderTab tab = new OrderTab(sequence, String.format(Locale.US, "#%03d", sequence));
+        OrderTab tab = new OrderTab(sequence, String.format(Locale.US, "Order#%03d", sequence));
         tabs.put(tab.id, tab);
         activeId = tab.id;
         error.setValue("");
@@ -246,14 +246,14 @@ public class OrderFormViewModel extends ViewModel {
         return total;
     }
 
-    public void confirmOrder(String customerName, String discount, String remark) {
+    public void confirmOrder(String customerName, String discount, String remark, int orderType) {
         OrderTab tab = getActiveTab();
         if (tab == null || tab.items.isEmpty()) {
             error.setValue("Cart is empty");
             return;
         }
         submitting.setValue(true);
-        OrderRequest request = buildRequest(tab, customerName, discount, remark);
+        OrderRequest request = buildRequest(tab, customerName, discount, remark, orderType);
         ApiClient.orderService().confirmOrder(request).enqueue(new Callback<ApiResponse<Order>>() {
             @Override
             public void onResponse(Call<ApiResponse<Order>> call, Response<ApiResponse<Order>> response) {
@@ -273,7 +273,7 @@ public class OrderFormViewModel extends ViewModel {
         });
     }
 
-    private OrderRequest buildRequest(OrderTab tab, String customerName, String discount, String remark) {
+    private OrderRequest buildRequest(OrderTab tab, String customerName, String discount, String remark, int orderType) {
         Map<Integer, List<CartItem>> grouped = new LinkedHashMap<>();
         for (CartItem item : tab.items) {
             grouped.computeIfAbsent(item.getProductId(), k -> new ArrayList<>()).add(item);
@@ -288,7 +288,7 @@ public class OrderFormViewModel extends ViewModel {
             details.add(new OrderDetailRequest(first.getProductId(), first.getProductName(),
                     first.getCategoryId(), skus));
         }
-        return new OrderRequest(1, customerName, -1, remark, details, discount);
+        return new OrderRequest(orderType, customerName, -1, remark, details, discount);
     }
 
     private void publishTabs() {
@@ -301,6 +301,12 @@ public class OrderFormViewModel extends ViewModel {
 
     private void publishCart() {
         OrderTab tab = getActiveTab();
-        cart.setValue(tab == null ? new ArrayList<>() : new ArrayList<>(tab.items));
+        List<CartItem> copy = new ArrayList<>();
+        if (tab != null) {
+            for (CartItem item : tab.items) {
+                copy.add(item.copy());
+            }
+        }
+        cart.setValue(copy);
     }
 }

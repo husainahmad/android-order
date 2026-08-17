@@ -3,6 +3,7 @@ package com.harmoni.pos.order.ui.payment;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,22 +44,31 @@ public class PaymentDialog extends DialogFragment {
     }
 
     private static final String ARG_ORDER = "arg_order";
+    private static final String ARG_CUSTOMER = "arg_customer";
+    private static final String ARG_DISCOUNT = "arg_discount";
+    private static final String ARG_NOTE = "arg_note";
     private static final int PAYMENT_CASH = 1;
     private static final int PAYMENT_QR = 2;
     private static final int PAYMENT_CARD = 3;
 
     private DialogPaymentBinding binding;
     private Order order;
+    private String customerName = "";
+    private String discountStr = "0";
+    private String note = "";
     private OnPaymentSuccessListener listener;
     private OnPaymentDismissedListener dismissedListener;
     private boolean paid;
     private double cashReceived;
-    private int selectedPayment = PAYMENT_QR;
+    private int selectedPayment = PAYMENT_CASH;
 
-    public static PaymentDialog newInstance(Order order) {
+    public static PaymentDialog newInstance(Order order, String customerName, String discount, String note) {
         PaymentDialog dialog = new PaymentDialog();
         Bundle args = new Bundle();
         args.putSerializable(ARG_ORDER, order);
+        args.putString(ARG_CUSTOMER, customerName);
+        args.putString(ARG_DISCOUNT, discount);
+        args.putString(ARG_NOTE, note);
         dialog.setArguments(args);
         return dialog;
     }
@@ -84,7 +94,16 @@ public class PaymentDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
             order = (Order) getArguments().getSerializable(ARG_ORDER);
+            customerName = getArguments().getString(ARG_CUSTOMER, "");
+            discountStr = getArguments().getString(ARG_DISCOUNT, "0");
+            note = getArguments().getString(ARG_NOTE, "");
         }
+
+        binding.customerSummaryText.setText(TextUtils.isEmpty(customerName) ?
+                "Customer: -" : "Customer: " + customerName);
+        binding.discountSummaryText.setText("Discount: " + CurrencyUtils.formatRp2(parseDiscount(discountStr)));
+        binding.noteSummaryText.setText(TextUtils.isEmpty(note) ?
+                "Note: -" : "Note: " + note);
 
         binding.orderInfoText.setText(String.format("Order : %s\nTotal : %s",
                 order.getOrderNo(), CurrencyUtils.formatRp(order.getGrandTotal())));
@@ -94,7 +113,7 @@ public class PaymentDialog extends DialogFragment {
         binding.qrCard.setOnClickListener(v -> selectPayment(PAYMENT_QR));
         binding.cardCard.setOnClickListener(v -> selectPayment(PAYMENT_CARD));
         binding.cashCard.setOnClickListener(v -> selectPayment(PAYMENT_CASH));
-        selectPayment(PAYMENT_QR);
+        selectPayment(PAYMENT_CASH);
 
         setupCashGrid();
         binding.clearButton.setOnClickListener(v -> {
@@ -118,6 +137,14 @@ public class PaymentDialog extends DialogFragment {
             int width = (int) (metrics.widthPixels * 0.88);
             int height = (int) (metrics.heightPixels * 0.92);
             getDialog().getWindow().setLayout(width, height);
+        }
+    }
+
+    private double parseDiscount(String discountStr) {
+        try {
+            return Double.parseDouble(discountStr.isEmpty() ? "0" : discountStr);
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 

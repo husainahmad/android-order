@@ -17,13 +17,55 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_stepper"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_medium">
+
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/summaryTitleText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/select_payment_method"
+                android:text="@string/order_summary"
                 android:textColor="@color/text_primary"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/customerSummaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/discountSummaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/noteSummaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_payment_method"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/orderInfoText"
@@ -41,18 +83,18 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/qrCard"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_payment_option_selected"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    <LinearLayout
+                        android:id="@+id/qrCard"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_payment_option"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
                     <ImageView
                         android:id="@+id/qrImage"
@@ -397,8 +439,8 @@
             android:layout_height="52dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="@string/pay"
-            app:backgroundTint="@color/accent" />
+                            android:text="@string/pay"
+                            app:backgroundTint="@color/accent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/closeButton"
@@ -406,7 +448,7 @@
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_weight="1"
-            android:text="@string/close"
-            app:strokeColor="@color/gray_button" />
+                            android:text="@string/close"
+                            app:strokeColor="@color/gray_button" />
     </LinearLayout>
 </LinearLayout>

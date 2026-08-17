@@ -56,13 +56,16 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.loadOrders();
+        if (viewModel.getOrders().getValue() == null) {
+            viewModel.loadOrders();
+        }
     }
 
     private void setupRecyclers() {
         RecyclerView ordersRecycler = binding.ordersRecycler;
         orderAdapter = new OrderAdapter(this::openOrderDetail);
         ordersRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        ordersRecycler.setHasFixedSize(true);
         ordersRecycler.setAdapter(orderAdapter);
     }
 

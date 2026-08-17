@@ -2,11 +2,16 @@ package com.harmoni.pos.order.util;
 
 import android.content.Context;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.harmoni.pos.order.data.model.Category;
 import com.harmoni.pos.order.data.model.Product;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,7 +20,10 @@ import java.util.List;
 
 public class JsonCache {
 
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder()
+            .addSerializationExclusionStrategy(new NoImageBlobStrategy())
+            .addDeserializationExclusionStrategy(new NoImageBlobStrategy())
+            .create();
     private static final String CATEGORY_FILE = "category_cache.json";
     private static final String PRODUCT_PREFIX = "product_cache_";
 
@@ -55,7 +63,7 @@ public class JsonCache {
     private static <T> T read(File dir, String name, Type type) {
         File file = new File(dir, name);
         if (!file.exists()) return null;
-        try (FileReader reader = new FileReader(file)) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             return GSON.fromJson(reader, type);
         } catch (Exception e) {
             return null;
@@ -64,9 +72,22 @@ public class JsonCache {
 
     private static void write(File dir, String name, Object data) {
         File file = new File(dir, name);
-        try (FileWriter writer = new FileWriter(file)) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             GSON.toJson(data, writer);
         } catch (Exception ignored) {
+        }
+    }
+
+    /** Keeps heavy base64 image blobs out of the on-disk cache so reads/writes stay fast. */
+    private static final class NoImageBlobStrategy implements ExclusionStrategy {
+        @Override
+        public boolean shouldSkipField(FieldAttributes f) {
+            return "imageBlob".equals(f.getName());
+        }
+
+        @Override
+        public boolean shouldSkipClass(Class<?> clazz) {
+            return false;
         }
     }
 }

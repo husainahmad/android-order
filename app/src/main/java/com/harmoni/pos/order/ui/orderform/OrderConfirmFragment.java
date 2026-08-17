@@ -3,8 +3,6 @@ package com.harmoni.pos.order.ui.orderform;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,15 +46,36 @@ public class OrderConfirmFragment extends DialogFragment {
     private static final int PAYMENT_QR = 2;
     private static final int PAYMENT_CARD = 3;
 
+    private static final String ARG_CUSTOMER = "arg_customer";
+    private static final String ARG_DISCOUNT = "arg_discount";
+    private static final String ARG_NOTE = "arg_note";
+    private static final String ARG_ORDER_TYPE = "arg_order_type";
+
     private FragmentOrderConfirmBinding binding;
     private OrderFormViewModel viewModel;
     private ConfirmItemAdapter adapter;
     private OnOrderCompletedListener listener;
     private Order confirmedOrder;
-    private int selectedPayment = PAYMENT_QR;
+    private int selectedPayment = PAYMENT_CASH;
     private double cashReceived;
     private boolean paid;
     private boolean working;
+
+    private String passedCustomer = "";
+    private String passedDiscount = "0";
+    private String passedNote = "";
+    private int passedOrderType = 1;
+
+    public static OrderConfirmFragment newInstance(String customer, String discount, String note, int orderType) {
+        OrderConfirmFragment fragment = new OrderConfirmFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_CUSTOMER, customer);
+        args.putString(ARG_DISCOUNT, discount);
+        args.putString(ARG_NOTE, note);
+        args.putInt(ARG_ORDER_TYPE, orderType);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public void setOnOrderCompletedListener(OnOrderCompletedListener listener) {
         this.listener = listener;
@@ -81,15 +100,21 @@ public class OrderConfirmFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(OrderFormViewModel.class);
 
+        if (getArguments() != null) {
+            passedCustomer = getArguments().getString(ARG_CUSTOMER, "");
+            passedDiscount = getArguments().getString(ARG_DISCOUNT, "0");
+            passedNote = getArguments().getString(ARG_NOTE, "");
+            passedOrderType = getArguments().getInt(ARG_ORDER_TYPE, 1);
+        }
+
         UiUtils.applyStatusBarTopInset(binding.confirmToolbar);
 
         adapter = new ConfirmItemAdapter();
         binding.detailRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.detailRecycler.setHasFixedSize(true);
+        binding.detailRecycler.setItemAnimator(null);
         binding.detailRecycler.setAdapter(adapter);
 
-        binding.customerInput.addTextChangedListener(customerWatcher);
-        binding.discountInput.addTextChangedListener(discountWatcher);
-        binding.remarkInput.addTextChangedListener(remarkWatcher);
         binding.backButton.setOnClickListener(v -> dismiss());
         binding.cancelButton.setOnClickListener(v -> dismiss());
         binding.proceedButton.setOnClickListener(v -> onPay());
@@ -109,8 +134,9 @@ public class OrderConfirmFragment extends DialogFragment {
         setupCashGrid();
 
         viewModel.getCart().observe(getViewLifecycleOwner(), cart -> {
-            adapter.submitList(cart);
+            adapter.submitItems(cart);
             updateTotals();
+            updateSummary();
             int count = 0;
             if (cart != null) {
                 for (CartItem item : cart) {
@@ -125,6 +151,7 @@ public class OrderConfirmFragment extends DialogFragment {
             if (order != null) {
                 confirmedOrder = order;
                 updatePaymentInfo();
+                updateSummary();
                 doPay(confirmedOrder);
             }
         });
@@ -139,14 +166,37 @@ public class OrderConfirmFragment extends DialogFragment {
 
         OrderFormViewModel.OrderTab tab = viewModel.getActiveTab();
         if (tab != null) {
-            binding.customerInput.setText(tab.customer);
-            binding.discountInput.setText(tab.discount);
-            binding.remarkInput.setText(tab.remark);
             binding.orderNumberText.setText(getString(R.string.order_num, tab.id));
         }
 
-        selectPayment(PAYMENT_QR);
+        updateSummary();
+        selectPayment(PAYMENT_CASH);
         updatePaymentInfo();
+    }
+
+    private void updateSummary() {
+        OrderFormViewModel.OrderTab tab = viewModel.getActiveTab();
+        String customer = passedCustomer;
+        String discount = passedDiscount;
+        String note = passedNote;
+        if (tab != null) {
+            if (customer.isEmpty()) customer = tab.customer;
+            if (discount.isEmpty() || "0".equals(discount)) discount = tab.discount;
+            if (note.isEmpty()) note = tab.remark;
+        }
+
+        binding.customerSummaryText.setText(customer.isEmpty() ? "-" : customer);
+        binding.orderTypeSummaryText.setText(passedOrderType == 3 ? "Takeaway" : "Dine In");
+        binding.discountSummaryText.setText("Rp" + CurrencyUtils.formatRp2(parseDiscount(discount)));
+        binding.noteSummaryText.setText(note.isEmpty() ? "-" : note);
+    }
+
+    private double parseDiscount(String discountStr) {
+        try {
+            return Double.parseDouble(discountStr.isEmpty() ? "0" : discountStr);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     @Override
@@ -199,6 +249,10 @@ public class OrderConfirmFragment extends DialogFragment {
         updateCard(binding.cardCard, binding.cardImage, binding.cardLabel, payment == PAYMENT_CARD);
         updateCard(binding.cashCard, binding.cashImage, binding.cashLabel, cash);
         binding.cashPanel.setVisibility(cash ? View.VISIBLE : View.GONE);
+        if (cash) {
+            cashReceived = 0;
+            updateCash();
+        }
     }
 
     private void updateCard(LinearLayout card, ImageView image, TextView label, boolean selected) {
@@ -238,9 +292,9 @@ public class OrderConfirmFragment extends DialogFragment {
             return;
         }
 
-        String customer = binding.customerInput.getText().toString();
-        String discount = binding.discountInput.getText().toString();
-        String remark = binding.remarkInput.getText().toString();
+        String customer = passedCustomer;
+        String discount = passedDiscount;
+        String remark = passedNote;
         if (viewModel.getCart().getValue() == null || viewModel.getCart().getValue().isEmpty()) {
             Toast.makeText(requireContext(), R.string.cart_empty, Toast.LENGTH_SHORT).show();
             return;
@@ -254,7 +308,7 @@ public class OrderConfirmFragment extends DialogFragment {
         binding.cardCard.setClickable(false);
         binding.cashCard.setClickable(false);
 
-        viewModel.confirmOrder(customer, discount, remark);
+        viewModel.confirmOrder(customer, discount, remark, passedOrderType);
     }
 
     private void doPay(Order order) {
@@ -333,33 +387,6 @@ public class OrderConfirmFragment extends DialogFragment {
                 .setPositiveButton(R.string.close, null)
                 .show();
     }
-
-    private final TextWatcher customerWatcher = new TextWatcher() {
-        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-            viewModel.setCustomer(s.toString());
-        }
-        @Override public void afterTextChanged(Editable s) {}
-    };
-
-    private final TextWatcher discountWatcher = new TextWatcher() {
-        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-            viewModel.setDiscount(s.toString());
-            updateTotals();
-            updatePaymentInfo();
-            updateCash();
-        }
-        @Override public void afterTextChanged(Editable s) {}
-    };
-
-    private final TextWatcher remarkWatcher = new TextWatcher() {
-        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-            viewModel.setRemark(s.toString());
-        }
-        @Override public void afterTextChanged(Editable s) {}
-    };
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {

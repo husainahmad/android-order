@@ -87,7 +87,7 @@
                 android:orientation="vertical"
                 android:padding="@dimen/spacing_medium">
 
-                <!-- Order Summary -->
+                <!-- Order Summary Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -113,6 +113,84 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
+                <!-- Customer / Discount / Note Summary (non-editable) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:background="@drawable/bg_stepper"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_medium">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/customer_name"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_caption" />
+
+                    <TextView
+                        android:id="@+id/customerSummaryText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_body"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/order_type"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_caption" />
+
+                    <TextView
+                        android:id="@+id/orderTypeSummaryText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_body"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/discount"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_caption" />
+
+                    <TextView
+                        android:id="@+id/discountSummaryText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_body"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/additional_notes"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_caption" />
+
+                    <TextView
+                        android:id="@+id/noteSummaryText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_body"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Order Item List -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/detailRecycler"
                     android:layout_width="match_parent"
@@ -208,63 +286,6 @@
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <!-- Form Inputs -->
-                <LinearLayout
-                    android:id="@+id/formSection"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_large"
-                    android:background="@drawable/bg_stepper"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_medium">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.KopiHarmoni.InputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/customer_name">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/customerInput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:textSize="@dimen/text_body" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.KopiHarmoni.InputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_medium"
-                        android:hint="@string/discount">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/discountInput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:text="0"
-                            android:textSize="@dimen/text_body" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.KopiHarmoni.InputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_medium"
-                        android:hint="@string/additional_notes">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/remarkInput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:maxLines="2"
-                            android:textSize="@dimen/text_body" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
@@ -321,7 +342,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="12dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_payment_option_selected"
+                        android:background="@drawable/bg_payment_option"
                         android:clickable="true"
                         android:elevation="1dp"
                         android:gravity="center"
@@ -589,6 +610,7 @@
                                     android:layout_marginEnd="8dp"
                                     android:layout_weight="1"
                                     android:text="CLEAR"
+                                    android:textColor="@color/status_void"
                                     android:textSize="13sp"
                                     app:cornerRadius="10dp"
                                     app:strokeColor="@color/status_void" />
@@ -600,6 +622,7 @@
                                     android:layout_height="44dp"
                                     android:layout_weight="1"
                                     android:text="EXACT"
+                                    android:textColor="@color/white"
                                     android:textSize="13sp"
                                     app:backgroundTint="@color/accent"
                                     app:cornerRadius="10dp" />
@@ -646,8 +669,8 @@
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
 
-                            </LinearLayout>
                         </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
@@ -681,6 +704,7 @@
             android:layout_weight="1"
             android:enabled="true"
             android:text="@string/pay"
+            android:textColor="@color/white"
             app:backgroundTint="@color/accent" />
     </LinearLayout>
 </LinearLayout>

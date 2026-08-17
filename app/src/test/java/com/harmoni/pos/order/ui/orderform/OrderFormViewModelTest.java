@@ -45,7 +45,7 @@ public class OrderFormViewModelTest {
         OrderFormViewModel vm = new OrderFormViewModel();
         vm.ensureActiveTab();
         assertEquals(1, vm.getTabs().getValue().size());
-        assertEquals("#001", vm.getActiveTab().label);
+        assertEquals("Order#001", vm.getActiveTab().label);
         assertEquals(1, vm.getActiveTab().id);
     }
 
@@ -57,9 +57,9 @@ public class OrderFormViewModelTest {
         vm.createNewTab();
         List<OrderFormViewModel.OrderTab> tabs = vm.getTabs().getValue();
         assertEquals(3, tabs.size());
-        assertEquals("#001", tabs.get(0).label);
-        assertEquals("#002", tabs.get(1).label);
-        assertEquals("#003", tabs.get(2).label);
+        assertEquals("Order#001", tabs.get(0).label);
+        assertEquals("Order#002", tabs.get(1).label);
+        assertEquals("Order#003", tabs.get(2).label);
         assertEquals(3, vm.getActiveTab().id);
     }
 

@@ -1,50 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="52dp"
-    android:layout_marginTop="6dp"
-    android:background="@drawable/bg_stepper"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@drawable/bg_sku_row"
     android:gravity="center_vertical"
+    android:minHeight="56dp"
     android:orientation="horizontal"
-    android:padding="4dp">
+    android:paddingStart="6dp"
+    android:paddingEnd="6dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/skuAddButton"
-        style="@style/Widget.Material3.Button"
-        android:layout_width="56dp"
-        android:layout_height="match_parent"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:text="+"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:backgroundTint="@color/accent"
-        app:cornerRadius="@dimen/corner_medium" />
-
-    <TextView
-        android:id="@+id/skuNameText"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:textColor="@color/text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
+    <!-- REMOVE -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/skuRemoveButton"
         style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="56dp"
-        android:layout_height="match_parent"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/remove"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:text="−"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:cornerRadius="@dimen/corner_medium"
-        app:strokeColor="@color/status_void"
-        app:strokeWidth="1.5dp" />
+        android:minWidth="0dp"
+        android:text=""
+        app:backgroundTint="@color/md_surface_container"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_remove"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconTint="@color/text_secondary"
+        app:strokeColor="@color/md_outline"
+        app:strokeWidth="1dp" />
+
+    <!-- SKU NAME + QUANTITY -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <TextView
+            android:id="@+id/skuNameText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/skuQuantityText"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/accent"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- ADD -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/skuAddButton"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/add"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="0dp"
+        android:text=""
+        app:backgroundTint="@color/accent"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_add"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconTint="@color/white" />
+
 </LinearLayout>

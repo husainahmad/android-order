@@ -12,21 +12,33 @@ public class TimeUtils {
 
     private TimeUtils() {}
 
+    private static final SimpleDateFormat ISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+    private static final SimpleDateFormat OUT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
+    private static final SimpleDateFormat TODAY = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+    static {
+        ISO.setTimeZone(TimeZone.getTimeZone("UTC"));
+        OUT.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+    }
+
     public static String toJakarta(String isoUtc) {
         if (isoUtc == null || isoUtc.isEmpty()) return "";
         try {
-            SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-            iso.setTimeZone(TimeZone.getTimeZone("UTC"));
-            Date date = iso.parse(isoUtc);
-            SimpleDateFormat out = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
-            out.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
-            return out.format(date);
+            Date date;
+            synchronized (ISO) {
+                date = ISO.parse(isoUtc);
+            }
+            synchronized (OUT) {
+                return OUT.format(date);
+            }
         } catch (ParseException e) {
             return isoUtc;
         }
     }
 
     public static String todayDate() {
-        return new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
+        synchronized (TODAY) {
+            return TODAY.format(new Date());
+        }
     }
 }

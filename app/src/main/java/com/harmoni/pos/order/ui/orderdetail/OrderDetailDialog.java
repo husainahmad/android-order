@@ -103,7 +103,7 @@ public class OrderDetailDialog extends DialogFragment {
     }
 
     private void openPayment() {
-        PaymentDialog dialog = PaymentDialog.newInstance(order);
+        PaymentDialog dialog = PaymentDialog.newInstance(order, "", "0", "");
         dialog.setOnPaymentSuccessListener(paid -> {
             if (listener != null) listener.onOrderChanged();
             dismiss();

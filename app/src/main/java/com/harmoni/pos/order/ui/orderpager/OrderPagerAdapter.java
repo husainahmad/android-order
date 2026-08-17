@@ -22,6 +22,9 @@ public class OrderPagerAdapter extends FragmentStateAdapter {
     }
 
     public void setOrderIds(List<Integer> newIds) {
+        if (newIds != null && newIds.equals(orderIds)) {
+            return;
+        }
         orderIds.clear();
         if (newIds != null) {
             orderIds.addAll(newIds);

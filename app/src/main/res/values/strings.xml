@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Kopi Harmoni POS</string>
     <string name="login_subtitle">Point of Sale - Tablet</string>
+    <string name="remove">Remove</string>
+    <string name="add">Add</string>
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="login">Login</string>
@@ -9,6 +11,10 @@
     <string name="daily_order">Daily Order</string>
     <string name="order">Order</string>
     <string name="add_order">Add Order</string>
+    <string name="order_type">Order Type</string>
+    <string name="type">Type</string>
+    <string name="dine_in">Dine In</string>
+    <string name="takeaway">Takeaway</string>
     <string name="new_order">+ NEW ORDER</string>
     <string name="orders">Orders</string>
     <string name="no_customer">-</string>

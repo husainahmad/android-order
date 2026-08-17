@@ -81,7 +81,7 @@ public class ProductDetailDialog extends DialogFragment {
         binding.productNameText.setContentDescription(product.getName());
         if (product.getProductImage() == null
                 || product.getProductImage().getImageBlob().isEmpty()) {
-            binding.productImage.setImageResource(R.drawable.bg_product_placeholder);
+            binding.productImage.setImageResource(R.drawable.ic_default_product);
             binding.imageProgress.setVisibility(View.GONE);
             return;
         }
@@ -90,7 +90,7 @@ public class ProductDetailDialog extends DialogFragment {
             if (bitmap != null) {
                 binding.productImage.setImageBitmap(bitmap);
             } else {
-                binding.productImage.setImageResource(R.drawable.ic_image_off);
+                binding.productImage.setImageResource(R.drawable.ic_default_product);
             }
             binding.imageProgress.setVisibility(View.GONE);
         });

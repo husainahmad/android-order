@@ -92,6 +92,10 @@ public class ApiClient {
         @Override
         public Response intercept(@NonNull Chain chain) throws IOException {
             Request original = chain.request();
+            String path = original.url().encodedPath();
+            if (path.startsWith("/api/v1/auth/")) {
+                return chain.proceed(original);
+            }
             String token = TokenManager.getAccessToken();
             if (!token.isEmpty()) {
                 Request.Builder builder = original.newBuilder()

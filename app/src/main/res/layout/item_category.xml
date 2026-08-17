@@ -1,18 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/categoryName"
+    android:id="@+id/categoryCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/spacing_xsmall"
-    android:background="@drawable/bg_category_chip"
+    android:layout_margin="@dimen/spacing_xsmall"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="@drawable/bg_category_ripple"
-    android:gravity="center"
-    android:minHeight="40dp"
-    android:paddingStart="@dimen/spacing_xsmall"
-    android:paddingEnd="@dimen/spacing_xsmall"
-    android:textColor="@color/text_primary"
-    android:textSize="@dimen/text_caption"
-    android:textStyle="bold" />
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/md_surface_container_high"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="1dp"
+    app:rippleColor="@color/md_primary_container"
+    app:strokeColor="@color/md_outline_variant"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingBottom="@dimen/spacing_small">
+
+        <TextView
+            android:id="@+id/categoryIcon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_category_circle"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/categoryName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_xsmall"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="@dimen/spacing_xsmall"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:minHeight="26dp"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_caption_small"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

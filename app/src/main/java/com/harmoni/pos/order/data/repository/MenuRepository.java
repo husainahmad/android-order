@@ -10,7 +10,9 @@ import com.harmoni.pos.order.data.model.Product;
 import com.harmoni.pos.order.data.remote.ApiClient;
 import com.harmoni.pos.order.util.JsonCache;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,10 +30,18 @@ public class MenuRepository {
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
 
+    private static final Map<Integer, List<Product>> memoryProducts = new HashMap<>();
+    private static List<Category> memoryCategories;
+
     public void getCategories(RepositoryCallback<List<Category>> callback) {
+        if (memoryCategories != null) {
+            MAIN.post(() -> callback.onSuccess(memoryCategories));
+            return;
+        }
         EXECUTOR.execute(() -> {
             List<Category> cached = JsonCache.readCategories(PosApplication.getAppContext());
             if (cached != null) {
+                memoryCategories = cached;
                 MAIN.post(() -> callback.onSuccess(cached));
                 return;
             }
@@ -40,6 +50,7 @@ public class MenuRepository {
                 public void onResponse(Call<ApiResponse<List<Category>>> call, Response<ApiResponse<List<Category>>> response) {
                     if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                         List<Category> data = response.body().getData();
+                        memoryCategories = data;
                         EXECUTOR.execute(() -> JsonCache.writeCategories(PosApplication.getAppContext(), data));
                         callback.onSuccess(data);
                     } else {
@@ -56,29 +67,43 @@ public class MenuRepository {
     }
 
     public void getProducts(int categoryId, RepositoryCallback<List<Product>> callback) {
+        List<Product> memory = memoryProducts.get(categoryId);
+        if (memory != null) {
+            MAIN.post(() -> callback.onSuccess(memory));
+            return;
+        }
         EXECUTOR.execute(() -> {
             List<Product> cached = JsonCache.readProducts(PosApplication.getAppContext(), categoryId);
             if (cached != null) {
+                memoryProducts.put(categoryId, cached);
                 MAIN.post(() -> callback.onSuccess(cached));
-                return;
             }
-            ApiClient.menuService().productsByCategory(categoryId).enqueue(new Callback<ApiResponse<List<Product>>>() {
-                @Override
-                public void onResponse(Call<ApiResponse<List<Product>>> call, Response<ApiResponse<List<Product>>> response) {
-                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                        List<Product> data = response.body().getData();
-                        EXECUTOR.execute(() -> JsonCache.writeProducts(PosApplication.getAppContext(), categoryId, data));
-                        callback.onSuccess(data);
-                    } else {
-                        callback.onError(errorMessage(response));
-                    }
-                }
+            fetchProducts(categoryId, callback, cached != null);
+        });
+    }
 
-                @Override
-                public void onFailure(Call<ApiResponse<List<Product>>> call, Throwable t) {
+    private void fetchProducts(int categoryId, RepositoryCallback<List<Product>> callback, boolean silent) {
+        ApiClient.menuService().productsByCategory(categoryId).enqueue(new Callback<ApiResponse<List<Product>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Product>>> call, Response<ApiResponse<List<Product>>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    List<Product> data = response.body().getData();
+                    EXECUTOR.execute(() -> {
+                        JsonCache.writeProducts(PosApplication.getAppContext(), categoryId, data);
+                        memoryProducts.put(categoryId, data);
+                    });
+                    callback.onSuccess(data);
+                } else if (!silent) {
+                    callback.onError(errorMessage(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Product>>> call, Throwable t) {
+                if (!silent) {
                     callback.onError(t.getMessage());
                 }
-            });
+            }
         });
     }
 
