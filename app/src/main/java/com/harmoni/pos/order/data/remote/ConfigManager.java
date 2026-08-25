@@ -9,7 +9,7 @@ public class ConfigManager {
     private static final String KEY_HOST = "host";
     private static final String KEY_PORT = "port";
 
-    private static final String DEFAULT_HOST = "10.0.2.2";
+    private static final String DEFAULT_HOST = "103.150.197.7";
     private static final int DEFAULT_PORT = 8080;
 
     private static SharedPreferences prefs;

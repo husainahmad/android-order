@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.harmoni.pos.order.R;
@@ -26,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class DailyReportFragment extends Fragment {
+public class DailyReportDialogFragment extends DialogFragment {
 
     private FragmentDailyReportBinding binding;
     private DailyReportViewModel viewModel;
@@ -43,11 +42,15 @@ public class DailyReportFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_FRAME, R.style.ThemeOverlay_OrderConfirm);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(DailyReportViewModel.class);
-
-        com.harmoni.pos.order.util.UiUtils.applyStatusBarTopInset(binding.reportToolbar);
 
         adapter = new DailyReportAdapter();
         binding.reportRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -61,10 +64,20 @@ public class DailyReportFragment extends Fragment {
         binding.startDateButton.setOnClickListener(v -> pickDate(true));
         binding.endDateButton.setOnClickListener(v -> pickDate(false));
         binding.loadButton.setOnClickListener(v -> viewModel.load(startDate, endDate));
-        binding.backButton.setOnClickListener(v -> Navigation.findNavController(requireView()).popBackStack());
+        binding.backButton.setOnClickListener(v -> dismiss());
 
         observe();
         viewModel.load(startDate, endDate);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+            getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
     }
 
     private void observe() {

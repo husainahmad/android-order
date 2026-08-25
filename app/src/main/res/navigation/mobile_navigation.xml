@@ -28,54 +28,5 @@
             app:destination="@id/nav_login"
             app:popUpTo="@id/nav_order_pager"
             app:popUpToInclusive="true" />
-
-        <action
-            android:id="@+id/action_orders_to_sales_report"
-            app:destination="@id/nav_sales_report"
-            app:enterAnim="@anim/nav_enter"
-            app:exitAnim="@anim/nav_exit"
-            app:popEnterAnim="@anim/nav_pop_enter"
-            app:popExitAnim="@anim/nav_pop_exit" />
-
-        <action
-            android:id="@+id/action_orders_to_daily_report"
-            app:destination="@id/nav_daily_report"
-            app:enterAnim="@anim/nav_enter"
-            app:exitAnim="@anim/nav_exit"
-            app:popEnterAnim="@anim/nav_pop_enter"
-            app:popExitAnim="@anim/nav_pop_exit" />
-
-        <action
-            android:id="@+id/action_orders_to_settings"
-            app:destination="@id/nav_settings"
-            app:enterAnim="@anim/nav_enter"
-            app:exitAnim="@anim/nav_exit"
-            app:popEnterAnim="@anim/nav_pop_enter"
-            app:popExitAnim="@anim/nav_pop_exit" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_sales_report"
-        android:name="com.harmoni.pos.order.ui.reports.SalesReportFragment"
-        android:label="@string/sales_report"
-        tools:layout="@layout/fragment_sales_report" />
-
-    <fragment
-        android:id="@+id/nav_daily_report"
-        android:name="com.harmoni.pos.order.ui.reports.DailyReportFragment"
-        android:label="@string/daily_report"
-        tools:layout="@layout/fragment_daily_report" />
-
-    <fragment
-        android:id="@+id/nav_settings"
-        android:name="com.harmoni.pos.order.ui.settings.SettingsFragment"
-        android:label="@string/menu_settings"
-        tools:layout="@layout/fragment_settings">
-
-        <action
-            android:id="@+id/action_settings_to_login"
-            app:destination="@id/nav_login"
-            app:popUpTo="@id/nav_order_pager"
-            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

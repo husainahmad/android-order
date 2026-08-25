@@ -8,15 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.harmoni.pos.order.R;
@@ -26,9 +24,11 @@ import com.harmoni.pos.order.data.remote.TokenManager;
 import com.harmoni.pos.order.databinding.FragmentSettingsBinding;
 import com.harmoni.pos.order.print.PrinterManager;
 
+import androidx.navigation.Navigation;
+
 import java.util.List;
 
-public class SettingsFragment extends Fragment {
+public class SettingsDialogFragment extends DialogFragment {
 
     private FragmentSettingsBinding binding;
 
@@ -52,10 +52,15 @@ public class SettingsFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_FRAME, R.style.ThemeOverlay_OrderConfirm);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        com.harmoni.pos.order.util.UiUtils.applyStatusBarTopInset(binding.settingsToolbar);
         binding.usernameText.setText(TokenManager.getUsername());
         binding.storeText.setText("Store : " + TokenManager.getStoreName());
         binding.brandText.setText("Brand : " + TokenManager.getBrandName());
@@ -63,6 +68,16 @@ public class SettingsFragment extends Fragment {
         loadServerConfig();
         loadPrinterConfig();
         setupActions();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+            getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
     }
 
     private void loadServerConfig() {
@@ -84,12 +99,11 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setupActions() {
-        binding.backButton.setOnClickListener(v ->
-                Navigation.findNavController(requireView()).popBackStack());
+        binding.backButton.setOnClickListener(v -> dismiss());
         binding.logoutButton.setOnClickListener(v -> {
             TokenManager.clearTokens();
-            Navigation.findNavController(requireView())
-                    .navigate(R.id.action_settings_to_login);
+            dismiss();
+            Navigation.findNavController(requireView()).navigate(R.id.action_order_pager_to_login);
         });
 
         binding.serverSaveButton.setOnClickListener(v -> saveServer());

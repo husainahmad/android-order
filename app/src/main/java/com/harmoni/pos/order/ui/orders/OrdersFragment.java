@@ -23,6 +23,9 @@ import com.harmoni.pos.order.data.remote.TokenManager;
 import com.harmoni.pos.order.databinding.FragmentOrdersBinding;
 import com.harmoni.pos.order.print.PrinterManager;
 import com.harmoni.pos.order.ui.orderdetail.OrderDetailDialog;
+import com.harmoni.pos.order.ui.reports.DailyReportDialogFragment;
+import com.harmoni.pos.order.ui.reports.SalesReportDialogFragment;
+import com.harmoni.pos.order.ui.settings.SettingsDialogFragment;
 import com.harmoni.pos.order.util.CurrencyUtils;
 
 import java.util.List;
@@ -71,16 +74,13 @@ public class OrdersFragment extends Fragment {
 
     private void setupButtons() {
         binding.dailyReportButton.setOnClickListener(v ->
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_orders_to_daily_report));
+                new DailyReportDialogFragment().show(getParentFragmentManager(), "daily_report"));
         binding.salesReportButton.setOnClickListener(v ->
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_orders_to_sales_report));
+                new SalesReportDialogFragment().show(getParentFragmentManager(), "sales_report"));
         binding.settlementButton.setOnClickListener(v -> loadSettlement());
         binding.refreshButton.setOnClickListener(v -> viewModel.loadOrders());
         binding.settingsButton.setOnClickListener(v ->
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_orders_to_settings));
+                new SettingsDialogFragment().show(getParentFragmentManager(), "settings"));
         binding.logoutButton.setOnClickListener(v -> logout());
     }
 

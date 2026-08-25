@@ -51,19 +51,26 @@ public class OrderPagerFragment extends Fragment {
 
         binding.viewPager.setAdapter(pagerAdapter);
         binding.viewPager.setOffscreenPageLimit(10);
+        binding.viewPager.setSaveEnabled(true);
+
+        if (savedInstanceState != null) {
+            int savedItem = savedInstanceState.getInt("viewPagerCurrentItem", 0);
+            binding.viewPager.post(() -> binding.viewPager.setCurrentItem(savedItem, false));
+        }
 
         ordersViewModel.loadOrders();
 
         viewModel.getTabs().observe(getViewLifecycleOwner(), tabs -> {
+            if (tabs == null) return;
             List<Integer> ids = new ArrayList<>();
             for (OrderFormViewModel.OrderTab tab : tabs) {
                 ids.add(tab.id);
             }
             pagerAdapter.setOrderIds(ids);
-            renderHeaderTabs(tabs);
+            binding.viewPager.post(() -> renderHeaderTabs(tabs));
             if (ids.isEmpty()) {
                 binding.viewPager.post(() -> {
-                    if (binding.viewPager.getCurrentItem() != 0) {
+                    if (binding != null && binding.viewPager.getCurrentItem() != 0) {
                         binding.viewPager.setCurrentItem(0, true);
                     }
                 });
@@ -83,10 +90,34 @@ public class OrderPagerFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (binding != null) {
+            binding.viewPager.post(() -> {
+                if (binding.viewPager.getCurrentItem() != 0) {
+                    binding.viewPager.setCurrentItem(0, false);
+                }
+                List<OrderFormViewModel.OrderTab> tabs = viewModel.getTabs().getValue();
+                if (tabs != null) {
+                    renderHeaderTabs(tabs);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (binding != null && binding.viewPager != null) {
+            outState.putInt("viewPagerCurrentItem", binding.viewPager.getCurrentItem());
+        }
+    }
+
     private String lastHeaderSignature;
 
     private void renderHeaderTabs(List<OrderFormViewModel.OrderTab> tabs) {
-        if (tabs == null) {
+        if (tabs == null || binding == null) {
             return;
         }
         StringBuilder sig = new StringBuilder();
@@ -95,7 +126,7 @@ public class OrderPagerFragment extends Fragment {
         }
         String signature = sig.toString();
         if (signature.equals(lastHeaderSignature)) {
-            updateTabSelection(binding.viewPager.getCurrentItem());
+            binding.viewPager.post(() -> updateTabSelection(binding.viewPager.getCurrentItem()));
             return;
         }
         lastHeaderSignature = signature;
