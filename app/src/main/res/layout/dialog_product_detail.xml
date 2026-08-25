@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp">
+    android:padding="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,8 +17,8 @@
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="84dp"
-                android:layout_height="84dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 app:cardBackgroundColor="@color/md_surface_variant"
                 app:cardCornerRadius="@dimen/corner_large"
                 app:cardElevation="1dp">
@@ -28,7 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/product"
-                    android:padding="6dp"
+                    android:padding="8dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_default_product" />
 
@@ -45,32 +45,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/text_primary"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="20dp"
             android:text="@string/select_variant"
             android:textColor="@color/text_primary"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/skuContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:orientation="vertical" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/closeButton"
             style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="20dp"
             android:text="@string/close"
             app:strokeColor="@color/gray_button" />
     </LinearLayout>

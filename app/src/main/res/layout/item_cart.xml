@@ -24,70 +24,57 @@
         android:textSize="@dimen/text_caption"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/minusButton"
+        app:layout_constraintEnd_toStartOf="@id/qtyContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Minus -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/minusButton"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="44dp"
+    <!-- Quantity Controls Pill -->
+    <LinearLayout
+        android:id="@+id/qtyContainer"
+        android:layout_width="wrap_content"
         android:layout_height="44dp"
-        android:contentDescription="@string/remove"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="0dp"
-        android:text=""
-        app:backgroundTint="@color/md_surface_container"
-        app:cornerRadius="10dp"
-        app:icon="@drawable/ic_remove"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconTint="@color/text_secondary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/quantityText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/md_outline"
-        app:strokeWidth="1dp" />
-
-    <!-- Quantity -->
-    <TextView
-        android:id="@+id/quantityText"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:gravity="center"
-        android:textColor="@color/text_primary"
-        android:textSize="@dimen/text_caption"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/plusButton"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Plus -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/plusButton"
-        style="@style/Widget.Material3.Button"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:contentDescription="@string/add"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="0dp"
-        android:text=""
-        app:backgroundTint="@color/accent"
-        app:cornerRadius="10dp"
-        app:icon="@drawable/ic_add"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconTint="@color/white"
+        android:background="@drawable/bg_qty_pill"
+        android:orientation="horizontal"
+        android:paddingHorizontal="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/lineTotalText"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/minusButton"
+            style="@style/Widget.KopiHarmoni.QtyButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/remove"
+            android:text=""
+            app:backgroundTint="@color/md_surface_container"
+            app:icon="@drawable/ic_remove"
+            app:iconGravity="textStart"
+            app:iconTint="@color/text_secondary"
+            app:strokeColor="@color/md_outline"
+            app:strokeWidth="1dp" />
+
+        <TextView
+            android:id="@+id/quantityText"
+            android:layout_width="52dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_caption"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/plusButton"
+            style="@style/Widget.KopiHarmoni.QtyButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/add"
+            android:text=""
+            app:backgroundTint="@color/accent"
+            app:icon="@drawable/ic_add"
+            app:iconGravity="textStart"
+            app:iconTint="@color/white" />
+    </LinearLayout>
 
     <!-- Line Total -->
     <TextView

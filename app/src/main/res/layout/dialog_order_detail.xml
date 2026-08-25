@@ -4,24 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="24dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/order_detail"
         android:textColor="@color/text_primary"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/bg_stepper"
-        android:minHeight="280dp"
-        android:padding="12dp">
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/detailText"
@@ -29,22 +28,25 @@
             android:layout_height="wrap_content"
             android:fontFamily="monospace"
             android:textColor="@color/text_primary"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:lineSpacingExtra="2dp" />
     </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:weightSum="6">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/printButton"
             style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="56dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
+            android:minWidth="120dp"
             android:text="@string/print"
             android:textSize="14sp"
             app:strokeColor="@color/blue_action" />
@@ -53,9 +55,10 @@
             android:id="@+id/kitchenButton"
             style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="56dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:minWidth="180dp"
             android:text="@string/kitchen_print"
             android:textSize="14sp"
             app:strokeColor="@color/blue_action" />
@@ -64,9 +67,10 @@
             android:id="@+id/payButton"
             style="@style/Widget.KopiHarmoni.Button.Primary"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="56dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
+            android:minWidth="120dp"
             android:text="@string/pay"
             android:textSize="14sp"
             app:backgroundTint="@color/accent" />
@@ -75,9 +79,10 @@
             android:id="@+id/voidButton"
             style="@style/Widget.KopiHarmoni.Button.Primary"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="56dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
+            android:minWidth="120dp"
             android:text="@string/void_order"
             android:textSize="14sp"
             app:backgroundTint="@color/status_void" />
@@ -86,8 +91,9 @@
             android:id="@+id/closeButton"
             style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="56dp"
             android:layout_weight="1"
+            android:minWidth="120dp"
             android:text="@string/close"
             android:textSize="14sp"
             app:strokeColor="@color/gray_button" />

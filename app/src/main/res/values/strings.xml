@@ -71,6 +71,7 @@
     <string name="net_sales">Net Sales</string>
     <string name="category">Category</string>
     <string name="product">Product</string>
+    <string name="selected">Selected</string>
     <string name="load_report">Load Report</string>
     <string name="back">Back</string>
     <string name="start_date">Start Date</string>
@@ -92,4 +93,13 @@
     <string name="discount_line">Discount: %1$s</string>
     <string name="total_line">Total: %1$s</string>
     <string name="proceed_to_payment">Proceed to payment?</string>
+
+    <string name="badge_new">NEW</string>
+    <string name="out_of_stock">OUT OF STOCK</string>
+
+    <string name="server">Server</string>
+    <string name="printer">Printer</string>
+    <string name="network">Network</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="usb">USB</string>
 </resources>

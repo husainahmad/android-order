@@ -1,53 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/categoryCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/spacing_xsmall"
+    android:checkable="true"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    app:cardBackgroundColor="@color/md_surface_container_high"
+    android:minHeight="112dp"
+    app:cardBackgroundColor="@color/category_card_bg"
     app:cardCornerRadius="14dp"
     app:cardElevation="1dp"
     app:rippleColor="@color/md_primary_container"
-    app:strokeColor="@color/md_outline_variant"
+    app:strokeColor="@color/category_card_stroke"
     app:strokeWidth="1dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/spacing_small"
-        android:paddingBottom="@dimen/spacing_small">
+        android:layout_height="match_parent"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
 
-        <TextView
+        <ImageView
             android:id="@+id/categoryIcon"
             android:layout_width="44dp"
             android:layout_height="44dp"
+            android:layout_marginBottom="6dp"
             android:background="@drawable/bg_category_circle"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:contentDescription="@string/category"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_category_default"
+            app:layout_constraintBottom_toTopOf="@id/categoryName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/categoryName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_xsmall"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="@dimen/spacing_xsmall"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"
-            android:minHeight="26dp"
-            android:textColor="@color/text_primary"
+            android:minHeight="24dp"
+            android:textColor="@color/category_text_color"
             android:textSize="@dimen/text_caption_small"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/selectedIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:contentDescription="@string/selected"
+            android:src="@drawable/ic_check_circle"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

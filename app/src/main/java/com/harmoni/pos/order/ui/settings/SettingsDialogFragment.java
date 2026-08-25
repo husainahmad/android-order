@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -16,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.harmoni.pos.order.R;
 import com.harmoni.pos.order.data.remote.ApiClient;
@@ -87,12 +88,13 @@ public class SettingsDialogFragment extends DialogFragment {
 
     private void loadPrinterConfig() {
         String type = PrinterManager.getType();
+        ChipGroup chipGroup = binding.printerTypeGroup;
         if (PrinterManager.TYPE_BLUETOOTH.equals(type)) {
-            binding.bluetoothRadio.setChecked(true);
+            chipGroup.check(R.id.bluetoothChip);
         } else if (PrinterManager.TYPE_USB.equals(type)) {
-            binding.usbRadio.setChecked(true);
+            chipGroup.check(R.id.usbChip);
         } else {
-            binding.networkRadio.setChecked(true);
+            chipGroup.check(R.id.networkChip);
         }
         binding.printerAddressInput.setText(PrinterManager.getAddress());
         binding.printerPortInput.setText(String.valueOf(PrinterManager.getPort()));
@@ -130,9 +132,9 @@ public class SettingsDialogFragment extends DialogFragment {
     }
 
     private String currentPrinterType() {
-        int id = binding.printerTypeGroup.getCheckedRadioButtonId();
-        if (id == R.id.bluetoothRadio) return PrinterManager.TYPE_BLUETOOTH;
-        if (id == R.id.usbRadio) return PrinterManager.TYPE_USB;
+        int id = binding.printerTypeGroup.getCheckedChipId();
+        if (id == R.id.bluetoothChip) return PrinterManager.TYPE_BLUETOOTH;
+        if (id == R.id.usbChip) return PrinterManager.TYPE_USB;
         return PrinterManager.TYPE_NETWORK;
     }
 
@@ -161,7 +163,7 @@ public class SettingsDialogFragment extends DialogFragment {
                 .setItems(names, (d, which) -> {
                     String address = devices.get(which).getAddress();
                     binding.printerAddressInput.setText(address);
-                    binding.bluetoothRadio.setChecked(true);
+                    binding.printerTypeGroup.check(R.id.bluetoothChip);
                     savePrinter();
                     setPrinterStatus("Bluetooth printer selected: " + address);
                 })
@@ -183,7 +185,7 @@ public class SettingsDialogFragment extends DialogFragment {
                 .setItems(names, (d, which) -> {
                     UsbDevice device = devices.get(which);
                     PrinterManager.saveUsbDevice(PrinterManager.usbDeviceDescription(device));
-                    binding.usbRadio.setChecked(true);
+                    binding.printerTypeGroup.check(R.id.usbChip);
                     binding.printerAddressInput.setText(PrinterManager.usbDeviceDescription(device));
                     savePrinter();
                     requestUsbThen(device, () ->

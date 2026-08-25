@@ -24,6 +24,6 @@ public class CurrencyUtils {
     }
 
     public static String formatPlain(double value) {
-        return String.format(Locale.US, "%.2f", value);
+        return IDR.format(value);
     }
 }

@@ -3,6 +3,8 @@ package com.harmoni.pos.order.ui.orderform;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -91,8 +93,13 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
     public void onViewRecycled(@NonNull ProductHolder holder) {
         super.onViewRecycled(holder);
         holder.imageProgress.setVisibility(View.GONE);
+        holder.shimmerPlaceholder.setVisibility(View.VISIBLE);
+        holder.imageView.setVisibility(View.GONE);
         holder.imageView.setImageResource(DEFAULT_IMAGE_RES);
         holder.imageView.setContentDescription(null);
+        holder.badgeView.setVisibility(View.GONE);
+        holder.outOfStockOverlay.setVisibility(View.GONE);
+        holder.outOfStockText.setVisibility(View.GONE);
     }
 
     class ProductHolder extends RecyclerView.ViewHolder {
@@ -101,6 +108,11 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
         final TextView nameText;
         final TextView priceText;
         final com.google.android.material.button.MaterialButton addButton;
+        final View shimmerPlaceholder;
+        final TextView badgeView;
+        final View outOfStockOverlay;
+        final TextView outOfStockText;
+        private Animation shimmerAnim;
 
         ProductHolder(@NonNull View itemView) {
             super(itemView);
@@ -109,6 +121,11 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
             nameText = itemView.findViewById(R.id.productName);
             priceText = itemView.findViewById(R.id.productPrice);
             addButton = itemView.findViewById(R.id.productAddButton);
+            shimmerPlaceholder = itemView.findViewById(R.id.shimmerPlaceholder);
+            badgeView = itemView.findViewById(R.id.productBadge);
+            outOfStockOverlay = itemView.findViewById(R.id.outOfStockOverlay);
+            outOfStockText = itemView.findViewById(R.id.outOfStockText);
+            shimmerAnim = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.shimmer_animation);
         }
 
         void bind(Product product) {
@@ -120,39 +137,81 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
             } else {
                 priceText.setText("");
             }
+
+            // Badge handling
+            String badge = product.getBadge();
+            if (badge != null && !badge.isEmpty()) {
+                badgeView.setText(badge);
+                badgeView.setVisibility(View.VISIBLE);
+                // Change badge color based on type
+                int badgeColor = getBadgeColor(badge);
+                badgeView.setBackgroundTintList(android.content.res.ColorStateList.valueOf(badgeColor));
+            } else {
+                badgeView.setVisibility(View.GONE);
+            }
+
+            // Out of stock handling
+            boolean outOfStock = product.isOutOfStock();
+            outOfStockOverlay.setVisibility(outOfStock ? View.VISIBLE : View.GONE);
+            outOfStockText.setVisibility(outOfStock ? View.VISIBLE : View.GONE);
+            addButton.setEnabled(!outOfStock);
+            addButton.setAlpha(outOfStock ? 0.5f : 1f);
+
             itemView.setOnClickListener(v -> {
-                if (listener != null) listener.onProductClick(product);
+                if (listener != null && !outOfStock) listener.onProductClick(product);
             });
             addButton.setOnClickListener(v -> {
-                v.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM);
-                if (listener != null) listener.onProductClick(product);
+                if (!outOfStock) {
+                    v.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM);
+                    if (listener != null) listener.onProductClick(product);
+                }
             });
             bindImage(product);
+        }
+
+        private int getBadgeColor(String badge) {
+            String lower = badge.toLowerCase();
+            if (lower.contains("new")) return itemView.getContext().getColor(R.color.primary);
+            if (lower.contains("popular") || lower.contains("hot")) return itemView.getContext().getColor(R.color.accent);
+            if (lower.contains("sale") || lower.contains("promo")) return itemView.getContext().getColor(R.color.status_void);
+            return itemView.getContext().getColor(R.color.primary);
         }
 
         private void bindImage(Product product) {
             int productId = product.getId();
             if (product.getProductImage() == null
                     || product.getProductImage().getImageBlob().isEmpty()) {
-                imageView.setImageResource(DEFAULT_IMAGE_RES);
-                imageProgress.setVisibility(View.GONE);
+                showDefaultImage();
                 return;
             }
-            imageProgress.setVisibility(View.VISIBLE);
-            imageView.setImageResource(DEFAULT_IMAGE_RES);
+            // Show shimmer while loading
+            shimmerPlaceholder.setVisibility(View.VISIBLE);
+            shimmerPlaceholder.startAnimation(shimmerAnim);
+            imageView.setVisibility(View.GONE);
+            imageProgress.setVisibility(View.GONE);
+
             String blob = product.getProductImage().getImageBlob();
             ImageLoader.load(productId, blob, bitmap -> {
                 int pos = getBindingAdapterPosition();
                 if (pos >= 0 && pos < getItemCount()
                         && getItem(pos).getId() == productId) {
+                    shimmerPlaceholder.clearAnimation();
+                    shimmerPlaceholder.setVisibility(View.GONE);
                     if (bitmap != null) {
                         imageView.setImageBitmap(bitmap);
+                        imageView.setVisibility(View.VISIBLE);
                     } else {
-                        imageView.setImageResource(DEFAULT_IMAGE_RES);
+                        showDefaultImage();
                     }
                 }
-                imageProgress.setVisibility(View.GONE);
             });
+        }
+
+        private void showDefaultImage() {
+            shimmerPlaceholder.clearAnimation();
+            shimmerPlaceholder.setVisibility(View.GONE);
+            imageView.setVisibility(View.VISIBLE);
+            imageView.setImageResource(DEFAULT_IMAGE_RES);
         }
     }
 }

@@ -3,10 +3,10 @@ package com.harmoni.pos.order.ui.orderform;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
@@ -38,6 +38,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         notifyDataSetChanged();
     }
 
+    public void setSelectedPosition(int position) {
+        if (position >= 0 && position < categories.size()) {
+            int previous = selectedPosition;
+            selectedPosition = position;
+            if (previous >= 0) notifyItemChanged(previous);
+            notifyItemChanged(selectedPosition);
+        }
+    }
+
     @NonNull
     @Override
     public CategoryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -57,40 +66,37 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categories.size();
     }
 
-    private static String monogram(String name) {
-        if (name == null || name.isEmpty()) return "?";
-        return name.substring(0, 1).toUpperCase();
-    }
-
     class CategoryHolder extends RecyclerView.ViewHolder {
         MaterialCardView card;
-        TextView iconText;
+        ImageView iconView;
         TextView nameText;
+        ImageView selectedIcon;
 
         CategoryHolder(@NonNull View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.categoryCard);
-            iconText = itemView.findViewById(R.id.categoryIcon);
+            iconView = itemView.findViewById(R.id.categoryIcon);
             nameText = itemView.findViewById(R.id.categoryName);
+            selectedIcon = itemView.findViewById(R.id.selectedIcon);
         }
 
         void bind(Category category, boolean selected) {
             String name = category.getName();
             nameText.setText(name);
-            iconText.setText(monogram(name));
-            iconText.setSelected(selected);
 
-            if (selected) {
-                card.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.accent));
-                card.setStrokeColor(ContextCompat.getColor(itemView.getContext(), R.color.accent));
-                iconText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.accent));
-                nameText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
+            // Set icon if available, fallback to default
+            int iconRes = category.getIconRes();
+            if (iconRes != 0) {
+                iconView.setImageResource(iconRes);
             } else {
-                card.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.md_surface_container_high));
-                card.setStrokeColor(ContextCompat.getColor(itemView.getContext(), R.color.md_outline_variant));
-                iconText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.md_on_primary_container));
-                nameText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.text_primary));
+                iconView.setImageResource(R.drawable.ic_category_default);
             }
+
+            // Set checked state for state-list drawables (bg, stroke, text, icon bg)
+            card.setChecked(selected);
+
+            // Show/hide check icon
+            selectedIcon.setVisibility(selected ? View.VISIBLE : View.GONE);
 
             itemView.setOnClickListener(v -> {
                 int previous = selectedPosition;

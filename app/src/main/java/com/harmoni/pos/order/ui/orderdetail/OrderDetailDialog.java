@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,6 +85,16 @@ public class OrderDetailDialog extends DialogFragment {
         payButton.setOnClickListener(v -> openPayment());
         voidButton.setOnClickListener(v -> confirmVoid());
         binding.closeButton.setOnClickListener(v -> dismiss());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            int width = (int) (requireContext().getResources().getDisplayMetrics().widthPixels * 0.5);
+            int height = (int) (requireContext().getResources().getDisplayMetrics().heightPixels * 0.8);
+            getDialog().getWindow().setLayout(width, height);
+        }
     }
 
     private void printText(String label, String text) {

@@ -53,6 +53,14 @@ public class ProductDetailDialog extends DialogFragment {
         binding.closeButton.setOnClickListener(v -> dismiss());
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setLayout((int) (requireContext().getResources().getDisplayMetrics().widthPixels * 0.4), ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+    }
+
     private void setupSkus(Product product) {
         binding.skuContainer.removeAllViews();
         if (product.getSkus() == null || product.getSkus().isEmpty()) {

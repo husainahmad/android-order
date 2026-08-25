@@ -1,106 +1,158 @@
-    <com.google.android.material.card.MaterialCardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/spacing_xsmall"
-        android:clickable="true"
-        android:elevation="2dp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:stateListAnimator="@animator/card_lift"
-        app:cardBackgroundColor="@color/md_surface_container_high"
-        app:cardCornerRadius="@dimen/corner_large"
-        app:cardElevation="2dp"
-        app:rippleColor="@color/md_primary_container"
-        app:strokeColor="@color/md_outline_variant"
-        app:strokeWidth="1dp">
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_xsmall"
+    android:clickable="true"
+    android:elevation="2dp"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:stateListAnimator="@animator/card_lift"
+    app:cardBackgroundColor="@color/md_surface_container_high"
+    app:cardCornerRadius="@dimen/corner_large"
+    app:cardElevation="2dp"
+    app:rippleColor="@color/md_primary_container"
+    app:strokeColor="@color/md_outline_variant"
+    app:strokeWidth="1dp">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <!-- Product Image -->
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/height_product_image"
-            android:background="@color/md_surface_variant">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/productImage"
+            <!-- Product Image with Shimmer -->
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/product"
-                android:padding="6dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_default_product" />
+                android:layout_height="@dimen/height_product_image"
+                android:background="@color/md_surface_variant">
 
-            <ProgressBar
-                android:id="@+id/imageProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                <!-- Shimmer placeholder (visible while loading) -->
+                <View
+                    android:id="@+id/shimmerPlaceholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shimmer_bg"
+                    android:visibility="visible" />
 
-        </FrameLayout>
+                <ImageView
+                    android:id="@+id/productImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/product"
+                    android:padding="6dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_default_product"
+                    android:visibility="gone" />
 
-        <!-- Product Name -->
-        <TextView
-            android:id="@+id/productName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_small"
-            android:layout_marginTop="@dimen/spacing_small"
-            android:layout_marginEnd="@dimen/spacing_small"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:minHeight="40dp"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/text_caption_small"
-            android:textStyle="bold" />
+                <ProgressBar
+                    android:id="@+id/imageProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
 
-        <!-- Price + Add -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_small"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="@dimen/spacing_small"
-            android:layout_marginBottom="@dimen/spacing_small">
+                <!-- Badge overlay -->
+                <TextView
+                    android:id="@+id/productBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|start"
+                    android:layout_margin="@dimen/spacing_small"
+                    android:background="@drawable/bg_badge_new"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:text="@string/badge_new"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/productAddButton"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_alignParentEnd="true"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:minWidth="0dp"
-                android:text=""
-                android:contentDescription="@string/add_to_cart"
-                app:backgroundTint="@color/accent"
-                app:cornerRadius="10dp"
-                app:icon="@drawable/ic_add"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:iconTint="@color/white" />
+            </FrameLayout>
 
+            <!-- Product Name -->
             <TextView
-                android:id="@+id/productPrice"
+                android:id="@+id/productName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/productAddButton"
-                android:layout_marginEnd="@dimen/spacing_xsmall"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_small"
                 android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/accent"
+                android:maxLines="2"
+                android:minHeight="40dp"
+                android:textColor="@color/text_primary"
                 android:textSize="@dimen/text_caption_small"
                 android:textStyle="bold" />
 
-        </RelativeLayout>
+            <!-- Price + Add -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/spacing_small"
+                android:layout_marginBottom="@dimen/spacing_small">
 
-    </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/productAddButton"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_alignParentEnd="true"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:minWidth="0dp"
+                    android:text=""
+                    android:contentDescription="@string/add_to_cart"
+                    app:backgroundTint="@color/accent"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_add"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconTint="@color/white" />
+
+                <TextView
+                    android:id="@+id/productPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/productAddButton"
+                    android:layout_marginEnd="@dimen/spacing_xsmall"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/text_body"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!-- Out of stock overlay -->
+        <View
+            android:id="@+id/outOfStockOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/outOfStockText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/out_of_stock"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </com.google.android.material.card.MaterialCardView>

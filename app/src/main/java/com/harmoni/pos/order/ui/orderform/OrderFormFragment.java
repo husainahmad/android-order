@@ -159,6 +159,7 @@ public class OrderFormFragment extends Fragment {
                 categoryAdapter.submitList(data);
                 binding.progressBar.setVisibility(View.GONE);
                 if (!data.isEmpty()) {
+                    categoryAdapter.setSelectedPosition(0);
                     selectCategory(data.get(0));
                 }
             }

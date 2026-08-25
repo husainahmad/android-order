@@ -16,6 +16,7 @@ import com.harmoni.pos.order.R;
 import com.harmoni.pos.order.data.model.OrderVolume;
 import com.harmoni.pos.order.databinding.FragmentDailyReportBinding;
 import com.harmoni.pos.order.util.CurrencyUtils;
+import com.harmoni.pos.order.util.StickyHeaderItemDecoration;
 import com.harmoni.pos.order.util.TimeUtils;
 
 import java.text.ParseException;
@@ -53,7 +54,24 @@ public class DailyReportDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(this).get(DailyReportViewModel.class);
 
         adapter = new DailyReportAdapter();
+        adapter.setContext(requireContext());
         binding.reportRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.reportRecycler.addItemDecoration(new StickyHeaderItemDecoration(new StickyHeaderItemDecoration.StickyHeaderCallback() {
+            @Override
+            public long getHeaderId(int position) {
+                return adapter.getHeaderId(position);
+            }
+
+            @Override
+            public View getHeaderView(int position) {
+                return adapter.getHeaderView(position);
+            }
+
+            @Override
+            public int getHeaderLayoutId() {
+                return R.layout.item_report_header;
+            }
+        }));
         binding.reportRecycler.setAdapter(adapter);
 
         startDate = TimeUtils.todayDate();
