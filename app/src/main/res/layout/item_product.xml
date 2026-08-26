@@ -9,7 +9,6 @@
     android:elevation="2dp"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:stateListAnimator="@animator/card_lift"
     app:cardBackgroundColor="@color/md_surface_container_high"
     app:cardCornerRadius="@dimen/corner_large"
     app:cardElevation="2dp"
@@ -85,9 +84,9 @@
                 android:layout_marginEnd="@dimen/spacing_small"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:minHeight="40dp"
+                android:minHeight="44dp"
                 android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_caption_small"
+                android:textSize="@dimen/text_body"
                 android:textStyle="bold" />
 
             <!-- Price + Add -->
@@ -102,16 +101,17 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/productAddButton"
                     style="@style/Widget.Material3.Button"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:minWidth="0dp"
                     android:text=""
                     android:contentDescription="@string/add_to_cart"
+                    android:stateListAnimator="@animator/button_press"
                     app:backgroundTint="@color/accent"
-                    app:cornerRadius="10dp"
+                    app:cornerRadius="12dp"
                     app:icon="@drawable/ic_add"
                     app:iconGravity="textStart"
                     app:iconPadding="0dp"
@@ -131,6 +131,18 @@
                     android:textStyle="bold" />
 
             </RelativeLayout>
+
+            <!-- Variant dots (shown when product has multiple SKUs) -->
+            <LinearLayout
+                android:id="@+id/variantDotsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_small"
+                android:layout_marginBottom="@dimen/spacing_small"
+                android:gravity="start"
+                android:orientation="horizontal"
+                android:visibility="gone" />
 
         </LinearLayout>
 

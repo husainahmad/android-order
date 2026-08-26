@@ -28,9 +28,9 @@
 
         <ImageView
             android:id="@+id/categoryIcon"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginBottom="6dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/bg_category_circle"
             android:contentDescription="@string/category"
             android:padding="8dp"
@@ -48,7 +48,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"
-            android:minHeight="24dp"
+            android:minHeight="28dp"
             android:textColor="@color/category_text_color"
             android:textSize="@dimen/text_caption_small"
             android:textStyle="bold"
@@ -58,10 +58,10 @@
 
         <ImageView
             android:id="@+id/selectedIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="6dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@string/selected"
             android:src="@drawable/ic_check_circle"
             android:visibility="gone"

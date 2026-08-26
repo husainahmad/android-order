@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 7" tablet (600dp smallest width) - portrait and landscape -->
+    <dimen name="height_product_image">160dp</dimen>
+    <dimen name="height_card">96dp</dimen>
+    <dimen name="height_button">56dp</dimen>
+    <dimen name="height_tab">56dp</dimen>
+
+    <!-- Order form text sizes -->
+    <dimen name="of_text_small">@dimen/text_caption</dimen>
+    <dimen name="of_text_medium">@dimen/text_body</dimen>
+    <dimen name="of_text_large">@dimen/text_title</dimen>
+    <dimen name="of_text_xlarge">@dimen/text_heading</dimen>
+    <dimen name="of_button_text">@dimen/text_button</dimen>
+    <dimen name="of_button_height">@dimen/height_button</dimen>
+    <dimen name="of_discount_input_width">140dp</dimen>
+
+    <!-- Spacing slightly larger for touch -->
+    <dimen name="spacing_xsmall">6dp</dimen>
+    <dimen name="spacing_small">12dp</dimen>
+    <dimen name="spacing_medium">20dp</dimen>
+    <dimen name="spacing_large">28dp</dimen>
+    <dimen name="spacing_xlarge">40dp</dimen>
+
+    <!-- Category column wider for tablet -->
+    <dimen name="width_tab">88dp</dimen>
+</resources>

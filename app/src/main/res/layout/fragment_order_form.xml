@@ -313,6 +313,7 @@
                         android:layout_weight="1"
                         android:text="@string/confirm"
                         android:textColor="@color/white"
+                        android:stateListAnimator="@animator/button_press"
                         app:backgroundTint="@color/accent" />
 
                     <com.google.android.material.button.MaterialButton
@@ -324,6 +325,7 @@
                         android:layout_weight="1"
                         android:text="@string/print"
                         android:textColor="@color/blue_action"
+                        android:stateListAnimator="@animator/button_press_outlined"
                         app:strokeColor="@color/blue_action" />
                 </LinearLayout>
             </LinearLayout>

@@ -72,6 +72,7 @@
             android:layout_height="52dp"
             android:layout_marginTop="20dp"
             android:text="@string/close"
+            android:stateListAnimator="@animator/button_press_outlined"
             app:strokeColor="@color/gray_button" />
     </LinearLayout>
 </ScrollView>

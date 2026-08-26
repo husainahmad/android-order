@@ -240,6 +240,7 @@
                                 android:tag="1000"
                                 android:text="1.000"
                                 android:textSize="14sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
@@ -252,6 +253,7 @@
                                 android:tag="2000"
                                 android:text="2.000"
                                 android:textSize="14sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
@@ -264,6 +266,7 @@
                                 android:tag="5000"
                                 android:text="5.000"
                                 android:textSize="14sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
@@ -276,6 +279,7 @@
                                 android:tag="10000"
                                 android:text="10.000"
                                 android:textSize="14sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
@@ -288,6 +292,7 @@
                                 android:tag="20000"
                                 android:text="20.000"
                                 android:textSize="14sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
@@ -300,6 +305,7 @@
                                 android:tag="50000"
                                 android:text="50.000"
                                 android:textSize="14sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
@@ -312,6 +318,7 @@
                                 android:tag="100000"
                                 android:text="100.000"
                                 android:textSize="14sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
@@ -324,6 +331,7 @@
                                 android:tag="200000"
                                 android:text="200.000"
                                 android:textSize="14sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp" />
 
                             <com.google.android.material.button.MaterialButton
@@ -336,6 +344,7 @@
                                 android:tag="500000"
                                 android:text="500.000"
                                 android:textSize="14sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp" />
                         </GridLayout>
 
@@ -354,6 +363,7 @@
                                 android:layout_weight="1"
                                 android:text="CLEAR"
                                 android:textSize="13sp"
+                                android:stateListAnimator="@animator/button_press_outlined"
                                 app:cornerRadius="10dp"
                                 app:strokeColor="@color/status_void" />
 
@@ -365,6 +375,7 @@
                                 android:layout_weight="1"
                                 android:text="EXACT"
                                 android:textSize="13sp"
+                                android:stateListAnimator="@animator/button_press"
                                 app:backgroundTint="@color/accent"
                                 app:cornerRadius="10dp" />
                         </LinearLayout>
@@ -418,6 +429,7 @@
                             android:layout_marginTop="16dp"
                             android:text="BAYAR"
                             android:textSize="15sp"
+                            android:stateListAnimator="@animator/button_press"
                             app:backgroundTint="@color/accent"
                             app:cornerRadius="12dp" />
                     </LinearLayout>
@@ -440,6 +452,7 @@
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
                             android:text="@string/pay"
+                            android:stateListAnimator="@animator/button_press"
                             app:backgroundTint="@color/accent" />
 
         <com.google.android.material.button.MaterialButton
@@ -449,6 +462,7 @@
             android:layout_height="52dp"
             android:layout_weight="1"
                             android:text="@string/close"
+                            android:stateListAnimator="@animator/button_press_outlined"
                             app:strokeColor="@color/gray_button" />
     </LinearLayout>
 </LinearLayout>

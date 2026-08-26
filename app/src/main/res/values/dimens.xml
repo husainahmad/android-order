@@ -41,4 +41,8 @@
     <dimen name="height_product_image">128dp</dimen>
     <dimen name="width_card">420dp</dimen>
     <dimen name="width_tab">72dp</dimen>
+
+    <!-- Variant dots -->
+    <dimen name="variant_dot_size">8dp</dimen>
+    <dimen name="variant_dot_spacing">4dp</dimen>
 </resources>

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -98,6 +99,8 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
         holder.imageView.setImageResource(DEFAULT_IMAGE_RES);
         holder.imageView.setContentDescription(null);
         holder.badgeView.setVisibility(View.GONE);
+        holder.variantDotsContainer.setVisibility(View.GONE);
+        holder.variantDotsContainer.removeAllViews();
         holder.outOfStockOverlay.setVisibility(View.GONE);
         holder.outOfStockText.setVisibility(View.GONE);
     }
@@ -112,6 +115,7 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
         final TextView badgeView;
         final View outOfStockOverlay;
         final TextView outOfStockText;
+        final LinearLayout variantDotsContainer;
         private Animation shimmerAnim;
 
         ProductHolder(@NonNull View itemView) {
@@ -125,6 +129,7 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
             badgeView = itemView.findViewById(R.id.productBadge);
             outOfStockOverlay = itemView.findViewById(R.id.outOfStockOverlay);
             outOfStockText = itemView.findViewById(R.id.outOfStockText);
+            variantDotsContainer = itemView.findViewById(R.id.variantDotsContainer);
             shimmerAnim = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.shimmer_animation);
         }
 
@@ -148,6 +153,35 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
                 badgeView.setBackgroundTintList(android.content.res.ColorStateList.valueOf(badgeColor));
             } else {
                 badgeView.setVisibility(View.GONE);
+            }
+
+            // Variant dots (show number of SKU options)
+            int skuCount = product.getSkus() != null ? product.getSkus().size() : 0;
+            if (skuCount > 1) {
+                variantDotsContainer.setVisibility(View.VISIBLE);
+                variantDotsContainer.removeAllViews();
+                int maxDots = Math.min(skuCount, 6);
+                for (int i = 0; i < maxDots; i++) {
+                    View dot = new View(itemView.getContext());
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            (int) itemView.getContext().getResources().getDimension(R.dimen.variant_dot_size),
+                            (int) itemView.getContext().getResources().getDimension(R.dimen.variant_dot_size)
+                    );
+                    params.setMargins(0, 0, (int) itemView.getContext().getResources().getDimension(R.dimen.variant_dot_spacing), 0);
+                    dot.setLayoutParams(params);
+                    dot.setBackgroundResource(R.drawable.bg_variant_dot);
+                    variantDotsContainer.addView(dot);
+                }
+                if (skuCount > maxDots) {
+                    TextView moreText = new TextView(itemView.getContext());
+                    moreText.setText("+" + (skuCount - maxDots));
+                    moreText.setTextSize(10);
+                    moreText.setTextColor(itemView.getContext().getColor(R.color.text_secondary));
+                    moreText.setPadding((int) itemView.getContext().getResources().getDimension(R.dimen.variant_dot_spacing), 0, 0, 0);
+                    variantDotsContainer.addView(moreText);
+                }
+            } else {
+                variantDotsContainer.setVisibility(View.GONE);
             }
 
             // Out of stock handling

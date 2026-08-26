@@ -108,6 +108,7 @@
                 android:layout_height="@dimen/height_button"
                 android:layout_marginTop="@dimen/spacing_large"
                 android:text="@string/login"
+                android:stateListAnimator="@animator/button_press"
                 app:backgroundTint="@color/accent" />
 
             <ProgressBar
