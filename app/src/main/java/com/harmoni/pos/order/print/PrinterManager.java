@@ -17,6 +17,7 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -138,18 +139,31 @@ public class PrinterManager {
         }
     }
 
+    public static boolean isBluetoothPermissionRequired() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
+    }
+
+    public static boolean isBluetoothPermissionGranted() {
+        if (!isBluetoothPermissionRequired()) return true;
+        if (context == null) return false;
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
     private static void sendBluetooth(byte[] data) throws Exception {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT)
-                != PackageManager.PERMISSION_GRANTED) {
-            throw new Exception("Bluetooth permission not granted");
+        if (!isBluetoothPermissionGranted()) {
+            throw new Exception("Bluetooth permission not granted – please grant BLUETOOTH_CONNECT in App Settings > Permissions");
         }
         String mac = getAddress();
         if (mac == null || mac.trim().isEmpty()) {
-            throw new Exception("Bluetooth printer not selected");
+            throw new Exception("Bluetooth printer not selected – open Settings → Bluetooth Devices and select a paired printer (MAC like 00:11:22:AA:BB:CC)");
         }
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter == null) {
-            throw new Exception("Bluetooth not supported");
+            throw new Exception("Bluetooth not supported on this device");
+        }
+        if (!adapter.isEnabled()) {
+            throw new Exception("Bluetooth is OFF – please enable Bluetooth in Android Settings → Bluetooth");
         }
         BluetoothDevice device = adapter.getRemoteDevice(mac.trim());
         try (BluetoothSocketHolder holder = openSocket(device)) {
@@ -312,8 +326,7 @@ public class PrinterManager {
 
     public static List<BluetoothDevice> getBondedBluetoothDevices() {
         List<BluetoothDevice> result = new ArrayList<>();
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (!isBluetoothPermissionGranted()) {
             return result;
         }
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();

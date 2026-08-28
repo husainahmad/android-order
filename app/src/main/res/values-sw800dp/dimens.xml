@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Large 10"+ tablets / Desktop mode (800dp+ smallest width) -->
+    <dimen name="height_product_image">200dp</dimen>
+    <dimen name="height_card">112dp</dimen>
+    <dimen name="height_button">64dp</dimen>
+    <dimen name="height_button_large">64dp</dimen>
+    <dimen name="height_button_medium">56dp</dimen>
+    <dimen name="height_button_small">52dp</dimen>
+    <dimen name="height_button_dense">48dp</dimen>
+    <dimen name="height_tab">64dp</dimen>
+    <dimen name="width_button_icon">56dp</dimen>
+    <dimen name="width_button_icon_medium">52dp</dimen>
+    <dimen name="width_button_icon_dense">48dp</dimen>
+
+    <!-- Category - compact -->
+    <dimen name="height_category_card">96dp</dimen>
+    <dimen name="size_category_icon">48dp</dimen>
+    <dimen name="height_category_name">34dp</dimen>
+    <dimen name="size_selected_icon">20dp</dimen>
+
+    <!-- Order tab -->
+    <dimen name="height_order_tab">56dp</dimen>
+
+    <!-- Product -->
+    <dimen name="height_product_name">56dp</dimen>
+
+    <!-- Dialog buttons -->
+    <dimen name="width_dialog_button_small">180dp</dimen>
+    <dimen name="width_dialog_button_medium">200dp</dimen>
+    <dimen name="width_dialog_button_large">240dp</dimen>
+
+    <!-- Settings -->
+    <dimen name="size_settings_icon">36dp</dimen>
+
+    <!-- Confirm SKU -->
+    <dimen name="width_confirm_sku_qty">48dp</dimen>
+    <dimen name="width_confirm_sku_price">140dp</dimen>
+
+    <!-- Table headers -->
+    <dimen name="height_table_header">60dp</dimen>
+    <dimen name="height_report_total">60dp</dimen>
+    <dimen name="height_report_volume">64dp</dimen>
+
+    <!-- Divider -->
+    <dimen name="divider_thickness">1dp</dimen>
+
+    <!-- Empty state -->
+    <dimen name="size_empty_state_icon">112dp</dimen>
+
+    <!-- Login -->
+    <dimen name="size_login_logo">128dp</dimen>
+    <dimen name="size_login_logo_inner">72dp</dimen>
+
+    <!-- Order confirm -->
+    <dimen name="size_back_button">56dp</dimen>
+    <dimen name="size_payment_icon">56dp</dimen>
+
+    <!-- Payment dialog -->
+    <dimen name="height_payment_action_button">64dp</dimen>
+
+    <!-- Item rows -->
+    <dimen name="height_cart_row">72dp</dimen>
+    <dimen name="height_cart_qty_container">56dp</dimen>
+    <dimen name="width_cart_quantity">64dp</dimen>
+    <dimen name="width_cart_line_total">120dp</dimen>
+    <dimen name="height_sku_row">68dp</dimen>
+    <dimen name="height_order_item">64dp</dimen>
+    <dimen name="height_daily_report_item">56dp</dimen>
+    <dimen name="height_sales_report_item">56dp</dimen>
+
+    <!-- Order tab -->
+    <dimen name="min_width_order_tab">112dp</dimen>
+
+    <!-- Order form text sizes - larger for distance viewing -->
+    <dimen name="of_text_small">@dimen/text_body</dimen>
+    <dimen name="of_text_medium">@dimen/text_title</dimen>
+    <dimen name="of_text_large">@dimen/text_heading</dimen>
+    <dimen name="of_text_xlarge">@dimen/text_display</dimen>
+    <dimen name="of_button_text">@dimen/text_button</dimen>
+    <dimen name="of_button_height">@dimen/height_button</dimen>
+    <dimen name="of_discount_input_width">180dp</dimen>
+
+    <!-- Text sizes for 10"+ -->
+    <dimen name="text_size_badge">13sp</dimen>
+    <dimen name="text_size_table_header">16sp</dimen>
+    <dimen name="text_size_table_cell">16sp</dimen>
+    <dimen name="text_size_sku_name">17sp</dimen>
+    <dimen name="text_size_sku_qty">18sp</dimen>
+    <dimen name="text_size_sku_price">14sp</dimen>
+    <dimen name="text_size_confirm_sku_name">16sp</dimen>
+    <dimen name="text_size_confirm_sku_price">14sp</dimen>
+    <dimen name="text_size_confirm_sku_qty">15sp</dimen>
+    <dimen name="text_size_confirm_sku_total">16sp</dimen>
+    <dimen name="text_size_settings_title">24sp</dimen>
+    <dimen name="text_size_settings_subtitle">18sp</dimen>
+    <dimen name="text_size_settings_section">20sp</dimen>
+    <dimen name="text_size_settings_status">16sp</dimen>
+    <dimen name="text_size_settings_button">16sp</dimen>
+    <dimen name="text_size_login_title">40sp</dimen>
+    <dimen name="text_size_login_subtitle">20sp</dimen>
+    <dimen name="text_size_dialog_title">28sp</dimen>
+    <dimen name="text_size_dialog_subtitle">20sp</dimen>
+    <dimen name="text_size_dialog_button">17sp</dimen>
+    <dimen name="text_size_dialog_label">17sp</dimen>
+    <dimen name="text_size_dialog_body">16sp</dimen>
+    <dimen name="text_size_payment_title">26sp</dimen>
+    <dimen name="text_size_payment_subtitle">16sp</dimen>
+    <dimen name="text_size_payment_cash_label">15sp</dimen>
+    <dimen name="text_size_payment_cash_amount">28sp</dimen>
+    <dimen name="text_size_payment_button">18sp</dimen>
+    <dimen name="text_size_report_kpi_label">15sp</dimen>
+    <dimen name="text_size_report_kpi_value">26sp</dimen>
+    <dimen name="text_size_report_header">16sp</dimen>
+    <dimen name="text_size_report_total">17sp</dimen>
+    <dimen name="text_size_report_volume">20sp</dimen>
+    <dimen name="text_size_category_label">17sp</dimen>
+    <dimen name="text_size_order_tab">17sp</dimen>
+    <dimen name="text_size_empty_title">20sp</dimen>
+    <dimen name="text_size_out_of_stock">17sp</dimen>
+
+    <!-- Generous spacing -->
+    <dimen name="spacing_xsmall">10dp</dimen>
+    <dimen name="spacing_small">18dp</dimen>
+    <dimen name="spacing_medium">28dp</dimen>
+    <dimen name="spacing_large">36dp</dimen>
+    <dimen name="spacing_xlarge">56dp</dimen>
+
+    <!-- Category column wider -->
+    <dimen name="width_tab">104dp</dimen>
+</resources>

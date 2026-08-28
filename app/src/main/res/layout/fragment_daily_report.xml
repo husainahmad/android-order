@@ -59,10 +59,10 @@
                 android:id="@+id/startDateButton"
                 style="@style/Widget.KopiHarmoni.Button.Outlined"
                 android:layout_width="wrap_content"
-                android:layout_height="44dp"
+                android:layout_height="@dimen/height_button_small"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="24dp"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_dialog_button"
                 android:stateListAnimator="@animator/button_press_outlined"
                 app:strokeColor="@color/primary" />
 
@@ -76,10 +76,10 @@
                 android:id="@+id/endDateButton"
                 style="@style/Widget.KopiHarmoni.Button.Outlined"
                 android:layout_width="wrap_content"
-                android:layout_height="44dp"
+                android:layout_height="@dimen/height_button_small"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="24dp"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_dialog_button"
                 android:stateListAnimator="@animator/button_press_outlined"
                 app:strokeColor="@color/primary" />
 
@@ -87,9 +87,9 @@
                 android:id="@+id/loadButton"
                 style="@style/Widget.KopiHarmoni.Button.Primary"
                 android:layout_width="wrap_content"
-                android:layout_height="44dp"
+                android:layout_height="@dimen/height_button_small"
                 android:text="@string/load_report"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_dialog_button"
                 android:stateListAnimator="@animator/button_press"
                 app:backgroundTint="@color/blue_action" />
         </LinearLayout>
@@ -123,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/kpi_net"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/text_size_report_kpi_label" />
 
                     <TextView
                         android:id="@+id/kpiNetText"
@@ -131,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:textColor="@color/primary"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_size_report_kpi_value"
                         android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -157,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/kpi_discount"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/text_size_report_kpi_label" />
 
                     <TextView
                         android:id="@+id/kpiDiscountText"
@@ -165,7 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:textColor="@color/status_void"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_size_report_kpi_value"
                         android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -191,7 +191,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/kpi_qty"
                         android:textColor="@color/white"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/text_size_report_kpi_label" />
 
                     <TextView
                         android:id="@+id/kpiQtyText"
@@ -199,7 +199,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_size_report_kpi_value"
                         android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -207,7 +207,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/height_table_header"
             android:background="@color/md_surface_container"
             android:gravity="center_vertical"
             android:paddingStart="8dp"
@@ -218,7 +218,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/date"
                 android:textColor="@color/text_primary"
-                android:textSize="13sp"
+                android:textSize="@dimen/text_size_table_header"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -230,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/product"
                 android:textColor="@color/text_primary"
-                android:textSize="13sp"
+                android:textSize="@dimen/text_size_table_header"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/qtyHeader"
@@ -245,7 +245,7 @@
                 android:gravity="center"
                 android:text="@string/qty"
                 android:textColor="@color/text_primary"
-                android:textSize="13sp"
+                android:textSize="@dimen/text_size_table_header"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/netHeader"
@@ -259,7 +259,7 @@
                 android:gravity="end"
                 android:text="@string/net_sales"
                 android:textColor="@color/text_primary"
-                android:textSize="13sp"
+                android:textSize="@dimen/text_size_table_header"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/discountHeader"
@@ -273,7 +273,7 @@
                 android:gravity="end"
                 android:text="@string/discount"
                 android:textColor="@color/text_primary"
-                android:textSize="13sp"
+                android:textSize="@dimen/text_size_table_header"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -284,7 +284,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/divider_thickness"
             android:background="@color/divider" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -296,13 +296,13 @@
         <TextView
             android:id="@+id/totalText"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/height_report_total"
             android:background="@color/md_surface_container_high"
             android:gravity="center_vertical"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             android:textColor="@color/text_primary"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_report_total"
             android:textStyle="bold" />
 
         <TextView
@@ -312,12 +312,12 @@
             android:padding="12dp"
             android:text="@string/order_volume"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_report_volume"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="@dimen/height_report_volume"
             android:background="@color/md_surface_container"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -329,7 +329,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_primary"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_report_volume" />
         </LinearLayout>
 
         <ProgressBar

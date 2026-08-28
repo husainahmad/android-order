@@ -1,6 +1,9 @@
 package com.harmoni.pos.order.ui.orderform;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -55,6 +61,32 @@ public class OrderFormFragment extends Fragment {
     private List<Category> categories = new ArrayList<>();
     private List<Product> allProducts = new ArrayList<>();
     private int selectedCategoryId = -1;
+
+    private String pendingKitchenText;
+    private final ActivityResultLauncher<String> bluetoothPrintPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+                if (granted && pendingKitchenText != null) {
+                    doPrintWithText(pendingKitchenText);
+                } else if (!granted) {
+                    boolean permanentlyDenied = !shouldShowRequestPermissionRationale(android.Manifest.permission.BLUETOOTH_CONNECT);
+                    if (permanentlyDenied) {
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Bluetooth Permission Required")
+                                .setMessage("Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow")
+                                .setPositiveButton("Open Settings", (d, w) -> {
+                                    try {
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null));
+                                        startActivity(intent);
+                                    } catch (Exception e) { startActivity(new Intent(Settings.ACTION_SETTINGS)); }
+                                })
+                                .setNegativeButton("Cancel", null)
+                                .show();
+                    } else {
+                        Toast.makeText(requireContext(), "Bluetooth permission denied – enable in App Settings > Permissions", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
 
     @Nullable
     @Override
@@ -113,6 +145,65 @@ public class OrderFormFragment extends Fragment {
     private void setupActions() {
         binding.confirmButton.setOnClickListener(v -> onConfirm());
         binding.printButton.setOnClickListener(v -> onPrint());
+        binding.orderSummaryHeader.setOnClickListener(v -> showPreviewOrderDialog());
+        // also make badge itself tappable (propagates to header)
+        binding.cartCountText.setOnClickListener(v -> showPreviewOrderDialog());
+        setupKeyboardNavigation();
+    }
+
+    private void showPreviewOrderDialog() {
+        String customer = binding.customerInput.getText() != null ?
+                binding.customerInput.getText().toString() : "";
+        String discount = binding.discountInput.getText() != null ?
+                binding.discountInput.getText().toString() : "0";
+        String remark = binding.remarkInput.getText() != null ?
+                binding.remarkInput.getText().toString() : "";
+        int orderType = binding.orderTypeGroup.getCheckedRadioButtonId() == R.id.takeawayRadio ? 3 : 1;
+        OrderPreviewDialogFragment fragment = OrderPreviewDialogFragment.newInstance(customer, discount, remark, orderType);
+        fragment.show(getParentFragmentManager(), "order_preview");
+    }
+
+    private void setupKeyboardNavigation() {
+        // Auto-scroll focused field into view when keyboard shows (fixes remark/additional notes overlapping)
+        View.OnFocusChangeListener scrollListener = (v, hasFocus) -> {
+            if (hasFocus) v.postDelayed(() -> {
+                android.graphics.Rect rect = new android.graphics.Rect(0, 0, v.getWidth(), v.getHeight() + 120);
+                v.requestRectangleOnScreen(rect, true);
+                // Fallback for NestedScrollView with maxHeight
+                binding.checkoutScrollView.postDelayed(
+                        () -> binding.checkoutScrollView.smoothScrollTo(0, v.getBottom() + 200), 100);
+            }, 250);
+        };
+        binding.customerInput.setOnFocusChangeListener(scrollListener);
+        binding.discountInput.setOnFocusChangeListener(scrollListener);
+        binding.remarkInput.setOnFocusChangeListener(scrollListener);
+
+        // customer -> discount (skip RadioGroup)
+        binding.customerInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
+                binding.discountInput.requestFocus();
+                return true;
+            }
+            return false;
+        });
+        binding.discountInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
+                binding.remarkInput.requestFocus();
+                return true;
+            }
+            return false;
+        });
+        binding.remarkInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                v.clearFocus();
+                android.view.inputmethod.InputMethodManager imm =
+                        (android.view.inputmethod.InputMethodManager) requireContext()
+                                .getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                if (imm != null) imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return true;
+            }
+            return false;
+        });
     }
 
     private void observe() {
@@ -133,6 +224,17 @@ public class OrderFormFragment extends Fragment {
                 binding.cartEmptyView.emptyIcon.setImageResource(R.drawable.ic_empty_cart);
                 binding.cartEmptyView.emptyTitle.setText(R.string.cart_empty);
                 binding.cartEmptyView.emptySubtitle.setText(R.string.cart_empty_subtitle);
+            }
+            // Update Order Summary cart count badge (optional, header works without it)
+            try {
+                int totalQty = 0;
+                if (cart != null) {
+                    for (CartItem item : cart) totalQty += item.getQuantity();
+                }
+                binding.cartCountText.setText(String.valueOf(totalQty));
+                binding.cartCountText.setVisibility(View.VISIBLE);
+            } catch (Exception ignored) {
+                // Header remains functional without count
             }
             updateTotals();
         });
@@ -262,6 +364,17 @@ public class OrderFormFragment extends Fragment {
             return;
         }
         String kitchenText = buildKitchenText(cart);
+        if (PrinterManager.TYPE_BLUETOOTH.equals(PrinterManager.getType())
+                && !PrinterManager.isBluetoothPermissionGranted()) {
+            pendingKitchenText = kitchenText;
+            bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
+            Toast.makeText(requireContext(), "Requesting Bluetooth permission…", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        doPrintWithText(kitchenText);
+    }
+
+    private void doPrintWithText(String kitchenText) {
         Toast.makeText(requireContext(), R.string.kitchen_print + "...", Toast.LENGTH_SHORT).show();
         PrinterManager.print(kitchenText, new PrinterManager.PrintCallback() {
             @Override

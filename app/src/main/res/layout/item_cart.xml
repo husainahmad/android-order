@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="@dimen/height_cart_row"
     android:paddingStart="12dp"
     android:paddingEnd="12dp"
     android:paddingTop="6dp"
@@ -32,7 +32,7 @@
     <LinearLayout
         android:id="@+id/qtyContainer"
         android:layout_width="wrap_content"
-        android:layout_height="44dp"
+        android:layout_height="@dimen/height_cart_qty_container"
         android:background="@drawable/bg_qty_pill"
         android:orientation="horizontal"
         android:paddingHorizontal="4dp"
@@ -43,8 +43,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/minusButton"
             style="@style/Widget.KopiHarmoni.QtyButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/width_button_icon_dense"
+            android:layout_height="@dimen/height_button_dense"
             android:contentDescription="@string/remove"
             android:text=""
             android:stateListAnimator="@animator/button_press_outlined"
@@ -57,8 +57,8 @@
 
         <TextView
             android:id="@+id/quantityText"
-            android:layout_width="52dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/width_cart_quantity"
+            android:layout_height="@dimen/height_button_dense"
             android:gravity="center"
             android:textColor="@color/text_primary"
             android:textSize="@dimen/text_caption"
@@ -67,8 +67,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/plusButton"
             style="@style/Widget.KopiHarmoni.QtyButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/width_button_icon_dense"
+            android:layout_height="@dimen/height_button_dense"
             android:contentDescription="@string/add"
             android:text=""
             android:stateListAnimator="@animator/button_press"
@@ -81,8 +81,8 @@
     <!-- Line Total -->
     <TextView
         android:id="@+id/lineTotalText"
-        android:layout_width="96dp"
-        android:layout_height="44dp"
+        android:layout_width="@dimen/width_cart_line_total"
+        android:layout_height="@dimen/height_cart_qty_container"
         android:gravity="center_vertical|end"
         android:textColor="@color/text_primary"
         android:textSize="@dimen/text_caption"

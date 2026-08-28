@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/emptyIcon"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="@dimen/size_empty_state_icon"
+        android:layout_height="@dimen/size_empty_state_icon"
         android:contentDescription="@string/empty"
         android:src="@drawable/ic_empty_cart"
         app:tint="@color/md_outline" />

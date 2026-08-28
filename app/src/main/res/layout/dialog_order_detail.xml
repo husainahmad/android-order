@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="@string/order_detail"
         android:textColor="@color/text_primary"
-        android:textSize="22sp"
+        android:textSize="@dimen/text_size_dialog_title"
         android:textStyle="bold" />
 
     <ScrollView
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="monospace"
             android:textColor="@color/text_primary"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_dialog_body"
             android:lineSpacingExtra="2dp" />
     </ScrollView>
 
@@ -43,12 +43,12 @@
             android:id="@+id/printButton"
             style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/height_button_large"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:minWidth="120dp"
+            android:minWidth="@dimen/width_dialog_button_small"
             android:text="@string/print"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_dialog_button"
             android:stateListAnimator="@animator/button_press_outlined"
             app:strokeColor="@color/blue_action" />
 
@@ -56,12 +56,12 @@
             android:id="@+id/kitchenButton"
             style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/height_button_large"
             android:layout_marginEnd="8dp"
             android:layout_weight="2"
-            android:minWidth="180dp"
+            android:minWidth="@dimen/width_dialog_button_large"
             android:text="@string/kitchen_print"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_dialog_button"
             android:stateListAnimator="@animator/button_press_outlined"
             app:strokeColor="@color/blue_action" />
 
@@ -69,12 +69,12 @@
             android:id="@+id/payButton"
             style="@style/Widget.KopiHarmoni.Button.Primary"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/height_button_large"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:minWidth="120dp"
+            android:minWidth="@dimen/width_dialog_button_small"
             android:text="@string/pay"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_dialog_button"
             android:stateListAnimator="@animator/button_press"
             app:backgroundTint="@color/accent" />
 
@@ -82,12 +82,12 @@
             android:id="@+id/voidButton"
             style="@style/Widget.KopiHarmoni.Button.Primary"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/height_button_large"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:minWidth="120dp"
+            android:minWidth="@dimen/width_dialog_button_small"
             android:text="@string/void_order"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_dialog_button"
             android:stateListAnimator="@animator/button_press"
             app:backgroundTint="@color/status_void" />
 
@@ -95,11 +95,11 @@
             android:id="@+id/closeButton"
             style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/height_button_large"
             android:layout_weight="1"
-            android:minWidth="120dp"
+            android:minWidth="@dimen/width_dialog_button_small"
             android:text="@string/close"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_dialog_button"
             android:stateListAnimator="@animator/button_press_outlined"
             app:strokeColor="@color/gray_button" />
     </LinearLayout>

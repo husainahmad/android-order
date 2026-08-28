@@ -1,12 +1,17 @@
 package com.harmoni.pos.order.ui.orders;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,6 +41,32 @@ public class OrdersFragment extends Fragment {
     private FragmentOrdersBinding binding;
     private OrdersViewModel viewModel;
     private OrderAdapter orderAdapter;
+
+    private String pendingSettlementText;
+    private final ActivityResultLauncher<String> bluetoothPrintPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+                if (granted && pendingSettlementText != null) {
+                    doPrintSettlement(pendingSettlementText);
+                } else if (!granted) {
+                    boolean permanentlyDenied = !shouldShowRequestPermissionRationale(android.Manifest.permission.BLUETOOTH_CONNECT);
+                    if (permanentlyDenied) {
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Bluetooth Permission Required")
+                                .setMessage("Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow")
+                                .setPositiveButton("Open Settings", (d, w) -> {
+                                    try {
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null));
+                                        startActivity(intent);
+                                    } catch (Exception e) { startActivity(new Intent(Settings.ACTION_SETTINGS)); }
+                                })
+                                .setNegativeButton("Cancel", null)
+                                .show();
+                    } else {
+                        Toast.makeText(requireContext(), "Bluetooth permission denied – enable in App Settings > Permissions", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
 
     @Nullable
     @Override
@@ -164,6 +195,17 @@ public class OrdersFragment extends Fragment {
                 text += "\n" + entry.getKey() + " : " + CurrencyUtils.formatRp2(entry.getValue());
             }
         }
+        if (PrinterManager.TYPE_BLUETOOTH.equals(PrinterManager.getType())
+                && !PrinterManager.isBluetoothPermissionGranted()) {
+            pendingSettlementText = text;
+            bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
+            Toast.makeText(requireContext(), "Requesting Bluetooth permission…", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        doPrintSettlement(text);
+    }
+
+    private void doPrintSettlement(String text) {
         PrinterManager.print(text, new PrinterManager.PrintCallback() {
             @Override
             public void onSuccess() {

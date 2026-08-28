@@ -6,12 +6,11 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/spacing_xsmall"
     android:clickable="true"
-    android:elevation="2dp"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/md_surface_container_high"
-    app:cardCornerRadius="@dimen/corner_large"
-    app:cardElevation="2dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="1dp"
     app:rippleColor="@color/md_primary_container"
     app:strokeColor="@color/md_outline_variant"
     app:strokeWidth="1dp">
@@ -29,7 +28,8 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_product_image"
-                android:background="@color/md_surface_variant">
+                android:background="@drawable/bg_product_image_top"
+                android:clipToOutline="true">
 
                 <!-- Shimmer placeholder (visible while loading) -->
                 <View
@@ -68,8 +68,20 @@
                     android:paddingVertical="4dp"
                     android:text="@string/badge_new"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="@dimen/text_size_badge"
                     android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <!-- Variant dots overlay -->
+                <LinearLayout
+                    android:id="@+id/variantDotsContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_margin="@dimen/spacing_xsmall"
+                    android:background="@drawable/bg_variant_overlay"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:visibility="gone" />
 
             </FrameLayout>
@@ -80,11 +92,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_xsmall"
                 android:layout_marginEnd="@dimen/spacing_small"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:minHeight="44dp"
+                android:minHeight="36dp"
                 android:textColor="@color/text_primary"
                 android:textSize="@dimen/text_body"
                 android:textStyle="bold" />
@@ -96,13 +108,13 @@
                 android:layout_marginStart="@dimen/spacing_small"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="@dimen/spacing_small"
-                android:layout_marginBottom="@dimen/spacing_small">
+                android:layout_marginBottom="@dimen/spacing_xsmall">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/productAddButton"
                     style="@style/Widget.Material3.Button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="@dimen/width_button_icon"
+                    android:layout_height="@dimen/height_button_medium"
                     android:layout_alignParentEnd="true"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
@@ -132,18 +144,6 @@
 
             </RelativeLayout>
 
-            <!-- Variant dots (shown when product has multiple SKUs) -->
-            <LinearLayout
-                android:id="@+id/variantDotsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginEnd="@dimen/spacing_small"
-                android:layout_marginBottom="@dimen/spacing_small"
-                android:gravity="start"
-                android:orientation="horizontal"
-                android:visibility="gone" />
-
         </LinearLayout>
 
         <!-- Out of stock overlay -->
@@ -161,7 +161,7 @@
             android:layout_gravity="center"
             android:text="@string/out_of_stock"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_out_of_stock"
             android:textStyle="bold"
             android:visibility="gone" />
 

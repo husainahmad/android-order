@@ -70,14 +70,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         MaterialCardView card;
         ImageView iconView;
         TextView nameText;
-        ImageView selectedIcon;
 
         CategoryHolder(@NonNull View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.categoryCard);
             iconView = itemView.findViewById(R.id.categoryIcon);
             nameText = itemView.findViewById(R.id.categoryName);
-            selectedIcon = itemView.findViewById(R.id.selectedIcon);
         }
 
         void bind(Category category, boolean selected) {
@@ -92,11 +90,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 iconView.setImageResource(R.drawable.ic_category_default);
             }
 
-            // Set checked state for state-list drawables (bg, stroke, text, icon bg)
+            // Single source of truth for selection - card checked state drives bg/stroke/text/iconBg selectors
             card.setChecked(selected);
-
-            // Show/hide check icon
-            selectedIcon.setVisibility(selected ? View.VISIBLE : View.GONE);
+            itemView.setContentDescription(selected ? name + ", selected" : name);
 
             itemView.setOnClickListener(v -> {
                 int previous = selectedPosition;

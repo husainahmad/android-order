@@ -2,7 +2,10 @@ package com.harmoni.pos.order.ui.orderform;
 
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +34,9 @@ import com.harmoni.pos.order.print.PrinterManager;
 import com.harmoni.pos.order.util.CurrencyUtils;
 import com.harmoni.pos.order.util.PrintUtils;
 import com.harmoni.pos.order.util.UiUtils;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,6 +71,32 @@ public class OrderConfirmFragment extends DialogFragment {
     private String passedDiscount = "0";
     private String passedNote = "";
     private int passedOrderType = 1;
+
+    private Order pendingPrintOrder;
+    private final ActivityResultLauncher<String> bluetoothPrintPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+                if (granted && pendingPrintOrder != null) {
+                    doPrintReceipt(pendingPrintOrder);
+                } else if (!granted) {
+                    boolean permanentlyDenied = !shouldShowRequestPermissionRationale(android.Manifest.permission.BLUETOOTH_CONNECT);
+                    if (permanentlyDenied) {
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Bluetooth Permission Required")
+                                .setMessage("Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow")
+                                .setPositiveButton("Open Settings", (d, w) -> {
+                                    try {
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null));
+                                        startActivity(intent);
+                                    } catch (Exception e) { startActivity(new Intent(Settings.ACTION_SETTINGS)); }
+                                })
+                                .setNegativeButton("Cancel", null)
+                                .show();
+                    } else {
+                        Toast.makeText(requireContext(), "Bluetooth permission denied – enable in App Settings > Permissions", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
 
     public static OrderConfirmFragment newInstance(String customer, String discount, String note, int orderType) {
         OrderConfirmFragment fragment = new OrderConfirmFragment();
@@ -187,7 +219,7 @@ public class OrderConfirmFragment extends DialogFragment {
 
         binding.customerSummaryText.setText(customer.isEmpty() ? "-" : customer);
         binding.orderTypeSummaryText.setText(passedOrderType == 3 ? "Takeaway" : "Dine In");
-        binding.discountSummaryText.setText("Rp" + CurrencyUtils.formatRp2(parseDiscount(discount)));
+        binding.discountSummaryText.setText(CurrencyUtils.formatRp2(parseDiscount(discount)));
         binding.noteSummaryText.setText(note.isEmpty() ? "-" : note);
     }
 
@@ -360,6 +392,17 @@ public class OrderConfirmFragment extends DialogFragment {
     }
 
     private void printReceipt(Order paidOrder) {
+        if (PrinterManager.TYPE_BLUETOOTH.equals(PrinterManager.getType())
+                && !PrinterManager.isBluetoothPermissionGranted()) {
+            pendingPrintOrder = paidOrder;
+            bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
+            Toast.makeText(requireContext(), "Requesting Bluetooth permission…", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        doPrintReceipt(paidOrder);
+    }
+
+    private void doPrintReceipt(Order paidOrder) {
         PrinterManager.print(PrintUtils.buildReceiptText(paidOrder),
                 new PrinterManager.PrintCallback() {
                     @Override

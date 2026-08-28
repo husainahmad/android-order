@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/text_primary"
-                android:textSize="22sp"
+                android:textSize="@dimen/text_size_dialog_title"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -55,7 +55,7 @@
             android:layout_marginTop="20dp"
             android:text="@string/select_variant"
             android:textColor="@color/text_primary"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_dialog_subtitle"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -69,7 +69,7 @@
             android:id="@+id/closeButton"
             style="@style/Widget.KopiHarmoni.Button.Outlined"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="@dimen/height_payment_action_button"
             android:layout_marginTop="20dp"
             android:text="@string/close"
             android:stateListAnimator="@animator/button_press_outlined"
