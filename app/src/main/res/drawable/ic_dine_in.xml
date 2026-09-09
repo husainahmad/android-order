@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Restaurant / dine-in: table + plate -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M11,9H9V2H7v7H5V9H3V2H1v7h2v2h10v-2h2V2h-2v7zM16,11c1.1,0 2,0.9 2,2s-0.9,2 -2,2s-2,-0.9 -2,-2s0.9,-2 2,-2zM16,18c-1.1,0 -2,-0.9 -2,-2s0.9,-2 2,-2s2,0.9 2,2s-0.9,2 -2,2zM18,4h2v2h-2V4zM20,4h2v2h-2V4z" />
+</vector>

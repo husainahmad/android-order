@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Production: cleartext disabled globally. Allow only if user explicitly configures http via ConfigManager -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <!-- Debug override: permit http to local/dev host when DEBUG and ConfigManager uses http -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Default dev IP; add domains as needed. User-configured host still needs to be added here if http -->
+        <domain includeSubdomains="true">103.150.197.7</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">localhost</domain>
+    </domain-config>
+</network-security-config>

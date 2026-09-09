@@ -20,6 +20,9 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.harmoni.pos.order.data.remote.ApiClient;
+import com.harmoni.pos.order.data.remote.SessionManager;
+import com.harmoni.pos.order.data.remote.TokenManager;
 import com.harmoni.pos.order.databinding.ActivityMainBinding;
 import com.harmoni.pos.order.print.PrinterManager;
 
@@ -95,14 +98,70 @@ public class MainActivity extends AppCompatActivity {
         enableEdgeToEdge();
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        // Fix transparent nav bar overlapping bottom buttons (Daily Report etc.)
+        // Edge-to-edge: apply system bar insets once to avoid double handling (no duplicate UiUtils)
         androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-            androidx.core.graphics.Insets nav = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
-            v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), nav.bottom);
-            return insets;
+            androidx.core.graphics.Insets nav = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.systemBars());
+            androidx.core.graphics.Insets cutout = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.displayCutout());
+            int left = Math.max(nav.left, cutout.left);
+            int right = Math.max(nav.right, cutout.right);
+            v.setPadding(left, nav.top, right, nav.bottom);
+            return androidx.core.view.WindowInsetsCompat.CONSUMED;
         });
         setupExitConfirmation();
         ensureBluetoothPermissionIfNeeded();
+        observeSessionExpired();
+    }
+
+    private void observeSessionExpired() {
+        SessionManager.getSessionExpiredEvent().observe(this, message -> {
+            if (message == null || message.isEmpty()) return;
+            // Throttle guard already in SessionManager; consume event
+            // Avoid navigating if already on login – just reset throttle
+            androidx.navigation.NavController navController;
+            try {
+                navController = androidx.navigation.Navigation.findNavController(this, R.id.nav_host_fragment);
+            } catch (Exception e) {
+                SessionManager.onHandled();
+                return;
+            }
+            if (navController.getCurrentDestination() != null
+                    && navController.getCurrentDestination().getId() == R.id.nav_login) {
+                SessionManager.onHandled();
+                return;
+            }
+            // Ensure tokens are cleared and Retrofit caches are dropped
+            try {
+                TokenManager.clearTokens();
+            } catch (Exception ignored) {}
+            ApiClient.reset();
+
+            boolean isForbidden = message.contains("403");
+            String title = isForbidden ? getString(R.string.session_forbidden_title) : getString(R.string.session_expired_title);
+            String body = isForbidden ? getString(R.string.session_forbidden_body) : getString(R.string.session_expired_body);
+
+            new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                    .setTitle(title)
+                    .setMessage(body)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.login, (d, w) -> {
+                        SessionManager.onHandled();
+                        try {
+                            // Use global action – pops order_pager backstack
+                            navController.navigate(R.id.action_order_pager_to_login);
+                        } catch (Exception e) {
+                            // Fallback if current destination is not order_pager (e.g. deep fragment)
+                            try {
+                                navController.navigate(R.id.nav_login);
+                            } catch (Exception ignored) {}
+                        }
+                    })
+                    .show();
+            // Keep PENDING throttled for 2s (SessionManager auto-resets), consume event
+            // Don't call onHandled() immediately – let dialog callback do it to avoid race;
+            // but also schedule fallback reset for dismiss without button (back press blocked anyway)
+        });
     }
 
     @Override
@@ -165,14 +224,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void enableEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        // Opaque dark nav bar for contrast: white icons on dark background (fixes white-on-white)
-        getWindow().setNavigationBarColor(androidx.core.content.ContextCompat.getColor(this, R.color.md_inverse_surface));
         getWindow().setStatusBarColor(android.graphics.Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(android.graphics.Color.TRANSPARENT);
         WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         if (controller != null) {
-            controller.setAppearanceLightNavigationBars(false); // white icons on dark bar
+            controller.setAppearanceLightNavigationBars(false); // white icons on dark nav bar (md_inverse_surface bg via insets)
             controller.setAppearanceLightStatusBars(true); // dark icons on light status bar
         }
+        // Navigation bar scrim handled by theme + insets, not window color (fixes overdraw)
     }
 
     @Override

@@ -145,16 +145,17 @@ public class OrderPagerFragment extends Fragment {
 
     private void applyTabStyle(View chip, boolean selected) {
         chip.setSelected(selected);
-        chip.setElevation(selected ? 4f : 1f);
+        chip.setElevation(selected ? 6f : 1.5f);
         chip.setBackgroundResource(selected ? R.drawable.bg_order_tab_selected
                 : R.drawable.bg_order_tab);
         TextView label = chip.findViewById(R.id.tabLabel);
+        // Selected: dark text on vibrant accent (works in both light/dark via accent/onPrimary)
         label.setTextColor(ContextCompat.getColor(requireContext(),
-                selected ? R.color.white : R.color.text_primary));
+                selected ? R.color.md_on_primary : R.color.text_primary));
         ImageButton close = chip.findViewById(R.id.closeButton);
         close.setImageTintList(android.content.res.ColorStateList.valueOf(
                 ContextCompat.getColor(requireContext(),
-                        selected ? R.color.white : R.color.text_primary)));
+                        selected ? R.color.md_on_primary : R.color.text_secondary)));
     }
 
     private void addTabHeaderView(String text, int targetPosition, int orderId, boolean isSelected, boolean isCloseable) {

@@ -33,6 +33,7 @@ public class SalesReportViewModel extends ViewModel {
     }
 
     public void load(String startDate, String endDate) {
+        error.setValue("");
         loading.setValue(true);
         String start = startDate + "T00:00:00";
         String end = endDate + "T23:59:59";
@@ -44,6 +45,7 @@ public class SalesReportViewModel extends ViewModel {
                     rows.setValue(response.body().getData());
                     error.setValue("");
                 } else {
+                    if (response.code() == 401 || response.code() == 403) return;
                     error.setValue("Failed to load report: HTTP " + response.code());
                 }
             }

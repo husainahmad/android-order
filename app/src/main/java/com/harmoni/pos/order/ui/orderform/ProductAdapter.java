@@ -94,8 +94,11 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
     public void onViewRecycled(@NonNull ProductHolder holder) {
         super.onViewRecycled(holder);
         holder.imageProgress.setVisibility(View.GONE);
+        holder.shimmerPlaceholder.stopShimmer();
+        holder.shimmerPlaceholder.setAlpha(1f);
         holder.shimmerPlaceholder.setVisibility(View.VISIBLE);
         holder.imageView.setVisibility(View.GONE);
+        holder.imageView.setAlpha(1f);
         holder.imageView.setImageResource(DEFAULT_IMAGE_RES);
         holder.imageView.setContentDescription(null);
         holder.badgeView.setVisibility(View.GONE);
@@ -111,7 +114,8 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
         final TextView nameText;
         final TextView priceText;
         final com.google.android.material.button.MaterialButton addButton;
-        final View shimmerPlaceholder;
+        final com.facebook.shimmer.ShimmerFrameLayout shimmerPlaceholder;
+        final View shimmerHighlight;
         final TextView badgeView;
         final View outOfStockOverlay;
         final TextView outOfStockText;
@@ -126,6 +130,7 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
             priceText = itemView.findViewById(R.id.productPrice);
             addButton = itemView.findViewById(R.id.productAddButton);
             shimmerPlaceholder = itemView.findViewById(R.id.shimmerPlaceholder);
+            shimmerHighlight = itemView.findViewById(R.id.shimmerHighlight);
             badgeView = itemView.findViewById(R.id.productBadge);
             outOfStockOverlay = itemView.findViewById(R.id.outOfStockOverlay);
             outOfStockText = itemView.findViewById(R.id.outOfStockText);
@@ -218,22 +223,28 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
                 showDefaultImage();
                 return;
             }
-            // Show shimmer while loading
+            // Show hardware shimmer while loading
             shimmerPlaceholder.setVisibility(View.VISIBLE);
-            shimmerPlaceholder.startAnimation(shimmerAnim);
-            imageView.setVisibility(View.GONE);
+            shimmerPlaceholder.setAlpha(1f);
+            shimmerPlaceholder.startShimmer();
+            imageView.setVisibility(View.INVISIBLE);
             imageProgress.setVisibility(View.GONE);
+            imageView.setAlpha(0f);
 
             String blob = product.getProductImage().getImageBlob();
             ImageLoader.load(productId, blob, bitmap -> {
                 int pos = getBindingAdapterPosition();
                 if (pos >= 0 && pos < getItemCount()
                         && getItem(pos).getId() == productId) {
-                    shimmerPlaceholder.clearAnimation();
-                    shimmerPlaceholder.setVisibility(View.GONE);
+                    shimmerPlaceholder.stopShimmer();
                     if (bitmap != null) {
                         imageView.setImageBitmap(bitmap);
                         imageView.setVisibility(View.VISIBLE);
+                        imageView.animate().alpha(1f).setDuration(180).start();
+                        shimmerPlaceholder.animate().alpha(0f).setDuration(120).withEndAction(() -> {
+                            shimmerPlaceholder.setVisibility(View.GONE);
+                            shimmerPlaceholder.setAlpha(1f);
+                        }).start();
                     } else {
                         showDefaultImage();
                     }
@@ -242,9 +253,11 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
         }
 
         private void showDefaultImage() {
-            shimmerPlaceholder.clearAnimation();
+            shimmerPlaceholder.stopShimmer();
             shimmerPlaceholder.setVisibility(View.GONE);
+            shimmerPlaceholder.setAlpha(1f);
             imageView.setVisibility(View.VISIBLE);
+            imageView.setAlpha(1f);
             imageView.setImageResource(DEFAULT_IMAGE_RES);
         }
     }

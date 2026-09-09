@@ -61,7 +61,9 @@ public class LoginFragment extends Fragment {
         });
 
         viewModel.getError().observe(getViewLifecycleOwner(), message -> {
-            if (message != null && !message.isEmpty()) {
+            if (message == null || message.isEmpty()) {
+                errorText.setVisibility(View.GONE);
+            } else {
                 errorText.setText(message);
                 errorText.setVisibility(View.VISIBLE);
             }

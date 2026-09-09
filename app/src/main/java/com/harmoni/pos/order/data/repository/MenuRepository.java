@@ -112,7 +112,8 @@ public class MenuRepository {
     }
 
     private static <T> String errorMessage(Response<ApiResponse<T>> response) {
-        if (response.code() == 401) return "Unauthorized";
+        if (response.code() == 401) return "Session expired – please login again";
+        if (response.code() == 403) return "Access denied – you don't have permission (403)";
         return "HTTP " + response.code();
     }
 }

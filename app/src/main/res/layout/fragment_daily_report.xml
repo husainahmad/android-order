@@ -210,31 +210,32 @@
             android:layout_height="@dimen/height_table_header"
             android:background="@color/md_surface_container"
             android:gravity="center_vertical"
+            android:minHeight="48dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp">
 
             <TextView
+                android:id="@+id/dateHeader"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/date"
+                android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
                 android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_size_table_header"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.15" />
 
             <TextView
+                android:id="@+id/productHeader"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/product"
+                android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
                 android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_size_table_header"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/qtyHeader"
-                app:layout_constraintStart_toEndOf="@+id/dateHeader"
+                app:layout_constraintEnd_toStartOf="@id/qtyHeader"
+                app:layout_constraintStart_toEndOf="@id/dateHeader"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.35" />
 
@@ -244,11 +245,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/qty"
+                android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
                 android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_size_table_header"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/netHeader"
+                app:layout_constraintEnd_toStartOf="@id/netHeader"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.1" />
 
@@ -258,11 +258,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="@string/net_sales"
+                android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
                 android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_size_table_header"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/discountHeader"
+                app:layout_constraintEnd_toStartOf="@id/discountHeader"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.2" />
 
@@ -272,9 +271,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="@string/discount"
+                android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
                 android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_size_table_header"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

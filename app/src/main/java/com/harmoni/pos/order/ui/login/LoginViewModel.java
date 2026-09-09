@@ -13,6 +13,7 @@ import com.harmoni.pos.order.data.model.AuthResponse;
 import com.harmoni.pos.order.data.model.User;
 import com.harmoni.pos.order.data.remote.ApiClient;
 import com.harmoni.pos.order.data.remote.LoginRequest;
+import com.harmoni.pos.order.data.remote.SessionManager;
 import com.harmoni.pos.order.data.remote.TokenManager;
 import com.harmoni.pos.order.util.JsonCache;
 
@@ -47,6 +48,7 @@ public class LoginViewModel extends AndroidViewModel {
             error.setValue("Please enter username and password");
             return;
         }
+        error.setValue("");
         loading.setValue(true);
         ApiClient.authService().login(new LoginRequest(username.trim(), password))
                 .enqueue(new Callback<AuthResponse>() {
@@ -58,6 +60,7 @@ public class LoginViewModel extends AndroidViewModel {
                                 && !response.body().getAccessToken().isEmpty()) {
                             AuthResponse auth = response.body();
                             TokenManager.setTokens(auth.getAccessToken(), auth.getRefreshToken());
+                            SessionManager.resetThrottle();
                             fetchUser(username.trim());
                         } else {
                             error.setValue("Login failed: HTTP " + response.code());
@@ -82,8 +85,10 @@ public class LoginViewModel extends AndroidViewModel {
                         && response.body().getData() != null) {
                     TokenManager.saveUser(response.body().getData());
                     JsonCache.clear(PosApplication.getAppContext());
+                    error.setValue("");
                     loggedIn.setValue(true);
                 } else {
+                    if (response.code() == 401 || response.code() == 403) return;
                     error.setValue("Failed to load user: HTTP " + response.code());
                 }
             }

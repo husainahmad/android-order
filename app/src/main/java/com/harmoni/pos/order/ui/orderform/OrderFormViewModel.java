@@ -260,7 +260,10 @@ public class OrderFormViewModel extends ViewModel {
                 submitting.setValue(false);
                 if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                     confirmedOrder.setValue(response.body().getData());
+                    error.setValue("");
                 } else {
+                    // 401/403 handled globally via SessionManager — suppress local
+                    if (response.code() == 401 || response.code() == 403) return;
                     error.setValue("Confirm order failed: HTTP " + response.code());
                 }
             }

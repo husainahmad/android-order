@@ -9,7 +9,9 @@ import com.harmoni.pos.order.print.PrinterManager;
 
 public class PosApplication extends Application {
 
-    private static PosApplication instance;
+    // No static instance leak. Use context.getApplicationContext() via DI / AndroidViewModel.
+    // Kept only for legacy callers that still use PosApplication.getAppContext() during migration.
+    private static volatile PosApplication instance;
 
     @Override
     public void onCreate() {
@@ -20,7 +22,13 @@ public class PosApplication extends Application {
         PrinterManager.init(this);
     }
 
+    /**
+     * @deprecated Inject Context or pass Application instead. Kept for incremental migration.
+     */
+    @Deprecated
     public static Context getAppContext() {
-        return instance;
+        PosApplication i = instance;
+        if (i != null) return i.getApplicationContext();
+        throw new IllegalStateException("PosApplication not created yet");
     }
 }

@@ -23,8 +23,10 @@
         android:contentDescription="@string/remove"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:minWidth="0dp"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         android:text=""
+        android:tooltipText="@string/remove"
         android:stateListAnimator="@animator/button_press_outlined"
         app:backgroundTint="@color/md_surface_container"
         app:cornerRadius="10dp"
@@ -52,18 +54,18 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
             android:textColor="@color/text_primary"
-            android:textSize="@dimen/text_size_sku_name"
-            android:textStyle="bold" />
+            android:tooltipText="@string/product" />
 
         <TextView
             android:id="@+id/skuQuantityText"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:accessibilityLiveRegion="polite"
             android:gravity="center"
-            android:textColor="@color/accent"
-            android:textSize="@dimen/text_size_sku_qty"
-            android:textStyle="bold" />
+            android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
+            android:textColor="@color/accent" />
 
     </LinearLayout>
 
@@ -77,8 +79,10 @@
         android:contentDescription="@string/add"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:minWidth="0dp"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         android:text=""
+        android:tooltipText="@string/add"
         android:stateListAnimator="@animator/button_press"
         app:backgroundTint="@color/accent"
         app:cornerRadius="10dp"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 7" tablet (600dp smallest width) - portrait and landscape -->
-    <dimen name="height_product_image">140dp</dimen>
+    <dimen name="height_product_image">128dp</dimen>
     <dimen name="height_card">88dp</dimen>
     <dimen name="height_button">56dp</dimen>
     <dimen name="height_button_large">56dp</dimen>
@@ -13,10 +13,10 @@
     <dimen name="width_button_icon_medium">44dp</dimen>
     <dimen name="width_button_icon_dense">40dp</dimen>
 
-    <!-- Category - compact -->
-    <dimen name="height_category_card">92dp</dimen>
-    <dimen name="size_category_icon">44dp</dimen>
-    <dimen name="height_category_name">30dp</dimen>
+    <!-- Category - enlarged touch target -->
+    <dimen name="height_category_card">108dp</dimen>
+    <dimen name="size_category_icon">50dp</dimen>
+    <dimen name="height_category_name">34dp</dimen>
     <dimen name="size_selected_icon">20dp</dimen>
 
     <!-- Order tab -->

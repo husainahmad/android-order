@@ -80,17 +80,17 @@
     <dimen name="height_dense_input">48dp</dimen>
     <dimen name="height_card">80dp</dimen>
     <dimen name="height_tab">56dp</dimen>
-    <dimen name="height_product_image">128dp</dimen>
+    <dimen name="height_product_image">118dp</dimen>
     <dimen name="width_card">420dp</dimen>
     <dimen name="width_tab">72dp</dimen>
     <dimen name="width_button_icon">48dp</dimen>
-    <dimen name="width_button_icon_medium">44dp</dimen>
+    <dimen name="width_button_icon_medium">48dp</dimen>
     <dimen name="width_button_icon_dense">40dp</dimen>
 
-    <!-- Category - compact navigation, 72-96dp touch target -->
-    <dimen name="height_category_card">88dp</dimen>
-    <dimen name="size_category_icon">42dp</dimen>
-    <dimen name="height_category_name">28dp</dimen>
+    <!-- Category - enlarged touch target (easy tap on POS) -->
+    <dimen name="height_category_card">102dp</dimen>
+    <dimen name="size_category_icon">48dp</dimen>
+    <dimen name="height_category_name">32dp</dimen>
     <dimen name="size_selected_icon">20dp</dimen>
 
     <!-- Order tab -->

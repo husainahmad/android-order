@@ -102,8 +102,16 @@ public class DailyReportDialogFragment extends DialogFragment {
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading ->
                 binding.progressBar.setVisibility(Boolean.TRUE.equals(loading) ? View.VISIBLE : View.GONE));
         viewModel.getError().observe(getViewLifecycleOwner(), message -> {
-            binding.errorText.setVisibility(message != null && !message.isEmpty() ? View.VISIBLE : View.GONE);
-            if (message != null) binding.errorText.setText(message);
+            if (message == null || message.isEmpty()) {
+                binding.errorText.setVisibility(View.GONE);
+                return;
+            }
+            if (message.contains("401") || message.contains("403") || message.contains("Session expired") || message.contains("Access denied")) {
+                binding.errorText.setVisibility(View.GONE);
+                return;
+            }
+            binding.errorText.setText(message);
+            binding.errorText.setVisibility(View.VISIBLE);
         });
         viewModel.getRows().observe(getViewLifecycleOwner(), this::onRowsLoaded);
         viewModel.getVolume().observe(getViewLifecycleOwner(), this::onVolumeLoaded);

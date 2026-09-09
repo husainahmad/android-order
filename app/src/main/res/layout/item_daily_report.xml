@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_daily_report_item"
     android:background="@color/row_even"
+    android:minHeight="48dp"
     android:paddingStart="8dp"
     android:paddingEnd="8dp">
 

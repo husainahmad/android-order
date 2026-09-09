@@ -34,6 +34,7 @@ public class OrdersViewModel extends ViewModel {
     }
 
     public void loadOrders() {
+        error.setValue("");
         loading.setValue(true);
         ApiClient.orderService().dailyOrders().enqueue(new Callback<ApiResponse<List<Order>>>() {
             @Override
@@ -43,6 +44,7 @@ public class OrdersViewModel extends ViewModel {
                     orders.setValue(response.body().getData());
                     error.setValue("");
                 } else {
+                    if (response.code() == 401 || response.code() == 403) return;
                     error.setValue("Failed to load orders: HTTP " + response.code());
                 }
             }
@@ -65,6 +67,7 @@ public class OrdersViewModel extends ViewModel {
                 if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                     callback.onSuccess(response.body().getData());
                 } else {
+                    if (response.code() == 401 || response.code() == 403) return;
                     callback.onError("Failed to load settlement: HTTP " + response.code());
                 }
             }

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="@dimen/corner_medium" />
-    <gradient
-        android:angle="180"
-        android:startColor="@color/md_surface_variant"
-        android:centerColor="@color/md_surface_container"
-        android:endColor="@color/md_surface_variant"
-        android:centerX="0.5"
-        android:type="linear" />
+    <solid android:color="@color/md_surface_variant" />
+    <corners android:radius="0dp" />
 </shape>

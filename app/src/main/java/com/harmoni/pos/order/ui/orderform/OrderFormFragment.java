@@ -88,6 +88,8 @@ public class OrderFormFragment extends Fragment {
                 }
             });
 
+    private boolean isCheckoutExpanded = false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -148,7 +150,52 @@ public class OrderFormFragment extends Fragment {
         binding.orderSummaryHeader.setOnClickListener(v -> showPreviewOrderDialog());
         // also make badge itself tappable (propagates to header)
         binding.cartCountText.setOnClickListener(v -> showPreviewOrderDialog());
+        setupCollapsibleCheckout();
         setupKeyboardNavigation();
+    }
+
+    private void setupCollapsibleCheckout() {
+        updateCheckoutSummary();
+        binding.checkoutDetailsHeader.setOnClickListener(v -> toggleCheckout());
+        // Update summary when text changes
+        android.text.TextWatcher summaryWatcher = new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            @Override public void afterTextChanged(android.text.Editable s) { updateCheckoutSummary(); }
+        };
+        binding.customerInput.addTextChangedListener(summaryWatcher);
+        binding.discountInput.addTextChangedListener(summaryWatcher);
+        binding.remarkInput.addTextChangedListener(summaryWatcher);
+        binding.orderTypeGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) updateCheckoutSummary();
+        });
+    }
+
+    private void toggleCheckout() {
+        isCheckoutExpanded = !isCheckoutExpanded;
+        binding.checkoutInputsContainer.setVisibility(isCheckoutExpanded ? View.VISIBLE : View.GONE);
+        binding.checkoutExpandIcon.animate().rotation(isCheckoutExpanded ? 45f : 0f).setDuration(200).start();
+        binding.checkoutDetailsSummary.setVisibility(isCheckoutExpanded ? View.GONE : View.VISIBLE);
+        if (isCheckoutExpanded) {
+            binding.checkoutScrollView.postDelayed(() -> binding.checkoutScrollView.smoothScrollTo(0, binding.checkoutInputsContainer.getBottom()), 100);
+        }
+    }
+
+    private void updateCheckoutSummary() {
+        if (binding == null) return;
+        String customer = binding.customerInput.getText() != null ? binding.customerInput.getText().toString().trim() : "";
+        String discount = binding.discountInput.getText() != null ? binding.discountInput.getText().toString().trim() : "0";
+        String remark = binding.remarkInput.getText() != null ? binding.remarkInput.getText().toString().trim() : "";
+        String type = binding.orderTypeGroup.getCheckedButtonId() == R.id.takeawayButton ? "Takeaway" : "Dine In";
+        StringBuilder sb = new StringBuilder();
+        if (!customer.isEmpty()) sb.append(customer).append(" • ");
+        sb.append(type);
+        if (!"0".equals(discount) && !discount.isEmpty()) sb.append(" • Disc:").append(discount);
+        if (!remark.isEmpty()) sb.append(" • ").append(remark.length() > 12 ? remark.substring(0,12)+"…" : remark);
+        String summary = sb.toString();
+        if (summary.length() > 28) summary = summary.substring(0,28)+"…";
+        binding.checkoutDetailsSummary.setText(summary);
+        binding.checkoutDetailsSummary.setVisibility(isCheckoutExpanded ? View.GONE : (summary.isEmpty() ? View.GONE : View.VISIBLE));
     }
 
     private void showPreviewOrderDialog() {
@@ -158,21 +205,24 @@ public class OrderFormFragment extends Fragment {
                 binding.discountInput.getText().toString() : "0";
         String remark = binding.remarkInput.getText() != null ?
                 binding.remarkInput.getText().toString() : "";
-        int orderType = binding.orderTypeGroup.getCheckedRadioButtonId() == R.id.takeawayRadio ? 3 : 1;
+        int orderType = binding.orderTypeGroup.getCheckedButtonId() == R.id.takeawayButton ? 3 : 1;
         OrderPreviewDialogFragment fragment = OrderPreviewDialogFragment.newInstance(customer, discount, remark, orderType);
         fragment.show(getParentFragmentManager(), "order_preview");
     }
 
     private void setupKeyboardNavigation() {
-        // Auto-scroll focused field into view when keyboard shows (fixes remark/additional notes overlapping)
+        // Auto-expand checkout if collapsed, then scroll focused field into view
         View.OnFocusChangeListener scrollListener = (v, hasFocus) -> {
-            if (hasFocus) v.postDelayed(() -> {
-                android.graphics.Rect rect = new android.graphics.Rect(0, 0, v.getWidth(), v.getHeight() + 120);
-                v.requestRectangleOnScreen(rect, true);
-                // Fallback for NestedScrollView with maxHeight
-                binding.checkoutScrollView.postDelayed(
-                        () -> binding.checkoutScrollView.smoothScrollTo(0, v.getBottom() + 200), 100);
-            }, 250);
+            if (hasFocus) {
+                if (!isCheckoutExpanded) toggleCheckout();
+                v.postDelayed(() -> {
+                    android.graphics.Rect rect = new android.graphics.Rect(0, 0, v.getWidth(), v.getHeight() + 120);
+                    v.requestRectangleOnScreen(rect, true);
+                    // Fallback for NestedScrollView with maxHeight
+                    binding.checkoutScrollView.postDelayed(
+                            () -> binding.checkoutScrollView.smoothScrollTo(0, v.getBottom() + 200), 100);
+                }, 250);
+            }
         };
         binding.customerInput.setOnFocusChangeListener(scrollListener);
         binding.discountInput.setOnFocusChangeListener(scrollListener);
@@ -238,28 +288,47 @@ public class OrderFormFragment extends Fragment {
             }
             updateTotals();
         });
-        viewModel.getSubmitting().observe(getViewLifecycleOwner(), submitting ->
-                binding.progressBar.setVisibility(Boolean.TRUE.equals(submitting) ? View.VISIBLE : View.GONE));
+        viewModel.getSubmitting().observe(getViewLifecycleOwner(), submitting -> {
+            boolean isSubmitting = Boolean.TRUE.equals(submitting);
+            binding.submitProgressBar.setVisibility(isSubmitting ? View.VISIBLE : View.GONE);
+            // Guard against double-tap duplicate orders (critical for POS)
+            binding.confirmButton.setEnabled(!isSubmitting);
+            binding.confirmButton.setAlpha(isSubmitting ? 0.6f : 1f);
+            binding.printButton.setEnabled(!isSubmitting);
+            if (isSubmitting) {
+                binding.confirmButton.setText(R.string.loading);
+            } else {
+                binding.confirmButton.setText(R.string.confirm);
+            }
+        });
         viewModel.getError().observe(getViewLifecycleOwner(), message -> {
             if (message == null || message.isEmpty()) {
                 binding.errorText.setVisibility(View.GONE);
-            } else {
-                binding.errorText.setText(message);
-                binding.errorText.setVisibility(View.VISIBLE);
+                return;
             }
+            // Suppress local for 401/403 — global SessionManager dialog will show
+            if (message.contains("401") || message.contains("403") || message.contains("Session expired") || message.contains("Access denied")) {
+                binding.errorText.setVisibility(View.GONE);
+                return;
+            }
+            binding.errorText.setText(message);
+            binding.errorText.setVisibility(View.VISIBLE);
         });
         viewModel.getConfirmedOrder().observe(getViewLifecycleOwner(), order -> {
         });
     }
 
     private void loadCategories() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        // Clear stale error before new load
+        viewModel.getError().getValue(); // trigger if needed
+        binding.errorText.setVisibility(View.GONE);
+        binding.categoryProgressBar.setVisibility(View.VISIBLE);
         menuRepository.getCategories(new MenuRepository.RepositoryCallback<List<Category>>() {
             @Override
             public void onSuccess(List<Category> data) {
                 categories = data;
                 categoryAdapter.submitList(data);
-                binding.progressBar.setVisibility(View.GONE);
+                binding.categoryProgressBar.setVisibility(View.GONE);
                 if (!data.isEmpty()) {
                     categoryAdapter.setSelectedPosition(0);
                     selectCategory(data.get(0));
@@ -268,7 +337,11 @@ public class OrderFormFragment extends Fragment {
 
             @Override
             public void onError(String message) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.categoryProgressBar.setVisibility(View.GONE);
+                // Suppress local if global 401/403 will show dialog
+                if (message != null && (message.contains("401") || message.contains("403") || message.contains("Session expired") || message.contains("Access denied"))) {
+                    return;
+                }
                 showError(message);
             }
         });
@@ -281,13 +354,14 @@ public class OrderFormFragment extends Fragment {
     }
 
     private void loadProducts(int categoryId) {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.errorText.setVisibility(View.GONE);
+        binding.productProgressBar.setVisibility(View.VISIBLE);
         menuRepository.getProducts(categoryId, new MenuRepository.RepositoryCallback<List<Product>>() {
             @Override
             public void onSuccess(List<Product> data) {
                 allProducts = data;
                 productAdapter.submitList(allProducts);
-                binding.progressBar.setVisibility(View.GONE);
+                binding.productProgressBar.setVisibility(View.GONE);
                 boolean empty = data == null || data.isEmpty();
                 binding.productsRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
                 binding.productsEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
@@ -300,7 +374,10 @@ public class OrderFormFragment extends Fragment {
 
             @Override
             public void onError(String message) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.productProgressBar.setVisibility(View.GONE);
+                if (message != null && (message.contains("401") || message.contains("403") || message.contains("Session expired") || message.contains("Access denied"))) {
+                    return;
+                }
                 showError(message);
             }
         });
@@ -335,6 +412,8 @@ public class OrderFormFragment extends Fragment {
     }
 
     private void onConfirm() {
+        // Extra guard: ViewModel already submitting → ignore double tap
+        if (Boolean.TRUE.equals(viewModel.getSubmitting().getValue())) return;
         List<CartItem> cart = viewModel.getCart().getValue();
         if (cart == null || cart.isEmpty()) {
             showError(getString(R.string.cart_empty));
@@ -346,7 +425,7 @@ public class OrderFormFragment extends Fragment {
                 binding.discountInput.getText().toString() : "0";
         String remark = binding.remarkInput.getText() != null ?
                 binding.remarkInput.getText().toString() : "";
-        int orderType = binding.orderTypeGroup.getCheckedRadioButtonId() == R.id.takeawayRadio ? 3 : 1;
+        int orderType = binding.orderTypeGroup.getCheckedButtonId() == R.id.takeawayButton ? 3 : 1;
         viewModel.setCustomer(customer);
         viewModel.setDiscount(discount);
         viewModel.setRemark(remark);

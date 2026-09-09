@@ -177,8 +177,16 @@ public class OrderConfirmFragment extends DialogFragment {
             }
             binding.itemCountText.setText(getString(R.string.item_count, count));
         });
-        viewModel.getSubmitting().observe(getViewLifecycleOwner(), submitting ->
-                binding.progressBar.setVisibility(Boolean.TRUE.equals(submitting) ? View.VISIBLE : View.GONE));
+        viewModel.getSubmitting().observe(getViewLifecycleOwner(), submitting -> {
+            boolean isSubmitting = Boolean.TRUE.equals(submitting);
+            binding.progressBar.setVisibility(isSubmitting ? View.VISIBLE : View.GONE);
+            binding.proceedButton.setEnabled(!isSubmitting);
+            binding.proceedButton.setAlpha(isSubmitting ? 0.6f : 1f);
+            binding.cancelButton.setEnabled(!isSubmitting);
+            binding.qrCard.setClickable(!isSubmitting);
+            binding.cardCard.setClickable(!isSubmitting);
+            binding.cashCard.setClickable(!isSubmitting);
+        });
         viewModel.getConfirmedOrder().observe(getViewLifecycleOwner(), order -> {
             if (order != null) {
                 confirmedOrder = order;

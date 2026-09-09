@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/spacing_xsmall"
@@ -24,20 +25,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Product Image with Shimmer -->
+            <!-- Product Image with Shimmer — hardware accelerated via Facebook Shimmer -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_product_image"
                 android:background="@drawable/bg_product_image_top"
                 android:clipToOutline="true">
 
-                <!-- Shimmer placeholder (visible while loading) -->
-                <View
+                <com.facebook.shimmer.ShimmerFrameLayout
                     android:id="@+id/shimmerPlaceholder"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shimmer_bg"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:shimmer_auto_start="true"
+                    app:shimmer_base_alpha="1.0"
+                    app:shimmer_base_color="@color/md_surface_variant"
+                    app:shimmer_highlight_alpha="0.7"
+                    app:shimmer_highlight_color="@color/white"
+                    app:shimmer_duration="1100"
+                    app:shimmer_direction="left_to_right"
+                    app:shimmer_shape="linear"
+                    app:shimmer_dropoff="0.5"
+                    app:shimmer_intensity="0.0">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/shimmer_bg" />
+
+                    <!-- inner highlight view kept for code compat (hidden, shimmer driven by FrameLayout) -->
+                    <View
+                        android:id="@+id/shimmerHighlight"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:visibility="gone" />
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <ImageView
                     android:id="@+id/productImage"
@@ -47,13 +69,16 @@
                     android:padding="6dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_default_product"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription" />
 
                 <ProgressBar
                     android:id="@+id/imageProgress"
+                    style="?android:attr/progressBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:contentDescription="@string/loading"
                     android:visibility="gone" />
 
                 <!-- Badge overlay -->
@@ -64,8 +89,8 @@
                     android:layout_gravity="top|start"
                     android:layout_margin="@dimen/spacing_small"
                     android:background="@drawable/bg_badge_new"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
                     android:text="@string/badge_new"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_badge"
@@ -78,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|start"
-                    android:layout_margin="@dimen/spacing_xsmall"
+                    android:layout_margin="@dimen/spacing_small"
                     android:background="@drawable/bg_variant_overlay"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -86,7 +111,7 @@
 
             </FrameLayout>
 
-            <!-- Product Name -->
+            <!-- Product Name — compact -->
             <TextView
                 android:id="@+id/productName"
                 android:layout_width="match_parent"
@@ -96,37 +121,40 @@
                 android:layout_marginEnd="@dimen/spacing_small"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:minHeight="36dp"
+                android:minHeight="32dp"
+                android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleSmall"
                 android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_body"
-                android:textStyle="bold" />
+                android:tooltipText="@string/product" />
 
-            <!-- Price + Add -->
+            <!-- Price + Add — compact -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="@dimen/spacing_small"
-                android:layout_marginBottom="@dimen/spacing_xsmall">
+                android:layout_marginBottom="6dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/productAddButton"
                     style="@style/Widget.Material3.Button"
-                    android:layout_width="@dimen/width_button_icon"
-                    android:layout_height="@dimen/height_button_medium"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:minWidth="0dp"
+                    android:minWidth="40dp"
+                    android:minHeight="40dp"
                     android:text=""
                     android:contentDescription="@string/add_to_cart"
+                    android:tooltipText="@string/add_to_cart"
                     android:stateListAnimator="@animator/button_press"
                     app:backgroundTint="@color/accent"
-                    app:cornerRadius="12dp"
+                    app:cornerRadius="10dp"
                     app:icon="@drawable/ic_add"
                     app:iconGravity="textStart"
                     app:iconPadding="0dp"
+                    app:iconSize="18dp"
                     app:iconTint="@color/white" />
 
                 <TextView
@@ -138,9 +166,10 @@
                     android:layout_marginEnd="@dimen/spacing_xsmall"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
                     android:textColor="@color/accent"
-                    android:textSize="@dimen/text_body"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:tooltipText="@string/product" />
 
             </RelativeLayout>
 
@@ -151,7 +180,8 @@
             android:id="@+id/outOfStockOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#80000000"
+            android:background="@color/scrim_overlay"
+            android:importantForAccessibility="no"
             android:visibility="gone" />
 
         <TextView
@@ -159,10 +189,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:accessibilityLiveRegion="polite"
             android:text="@string/out_of_stock"
+            android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleMedium"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_out_of_stock"
-            android:textStyle="bold"
             android:visibility="gone" />
 
     </FrameLayout>

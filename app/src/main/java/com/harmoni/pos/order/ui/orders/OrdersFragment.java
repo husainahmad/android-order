@@ -121,8 +121,16 @@ public class OrdersFragment extends Fragment {
         });
 
         viewModel.getError().observe(getViewLifecycleOwner(), message -> {
-            binding.errorText.setVisibility(message != null && !message.isEmpty() ? View.VISIBLE : View.GONE);
-            if (message != null) binding.errorText.setText(message);
+            if (message == null || message.isEmpty()) {
+                binding.errorText.setVisibility(View.GONE);
+                return;
+            }
+            if (message.contains("401") || message.contains("403") || message.contains("Session expired") || message.contains("Access denied")) {
+                binding.errorText.setVisibility(View.GONE);
+                return;
+            }
+            binding.errorText.setText(message);
+            binding.errorText.setVisibility(View.VISIBLE);
         });
 
         viewModel.getOrders().observe(getViewLifecycleOwner(), this::onOrdersLoaded);
@@ -173,6 +181,9 @@ public class OrdersFragment extends Fragment {
 
             @Override
             public void onError(String message) {
+                if (message != null && (message.contains("401") || message.contains("403") || message.contains("Session expired") || message.contains("Access denied"))) {
+                    return;
+                }
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.settlement)
                         .setMessage(message)

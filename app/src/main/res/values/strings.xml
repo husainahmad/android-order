@@ -104,4 +104,19 @@
     <string name="network">Network</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="usb">USB</string>
+    <string name="loading">Loading</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
+    <string name="cash_payment">CASH PAYMENT</string>
+    <string name="total_label">TOTAL</string>
+    <string name="money_received">UANG DITERIMA</string>
+    <string name="change">KEMBALIAN</string>
+    <string name="clear">CLEAR</string>
+    <string name="exact">EXACT</string>
+
+    <!-- Session / 403 handling -->
+    <string name="session_expired_title">Session Expired</string>
+    <string name="session_expired_body">Your session has expired. Please login again to continue.</string>
+    <string name="session_forbidden_title">Access Denied</string>
+    <string name="session_forbidden_body">You don\'t have permission to perform this action (403). Please login again or contact your administrator.</string>
 </resources>
