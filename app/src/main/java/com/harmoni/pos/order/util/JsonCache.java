@@ -2,10 +2,7 @@ package com.harmoni.pos.order.util;
 
 import android.content.Context;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.harmoni.pos.order.data.model.Category;
 import com.harmoni.pos.order.data.model.Product;
@@ -20,10 +17,7 @@ import java.util.List;
 
 public class JsonCache {
 
-    private static final Gson GSON = new GsonBuilder()
-            .addSerializationExclusionStrategy(new NoImageBlobStrategy())
-            .addDeserializationExclusionStrategy(new NoImageBlobStrategy())
-            .create();
+    private static final Gson GSON = new Gson();
     private static final String CATEGORY_FILE = "category_cache.json";
     private static final String PRODUCT_PREFIX = "product_cache_";
 
@@ -75,19 +69,6 @@ public class JsonCache {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             GSON.toJson(data, writer);
         } catch (Exception ignored) {
-        }
-    }
-
-    /** Keeps heavy base64 image blobs out of the on-disk cache so reads/writes stay fast. */
-    private static final class NoImageBlobStrategy implements ExclusionStrategy {
-        @Override
-        public boolean shouldSkipField(FieldAttributes f) {
-            return "imageBlob".equals(f.getName());
-        }
-
-        @Override
-        public boolean shouldSkipClass(Class<?> clazz) {
-            return false;
         }
     }
 }

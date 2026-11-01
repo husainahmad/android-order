@@ -52,7 +52,7 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
             Sku s2 = defaultSku(o2);
             return Objects.equals(o1.getName(), o2.getName())
                     && Objects.equals(s1 != null ? s1.getPrice() : null, s2 != null ? s2.getPrice() : null)
-                    && Objects.equals(imageBlob(o1), imageBlob(o2));
+                    && Objects.equals(imageUrl(o1), imageUrl(o2));
         }
     };
 
@@ -69,8 +69,8 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
         return skus.get(0);
     }
 
-    private static String imageBlob(Product product) {
-        return product.getProductImage() != null ? product.getProductImage().getImageBlob() : null;
+    private static String imageUrl(Product product) {
+        return product.getProductImage() != null ? product.getProductImage().getUrl() : null;
     }
 
     @NonNull
@@ -219,7 +219,7 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
         private void bindImage(Product product) {
             int productId = product.getId();
             if (product.getProductImage() == null
-                    || product.getProductImage().getImageBlob().isEmpty()) {
+                    || product.getProductImage().getUrl().isEmpty()) {
                 showDefaultImage();
                 return;
             }
@@ -231,8 +231,8 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductH
             imageProgress.setVisibility(View.GONE);
             imageView.setAlpha(0f);
 
-            String blob = product.getProductImage().getImageBlob();
-            ImageLoader.load(productId, blob, bitmap -> {
+            String url = product.getProductImage().getUrl();
+            ImageLoader.load(url, bitmap -> {
                 int pos = getBindingAdapterPosition();
                 if (pos >= 0 && pos < getItemCount()
                         && getItem(pos).getId() == productId) {

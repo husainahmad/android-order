@@ -88,13 +88,13 @@ public class ProductDetailDialog extends DialogFragment {
     private void bindImage(Product product) {
         binding.productNameText.setContentDescription(product.getName());
         if (product.getProductImage() == null
-                || product.getProductImage().getImageBlob().isEmpty()) {
+                || product.getProductImage().getUrl().isEmpty()) {
             binding.productImage.setImageResource(R.drawable.ic_default_product);
             binding.imageProgress.setVisibility(View.GONE);
             return;
         }
         binding.imageProgress.setVisibility(View.VISIBLE);
-        ImageLoader.load(product.getId(), product.getProductImage().getImageBlob(), bitmap -> {
+        ImageLoader.load(product.getProductImage().getUrl(), bitmap -> {
             if (bitmap != null) {
                 binding.productImage.setImageBitmap(bitmap);
             } else {
