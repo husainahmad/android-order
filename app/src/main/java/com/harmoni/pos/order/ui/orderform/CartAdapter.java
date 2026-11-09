@@ -26,8 +26,8 @@ public class CartAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> {
     private static final int VIEW_SKU = 1;
 
     public interface OnQuantityChangeListener {
-        void onIncrement(int productId, int skuId);
-        void onDecrement(int productId, int skuId);
+        void onIncrement(String lineKey);
+        void onDecrement(String lineKey);
     }
 
     private final OnQuantityChangeListener listener;
@@ -43,7 +43,7 @@ public class CartAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> {
             if (o1 instanceof CartItem && o2 instanceof CartItem) {
                 CartItem a = (CartItem) o1;
                 CartItem b = (CartItem) o2;
-                return a.getProductId() == b.getProductId() && a.getSkuId() == b.getSkuId();
+                return Objects.equals(a.getLineKey(), b.getLineKey());
             }
             if (o1 instanceof CartHeader && o2 instanceof CartHeader) {
                 return Objects.equals(((CartHeader) o1).productName, ((CartHeader) o2).productName);
@@ -58,6 +58,8 @@ public class CartAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> {
                 CartItem b = (CartItem) o2;
                 return a.getQuantity() == b.getQuantity()
                         && Objects.equals(a.getSkuName(), b.getSkuName())
+                        && Objects.equals(a.getCustomizationSummary(), b.getCustomizationSummary())
+                        && Objects.equals(a.getRemark(), b.getRemark())
                         && Objects.equals(a.getLineTotal(), b.getLineTotal());
             }
             return true;
@@ -118,16 +120,27 @@ public class CartAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> {
         } else {
             CartItem ci = (CartItem) item;
             SkuHolder skuHolder = (SkuHolder) holder;
-            skuHolder.skuName.setText(ci.getSkuName());
+            String summary = ci.getCustomizationSummary();
+            StringBuilder label = new StringBuilder(ci.getSkuName());
+            if (!summary.isEmpty()) label.append("\n").append(summary);
+            String note = ci.getRemark();
+            if (!note.isEmpty()) {
+                label.append("\n").append(holder.itemView.getContext()
+                        .getString(R.string.item_note_format, note));
+            }
+            label.append("\n").append(holder.itemView.getContext().getString(
+                    R.string.qty_times_price, ci.getQuantity(),
+                    CurrencyUtils.formatRp(ci.getUnitPrice())));
+            skuHolder.skuName.setText(label.toString());
             skuHolder.quantity.setText(String.valueOf(ci.getQuantity()));
             skuHolder.lineTotal.setText(CurrencyUtils.formatRp(ci.getLineTotal()));
             skuHolder.minus.setOnClickListener(v -> {
                 v.performHapticFeedback(android.view.HapticFeedbackConstants.CLOCK_TICK);
-                listener.onDecrement(ci.getProductId(), ci.getSkuId());
+                listener.onDecrement(ci.getLineKey());
             });
             skuHolder.plus.setOnClickListener(v -> {
                 v.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM);
-                listener.onIncrement(ci.getProductId(), ci.getSkuId());
+                listener.onIncrement(ci.getLineKey());
             });
         }
     }

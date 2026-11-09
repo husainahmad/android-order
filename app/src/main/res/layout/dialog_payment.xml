@@ -1,470 +1,713 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/md_background"
+    android:orientation="vertical">
 
-    <ScrollView
+    <!-- Dark header -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="none">
+        android:layout_height="wrap_content"
+        android:background="@color/sidebar_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="18dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/closeButton"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:contentDescription="@string/close"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="44dp"
+            android:minHeight="44dp"
+            android:text=""
+            app:icon="@drawable/ic_close"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/white" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/bg_stepper"
-            android:orientation="vertical"
-            android:padding="@dimen/spacing_medium">
-
             <TextView
-                android:id="@+id/summaryTitleText"
-                android:layout_width="wrap_content"
+                android:id="@+id/paymentTitleText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/order_summary"
-                android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_size_dialog_subtitle"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/payment"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_title"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/customerSummaryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_size_dialog_body" />
-
-            <TextView
-                android:id="@+id/discountSummaryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_size_dialog_body" />
-
-            <TextView
-                android:id="@+id/noteSummaryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_size_dialog_body" />
-        </LinearLayout>
-
-<TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/select_payment_method"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/text_size_payment_title"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/orderInfoText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/text_size_payment_subtitle" />
-
-            <LinearLayout
-                android:id="@+id/paymentSelector"
+                android:id="@+id/orderInfoText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/sidebar_text_muted"
+                android:textSize="@dimen/text_small" />
+
+            <TextView
+                android:id="@+id/paymentItemsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/sidebar_text_muted"
+                android:textSize="@dimen/text_small" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Body -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <!-- Left: order summary -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:background="@color/md_surface_container_low"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingTop="18dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="12dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/order_summary"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_caption" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/summaryRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:clipToPadding="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider"
+                android:importantForAccessibility="no" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:id="@+id/qrCard"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_payment_option"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                    <ImageView
-                        android:id="@+id/qrImage"
-                        android:layout_width="@dimen/size_payment_icon"
-                        android:layout_height="@dimen/height_button_small"
-                        android:contentDescription="@string/qris"
-                        android:src="@drawable/ic_qr"
-                        android:tint="@color/accent" />
-
-                    <TextView
-                        android:id="@+id/qrLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/qris"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_size_dialog_label"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/cardCard"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_payment_option"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:id="@+id/cardImage"
-                        android:layout_width="@dimen/size_payment_icon"
-                        android:layout_height="@dimen/height_button_small"
-                        android:contentDescription="@string/card"
-                        android:src="@drawable/ic_card"
-                        android:tint="@color/gray_button" />
-
-                    <TextView
-                        android:id="@+id/cardLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/card"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_size_dialog_label" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/cashCard"
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_payment_option"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:text="@string/sub_total"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption" />
 
-                    <ImageView
-                        android:id="@+id/cashImage"
-                        android:layout_width="@dimen/size_payment_icon"
-                        android:layout_height="@dimen/height_button_small"
-                        android:contentDescription="@string/cash"
-                        android:src="@drawable/ic_cash"
-                        android:tint="@color/gray_button" />
-
-                    <TextView
-                        android:id="@+id/cashLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/cash"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_size_dialog_label" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/subtotalSummaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_caption"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/cashPanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/cashTitleText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/discount"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption" />
+
+                <TextView
+                    android:id="@+id/discountSummaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CASH PAYMENT"
-                    android:textColor="@color/text_primary"
-                    android:textSize="@dimen/text_size_payment_subtitle"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption"
                     android:textStyle="bold" />
+            </LinearLayout>
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_to_pay"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_small" />
+
+                <TextView
+                    android:id="@+id/totalToPayText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="2dp"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.Total"
+                    android:textColor="@color/accent"
+                    android:textSize="30sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Right: payment method + keypad -->
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="12dp">
+
+                <!-- Segmented payment methods -->
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/paymentMethodGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    app:checkedButton="@id/cashButton"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/cashButton"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="@string/cash"
+                        android:textAllCaps="false"
+                        android:textColor="@color/order_type_text"
+                        android:textSize="@dimen/text_caption"
+                        app:backgroundTint="@color/order_type_bg"
+                        app:cornerRadius="10dp"
+                        app:icon="@drawable/ic_cash"
+                        app:iconGravity="textStart"
+                        app:iconPadding="6dp"
+                        app:iconTint="@color/order_type_text"
+                        app:strokeColor="@color/md_outline" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/qrButton"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="@string/qris"
+                        android:textAllCaps="false"
+                        android:textColor="@color/order_type_text"
+                        android:textSize="@dimen/text_caption"
+                        app:backgroundTint="@color/order_type_bg"
+                        app:cornerRadius="10dp"
+                        app:icon="@drawable/ic_qr"
+                        app:iconGravity="textStart"
+                        app:iconPadding="6dp"
+                        app:iconTint="@color/order_type_text"
+                        app:strokeColor="@color/md_outline" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/cardButton"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="@string/card"
+                        android:textAllCaps="false"
+                        android:textColor="@color/order_type_text"
+                        android:textSize="@dimen/text_caption"
+                        app:backgroundTint="@color/order_type_bg"
+                        app:cornerRadius="10dp"
+                        app:icon="@drawable/ic_card"
+                        app:iconGravity="textStart"
+                        app:iconPadding="6dp"
+                        app:iconTint="@color/order_type_text"
+                        app:strokeColor="@color/md_outline" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <!-- Cash panel -->
+                <LinearLayout
+                    android:id="@+id/cashPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="TOTAL"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_size_payment_cash_label" />
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/md_surface"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/md_outline"
+                            app:strokeWidth="1dp">
 
-                        <TextView
-                            android:id="@+id/cashTotalText"
-                            android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="14dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/cash_received"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="@dimen/text_small" />
+
+                                <TextView
+                                    android:id="@+id/cashReceivedText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:textAppearance="@style/TextAppearance.KopiHarmoni.Total"
+                                    android:textColor="@color/text_primary"
+                                    android:textSize="28sp" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_size_payment_cash_amount"
-                            android:textStyle="bold" />
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/status_paid_bg"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp">
 
-                        <GridLayout
-                            android:id="@+id/cashGrid"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:columnCount="3">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="14dp">
 
-                            <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill_horizontal"
-                                android:layout_margin="3dp"
-                                android:tag="1000"
-                                android:text="1.000"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/change"
+                                    android:textColor="@color/status_paid"
+                                    android:textSize="@dimen/text_small" />
 
-                            <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill_horizontal"
-                                android:layout_margin="3dp"
-                                android:tag="2000"
-                                android:text="2.000"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp" />
+                                <TextView
+                                    android:id="@+id/cashChangeText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:textAppearance="@style/TextAppearance.KopiHarmoni.Total"
+                                    android:textColor="@color/status_paid"
+                                    android:textSize="28sp" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
 
-                            <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill_horizontal"
-                                android:layout_margin="3dp"
-                                android:tag="5000"
-                                android:text="5.000"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill_horizontal"
-                                android:layout_margin="3dp"
-                                android:tag="10000"
-                                android:text="10.000"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill_horizontal"
-                                android:layout_margin="3dp"
-                                android:tag="20000"
-                                android:text="20.000"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill_horizontal"
-                                android:layout_margin="3dp"
-                                android:tag="50000"
-                                android:text="50.000"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill_horizontal"
-                                android:layout_margin="3dp"
-                                android:tag="100000"
-                                android:text="100.000"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill_horizontal"
-                                android:layout_margin="3dp"
-                                android:tag="200000"
-                                android:text="200.000"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill_horizontal"
-                                android:layout_margin="3dp"
-                                android:tag="500000"
-                                android:text="500.000"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp" />
-                        </GridLayout>
+                    <!-- Quick amounts -->
+                    <HorizontalScrollView
+                        android:id="@+id/quickAmountScroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:scrollbars="none">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
                             android:orientation="horizontal">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/clearButton"
-                                style="@style/Widget.Material3.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_marginEnd="8dp"
-                                android:layout_weight="1"
-                                android:text="CLEAR"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press_outlined"
-                                app:cornerRadius="10dp"
-                                app:strokeColor="@color/status_void" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/exactButton"
                                 style="@style/Widget.Material3.Button"
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/height_button_small"
-                                android:layout_weight="1"
-                                android:text="EXACT"
-                                android:textSize="@dimen/text_size_dialog_button"
-                                android:stateListAnimator="@animator/button_press"
+                                android:layout_width="wrap_content"
+                                android:layout_height="44dp"
+                                android:layout_marginEnd="6dp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minWidth="88dp"
+                                android:text="@string/exact"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white"
+                                android:textSize="13sp"
                                 app:backgroundTint="@color/accent"
-                                app:cornerRadius="10dp" />
+                                app:cornerRadius="22dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="44dp"
+                                android:layout_marginEnd="6dp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minWidth="88dp"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:tag="10000"
+                                android:text="10.000"
+                                android:textAllCaps="false"
+                                android:textSize="13sp"
+                                app:cornerRadius="22dp"
+                                app:strokeColor="@color/md_outline" />
+
+                            <com.google.android.material.button.MaterialButton
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="44dp"
+                                android:layout_marginEnd="6dp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minWidth="88dp"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:tag="20000"
+                                android:text="20.000"
+                                android:textAllCaps="false"
+                                android:textSize="13sp"
+                                app:cornerRadius="22dp"
+                                app:strokeColor="@color/md_outline" />
+
+                            <com.google.android.material.button.MaterialButton
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="44dp"
+                                android:layout_marginEnd="6dp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minWidth="88dp"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:tag="50000"
+                                android:text="50.000"
+                                android:textAllCaps="false"
+                                android:textSize="13sp"
+                                app:cornerRadius="22dp"
+                                app:strokeColor="@color/md_outline" />
+
+                            <com.google.android.material.button.MaterialButton
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="44dp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minWidth="88dp"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:tag="100000"
+                                android:text="100.000"
+                                android:textAllCaps="false"
+                                android:textSize="13sp"
+                                app:cornerRadius="22dp"
+                                app:strokeColor="@color/md_outline" />
                         </LinearLayout>
-                    </LinearLayout>
+                    </HorizontalScrollView>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <!-- Keypad -->
+                    <GridLayout
+                        android:id="@+id/cashGrid"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="UANG DITERIMA"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_size_payment_cash_label" />
-
-                        <TextView
-                            android:id="@+id/cashReceivedText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_size_payment_cash_amount"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="KEMBALIAN"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_size_payment_cash_label" />
-
-                        <TextView
-                            android:id="@+id/cashChangeText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:textColor="@color/accent"
-                            android:textSize="@dimen/text_size_payment_cash_amount"
-                            android:textStyle="bold" />
+                        android:layout_marginTop="12dp"
+                        android:columnCount="3">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/bayarButton"
-                            style="@style/Widget.Material3.Button"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/height_payment_action_button"
-                            android:layout_marginTop="16dp"
-                            android:text="BAYAR"
-                            android:textSize="@dimen/text_size_payment_button"
-                            android:stateListAnimator="@animator/button_press"
-                            app:backgroundTint="@color/accent"
-                            app:cornerRadius="12dp" />
-                    </LinearLayout>
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="1"
+                            android:text="1"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="2"
+                            android:text="2"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="3"
+                            android:text="3"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="4"
+                            android:text="4"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="5"
+                            android:text="5"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="6"
+                            android:text="6"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="7"
+                            android:text="7"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="8"
+                            android:text="8"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="9"
+                            android:text="9"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="000"
+                            android:text="000"
+                            android:textColor="@color/text_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:tag="0"
+                            android:text="0"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_outline" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/backspaceButton"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="64dp"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_margin="4dp"
+                            android:text=""
+                            app:cornerRadius="12dp"
+                            app:icon="@drawable/ic_backspace"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            app:iconTint="@color/text_primary"
+                            app:strokeColor="@color/md_outline" />
+                    </GridLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 
+    <!-- Footer -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
+        android:background="@color/md_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="14dp">
+
+        <LinearLayout
+            android:id="@+id/printerStatusContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_printer_warning"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="6dp">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:contentDescription="@string/printer"
+                android:src="@drawable/ic_printer"
+                app:tint="@color/status_confirmed" />
+
+            <TextView
+                android:id="@+id/printerStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="@string/printer_not_ready_receipt"
+                android:textColor="@color/status_confirmed"
+                android:textSize="@dimen/text_small" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancelButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginStart="12dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="110dp"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/text_primary"
+            app:cornerRadius="10dp"
+            app:strokeColor="@color/md_outline" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/payButton"
-            style="@style/Widget.KopiHarmoni.Button.Primary"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/height_payment_action_button"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-                            android:text="@string/pay"
-                            android:textSize="@dimen/text_size_payment_button"
-                            android:stateListAnimator="@animator/button_press"
-                            app:backgroundTint="@color/accent" />
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginStart="8dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="180dp"
+            android:text="@string/pay"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_caption"
+            app:backgroundTint="@color/accent"
+            app:cornerRadius="10dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/closeButton"
-            style="@style/Widget.KopiHarmoni.Button.Outlined"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/height_payment_action_button"
-            android:layout_weight="1"
-                            android:text="@string/close"
-                            android:textSize="@dimen/text_size_payment_button"
-                            android:stateListAnimator="@animator/button_press_outlined"
-                            app:strokeColor="@color/gray_button" />
     </LinearLayout>
 </LinearLayout>

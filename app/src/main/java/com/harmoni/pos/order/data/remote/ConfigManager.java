@@ -22,7 +22,9 @@ public final class ConfigManager {
     private static final String KEY_PORT = "port";
     private static final String KEY_USE_HTTPS = "use_https";
 
-    private static final String DEFAULT_HOST = "103.150.197.7";
+    // 10.0.2.2 is the Android emulator's alias for the host machine's loopback.
+    // On a physical device this must be changed in Settings to the server's LAN IP.
+    private static final String DEFAULT_HOST = "10.0.2.2";
     private static final int DEFAULT_PORT = 8080;
     private static final boolean DEFAULT_USE_HTTPS = false; // true in production once TLS is ready
 
@@ -113,6 +115,11 @@ public final class ConfigManager {
 
     @NonNull
     public static String getBaseOrder() {
+        return buildBaseUrl();
+    }
+
+    @NonNull
+    public static String getBaseCustomer() {
         return buildBaseUrl();
     }
 

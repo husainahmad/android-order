@@ -13,7 +13,7 @@
     <dimen name="text_title">20sp</dimen>
     <dimen name="text_body">16sp</dimen>
     <dimen name="text_caption">14sp</dimen>
-    <dimen name="text_button">16sp</dimen>
+    <dimen name="text_button">15sp</dimen>
     <dimen name="text_small">12sp</dimen>
     <dimen name="text_caption_small">11sp</dimen>
 
@@ -79,8 +79,8 @@
     <dimen name="height_button_dense">40dp</dimen>
     <dimen name="height_dense_input">48dp</dimen>
     <dimen name="height_card">80dp</dimen>
-    <dimen name="height_tab">56dp</dimen>
-    <dimen name="height_product_image">118dp</dimen>
+    <dimen name="height_tab">48dp</dimen>
+    <dimen name="height_product_image">132dp</dimen>
     <dimen name="width_card">420dp</dimen>
     <dimen name="width_tab">72dp</dimen>
     <dimen name="width_button_icon">48dp</dimen>
@@ -88,13 +88,14 @@
     <dimen name="width_button_icon_dense">40dp</dimen>
 
     <!-- Category - enlarged touch target (easy tap on POS) -->
-    <dimen name="height_category_card">102dp</dimen>
-    <dimen name="size_category_icon">48dp</dimen>
+    <dimen name="height_category_card">88dp</dimen>
+    <dimen name="size_category_icon">40dp</dimen>
     <dimen name="height_category_name">32dp</dimen>
     <dimen name="size_selected_icon">20dp</dimen>
 
     <!-- Order tab -->
     <dimen name="height_order_tab">44dp</dimen>
+    <dimen name="height_category_chip">48dp</dimen>
 
     <!-- Product -->
     <dimen name="height_product_name">44dp</dimen>
@@ -120,11 +121,11 @@
     <dimen name="divider_thickness">1dp</dimen>
 
     <!-- Empty state -->
-    <dimen name="size_empty_state_icon">72dp</dimen>
+    <dimen name="size_empty_state_icon">64dp</dimen>
 
     <!-- Login -->
-    <dimen name="size_login_logo">88dp</dimen>
-    <dimen name="size_login_logo_inner">52dp</dimen>
+    <dimen name="size_login_logo">72dp</dimen>
+    <dimen name="size_login_logo_inner">40dp</dimen>
 
     <!-- Order confirm -->
     <dimen name="size_back_button">44dp</dimen>
@@ -134,12 +135,12 @@
     <dimen name="height_payment_action_button">52dp</dimen>
 
     <!-- Item rows -->
-    <dimen name="height_cart_row">60dp</dimen>
-    <dimen name="height_cart_qty_container">44dp</dimen>
-    <dimen name="width_cart_quantity">52dp</dimen>
-    <dimen name="width_cart_line_total">96dp</dimen>
+    <dimen name="height_cart_row">56dp</dimen>
+    <dimen name="height_cart_qty_container">48dp</dimen>
+    <dimen name="width_cart_quantity">44dp</dimen>
+    <dimen name="width_cart_line_total">88dp</dimen>
     <dimen name="height_sku_row">56dp</dimen>
-    <dimen name="height_order_item">52dp</dimen>
+    <dimen name="height_order_item">60dp</dimen>
     <dimen name="height_daily_report_item">44dp</dimen>
     <dimen name="height_sales_report_item">44dp</dimen>
 
@@ -149,4 +150,5 @@
     <!-- Variant dots -->
     <dimen name="variant_dot_size">8dp</dimen>
     <dimen name="variant_dot_spacing">4dp</dimen>
+    <dimen name="sidebar_width">96dp</dimen>
 </resources>

@@ -1,28 +1,30 @@
 <resources>
 
-    <!-- ===== Material 3 typography scale (warm, modern) ===== -->
+    <!-- ===== High-contrast POS typography ===== -->
     <style name="TextAppearance.KopiHarmoni.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif-black</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.01</item>
     </style>
 
     <style name="TextAppearance.KopiHarmoni.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif-black</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.01</item>
     </style>
 
     <style name="TextAppearance.KopiHarmoni.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif-black</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.KopiHarmoni.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif-black</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.KopiHarmoni.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -40,14 +42,38 @@
 
     <style name="TextAppearance.KopiHarmoni.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
         <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.01</item>
     </style>
 
     <style name="TextAppearance.KopiHarmoni.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
         <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.01</item>
     </style>
 
     <style name="TextAppearance.KopiHarmoni.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <!-- Money and totals: heavy and tabular so columns line up. -->
+    <style name="TextAppearance.KopiHarmoni.Price" parent="TextAppearance.KopiHarmoni.LabelLarge">
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+    </style>
+
+    <style name="TextAppearance.KopiHarmoni.Total" parent="TextAppearance.KopiHarmoni.TitleLarge">
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+    </style>
+
+    <style name="TextAppearance.KopiHarmoni.SectionLabel" parent="TextAppearance.KopiHarmoni.LabelMedium">
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.02</item>
     </style>
 
 </resources>

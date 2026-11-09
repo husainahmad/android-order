@@ -2,122 +2,146 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/height_order_item"
-    android:background="@color/row_even"
+    android:layout_height="wrap_content"
+    android:background="@color/md_surface"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:minHeight="48dp"
-    android:orientation="horizontal"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/orderNoText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.2"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.BodySmall"
-        android:textColor="@color/text_primary"
-        android:textStyle="bold"
-        android:tooltipText="@string/order_no" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_order_item"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
 
-    <TextView
-        android:id="@+id/dateText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.3"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.BodySmall"
-        android:textColor="@color/text_primary"
-        android:tooltipText="@string/date"
-        tools:ignore="HardcodedText" />
+        <TextView
+            android:id="@+id/orderNoText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.45"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            android:tooltipText="@string/order_no" />
 
-    <TextView
-        android:id="@+id/customerText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.2"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.BodySmall"
-        android:textColor="@color/text_primary"
-        android:tooltipText="@string/customer" />
+        <TextView
+            android:id="@+id/dateText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_small"
+            android:tooltipText="@string/date_time"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/typeText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.BodySmall"
-        android:textColor="@color/text_secondary"
-        android:textStyle="bold"
-        android:tooltipText="@string/type" />
+        <TextView
+            android:id="@+id/customerText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.15"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_caption"
+            android:tooltipText="@string/customer" />
 
-    <TextView
-        android:id="@+id/paymentText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.7"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.BodySmall"
-        android:textColor="@color/text_primary"
-        android:tooltipText="@string/payment" />
+        <TextView
+            android:id="@+id/typeText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_small"
+            android:tooltipText="@string/type" />
 
-    <TextView
-        android:id="@+id/statusText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.8"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.BodySmall"
-        android:textColor="@color/status_confirmed"
-        android:textStyle="bold"
-        android:tooltipText="@string/status" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.95"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/subTotalText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.9"
-        android:ellipsize="end"
-        android:gravity="end"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.BodySmall"
-        android:textColor="@color/text_primary"
-        android:tooltipText="@string/sub_total" />
+            <TextView
+                android:id="@+id/paymentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_table_badge"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:maxWidth="84dp"
+                android:textAppearance="@style/TextAppearance.KopiHarmoni.Badge"
+                android:tooltipText="@string/payment" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/discountText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.8"
-        android:ellipsize="end"
-        android:gravity="end"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.BodySmall"
-        android:textColor="@color/status_void"
-        android:tooltipText="@string/discount" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.95"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/totalText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:ellipsize="end"
-        android:gravity="end"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.BodySmall"
-        android:textColor="@color/primary"
-        android:textStyle="bold"
-        android:tooltipText="@string/total" />
+            <TextView
+                android:id="@+id/statusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_table_badge"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:maxWidth="84dp"
+                android:textAppearance="@style/TextAppearance.KopiHarmoni.Badge"
+                android:tooltipText="@string/status" />
+        </LinearLayout>
 
+        <TextView
+            android:id="@+id/subTotalText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_small"
+            android:tooltipText="@string/sub_total" />
+
+        <TextView
+            android:id="@+id/discountText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_small"
+            android:tooltipText="@string/discount" />
+
+        <TextView
+            android:id="@+id/totalText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.05"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.KopiHarmoni.Price"
+            android:textColor="@color/text_primary"
+            android:tooltipText="@string/total" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider"
+        android:importantForAccessibility="no" />
 </LinearLayout>

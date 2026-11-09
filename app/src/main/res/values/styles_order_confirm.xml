@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ThemeOverlay.OrderConfirm" parent="ThemeOverlay.MaterialComponents" />
+    <style name="ThemeOverlay.OrderConfirm" parent="ThemeOverlay.MaterialComponents">
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.35</item>
+    </style>
 </resources>

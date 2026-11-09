@@ -22,32 +22,65 @@
         <LinearLayout
             android:id="@+id/settingsToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_order_summary_header"
-            android:elevation="2dp"
+            android:layout_height="64dp"
+            android:background="@color/md_surface"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="8dp">
+            android:paddingStart="20dp"
+            android:paddingEnd="12dp">
 
-            <TextView
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/menu_settings"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/accent" />
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:text="@string/menu_settings"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_heading"
-                android:textStyle="bold" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/menu_settings"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_subtitle"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_small" />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"
-                style="@style/Widget.KopiHarmoni.Button.Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/back"
-                android:textColor="@color/white"
-                android:stateListAnimator="@animator/button_press" />
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/close"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:text=""
+                app:icon="@drawable/ic_close"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/text_primary" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            android:importantForAccessibility="no" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,9 +116,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/md_surface_container_high"
-                app:cardCornerRadius="@dimen/corner_large"
-                app:cardElevation="1dp">
+                app:cardBackgroundColor="@color/md_surface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/md_outline"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -148,7 +183,7 @@
                         android:id="@+id/serverSaveButton"
                         style="@style/Widget.KopiHarmoni.Button.Primary"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/height_button_medium"
+                        android:layout_height="48dp"
                         android:layout_marginTop="12dp"
                         android:text="Save Server"
                         android:stateListAnimator="@animator/button_press"
@@ -168,9 +203,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/md_surface_container_high"
-                app:cardCornerRadius="@dimen/corner_large"
-                app:cardElevation="1dp">
+                app:cardBackgroundColor="@color/md_surface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/md_outline"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -283,26 +320,26 @@
                             android:id="@+id/bluetoothDevicesButton"
                             style="@style/Widget.KopiHarmoni.Button.Outlined"
                             android:layout_width="0dp"
-                            android:layout_height="@dimen/height_button_small"
+                            android:layout_height="44dp"
                             android:layout_marginEnd="8dp"
                             android:layout_weight="1"
                             android:text="Bluetooth Devices"
                             android:textAllCaps="false"
                             android:textSize="@dimen/text_size_settings_button"
                             android:stateListAnimator="@animator/button_press_outlined"
-                            app:strokeColor="@color/blue_action" />
+                            app:strokeColor="@color/md_outline" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/usbPrinterButton"
                             style="@style/Widget.KopiHarmoni.Button.Outlined"
                             android:layout_width="0dp"
-                            android:layout_height="@dimen/height_button_small"
+                            android:layout_height="44dp"
                             android:layout_weight="1"
                             android:text="USB Printer"
                             android:textAllCaps="false"
                             android:textSize="@dimen/text_size_settings_button"
                             android:stateListAnimator="@animator/button_press_outlined"
-                            app:strokeColor="@color/blue_action" />
+                            app:strokeColor="@color/md_outline" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -315,7 +352,7 @@
                             android:id="@+id/printerSaveButton"
                             style="@style/Widget.KopiHarmoni.Button.Primary"
                             android:layout_width="0dp"
-                            android:layout_height="@dimen/height_button_small"
+                            android:layout_height="44dp"
                             android:layout_marginEnd="8dp"
                             android:layout_weight="1"
                             android:text="Save Printer"
@@ -328,7 +365,7 @@
                             android:id="@+id/testPrintButton"
                             style="@style/Widget.KopiHarmoni.Button.Outlined"
                             android:layout_width="0dp"
-                            android:layout_height="@dimen/height_button_small"
+                            android:layout_height="44dp"
                             android:layout_weight="1"
                             android:text="Test Print"
                             android:textAllCaps="false"
@@ -346,6 +383,73 @@
                         android:textSize="@dimen/text_size_settings_status" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/md_surface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/md_outline"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_language"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_size_settings_section"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/appLanguageGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:chipSpacingHorizontal="8dp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/appLangSystem"
+                            style="@style/Widget.KopiHarmoni.ChoiceChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="@string/app_language_system"
+                            app:chipBackgroundColor="@color/chip_bg_selector"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/appLangEn"
+                            style="@style/Widget.KopiHarmoni.ChoiceChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="@string/app_language_english"
+                            app:chipBackgroundColor="@color/chip_bg_selector"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/appLangIn"
+                            style="@style/Widget.KopiHarmoni.ChoiceChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="@string/app_language_indonesia"
+                            app:chipBackgroundColor="@color/chip_bg_selector"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/logoutButton"

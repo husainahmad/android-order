@@ -81,19 +81,19 @@ public class OrderConfirmFragment extends DialogFragment {
                     boolean permanentlyDenied = !shouldShowRequestPermissionRationale(android.Manifest.permission.BLUETOOTH_CONNECT);
                     if (permanentlyDenied) {
                         new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Bluetooth Permission Required")
-                                .setMessage("Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow")
-                                .setPositiveButton("Open Settings", (d, w) -> {
+                                .setTitle(getString(R.string.bluetooth_permission_title))
+                                .setMessage(getString(R.string.bluetooth_permission_permanently_denied))
+                                .setPositiveButton(getString(R.string.open_settings), (d, w) -> {
                                     try {
                                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                         intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null));
                                         startActivity(intent);
                                     } catch (Exception e) { startActivity(new Intent(Settings.ACTION_SETTINGS)); }
                                 })
-                                .setNegativeButton("Cancel", null)
+                                .setNegativeButton(getString(R.string.cancel), null)
                                 .show();
                     } else {
-                        Toast.makeText(requireContext(), "Bluetooth permission denied – enable in App Settings > Permissions", Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_denied), Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -124,7 +124,7 @@ public class OrderConfirmFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentOrderConfirmBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        return com.harmoni.pos.order.util.DialogFrame.wrap(inflater.getContext(), binding.getRoot());
     }
 
     @Override
@@ -226,7 +226,7 @@ public class OrderConfirmFragment extends DialogFragment {
         }
 
         binding.customerSummaryText.setText(customer.isEmpty() ? "-" : customer);
-        binding.orderTypeSummaryText.setText(passedOrderType == 3 ? "Takeaway" : "Dine In");
+        binding.orderTypeSummaryText.setText(passedOrderType == 3 ? getString(R.string.takeaway) : getString(R.string.dine_in));
         binding.discountSummaryText.setText(CurrencyUtils.formatRp2(parseDiscount(discount)));
         binding.noteSummaryText.setText(note.isEmpty() ? "-" : note);
     }
@@ -242,11 +242,15 @@ public class OrderConfirmFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT);
-            getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
+        if (getDialog() == null || getDialog().getWindow() == null) return;
+        // Large centered dialog on tablets, still nearly full-width on smaller screens.
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        float density = getResources().getDisplayMetrics().density;
+        int width = Math.min((int) (screenWidth * 0.92f), (int) (1000 * density));
+        int height = Math.min((int) (screenHeight * 0.90f), (int) (760 * density));
+        getDialog().getWindow().setLayout(width, height);
+        com.harmoni.pos.order.util.DialogFrame.dimBehind(getDialog().getWindow(), 0.35f);
     }
 
     private double getDisplayTotal() {
@@ -353,7 +357,7 @@ public class OrderConfirmFragment extends DialogFragment {
 
     private void doPay(Order order) {
         if (selectedPayment == PAYMENT_CASH && cashReceived < order.getGrandTotal()) {
-            Toast.makeText(requireContext(), "Insufficient cash entered!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.insufficient_cash), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -404,7 +408,7 @@ public class OrderConfirmFragment extends DialogFragment {
                 && !PrinterManager.isBluetoothPermissionGranted()) {
             pendingPrintOrder = paidOrder;
             bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
-            Toast.makeText(requireContext(), "Requesting Bluetooth permission…", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_requesting), Toast.LENGTH_SHORT).show();
             return;
         }
         doPrintReceipt(paidOrder);
@@ -416,7 +420,7 @@ public class OrderConfirmFragment extends DialogFragment {
                     @Override
                     public void onSuccess() {
                         if (isAdded()) {
-                            Toast.makeText(requireContext(), "Receipt sent to printer",
+                            Toast.makeText(requireContext(), getString(R.string.receipt_sent),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -424,7 +428,7 @@ public class OrderConfirmFragment extends DialogFragment {
                     @Override
                     public void onError(String message) {
                         if (isAdded()) {
-                            Toast.makeText(requireContext(), "Print failed: " + message,
+                            Toast.makeText(requireContext(), getString(R.string.print_failed, message),
                                     Toast.LENGTH_LONG).show();
                         }
                     }

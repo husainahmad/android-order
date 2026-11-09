@@ -3,36 +3,124 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_surface"
+    android:background="@color/md_background"
     android:orientation="vertical">
 
-    <!-- Tab Header (Orders | #001 (x) | + NEW ORDER) -->
-    <HorizontalScrollView
-        android:id="@+id/tabScrollView"
+    <!-- Top bar: order tabs on the left, connection/printer state on the right -->
+    <LinearLayout
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_surface_container"
-        android:elevation="2dp"
-        android:fillViewport="true"
-        android:scrollbars="none">
+        android:background="@color/md_surface"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <HorizontalScrollView
+            android:id="@+id/tabScrollView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/tabContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="6dp" />
+
+        </HorizontalScrollView>
 
         <LinearLayout
-            android:id="@+id/tabContainer"
+            android:id="@+id/storeSelector"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp" />
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp">
 
-    </HorizontalScrollView>
+            <TextView
+                android:id="@+id/storeNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:maxWidth="140dp"
+                android:text="@string/sidebar_brand"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:contentDescription="@string/store_info_title"
+                android:src="@drawable/ic_chevron_down"
+                app:tint="@color/text_secondary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/statusContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="10dp">
+
+            <ImageView
+                android:id="@+id/connectionIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:contentDescription="@string/status_online"
+                android:src="@drawable/ic_network"
+                app:tint="@color/status_paid" />
+
+            <TextView
+                android:id="@+id/connectionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:maxLines="1"
+                android:text="@string/status_online"
+                android:textColor="@color/status_paid"
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/printerIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="10dp"
+                android:contentDescription="@string/printer_ready"
+                android:src="@drawable/ic_printer"
+                app:tint="@color/status_paid" />
+
+            <TextView
+                android:id="@+id/printerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:maxLines="1"
+                android:text="@string/printer_ready"
+                android:textColor="@color/status_paid"
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_thickness"
         android:background="@color/divider" />
 
-    <!-- Main ViewPager2 -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"

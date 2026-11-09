@@ -1,106 +1,367 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:layout_height="match_parent"
+    android:background="@color/md_surface"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/order_detail"
-        android:textColor="@color/text_primary"
-        android:textSize="@dimen/text_size_dialog_title"
-        android:textStyle="bold" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_stepper"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/detailText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/text_size_dialog_body"
-            android:lineSpacingExtra="2dp" />
-    </ScrollView>
-
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:weightSum="6">
+        android:paddingStart="24dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/printButton"
-            style="@style/Widget.KopiHarmoni.Button.Outlined"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/height_button_large"
-            android:layout_marginEnd="8dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:minWidth="@dimen/width_dialog_button_small"
-            android:text="@string/print"
-            android:textSize="@dimen/text_size_dialog_button"
-            android:stateListAnimator="@animator/button_press_outlined"
-            app:strokeColor="@color/blue_action" />
+            android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/kitchenButton"
-            style="@style/Widget.KopiHarmoni.Button.Outlined"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/height_button_large"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="2"
-            android:minWidth="@dimen/width_dialog_button_large"
-            android:text="@string/kitchen_print"
-            android:textSize="@dimen/text_size_dialog_button"
-            android:stateListAnimator="@animator/button_press_outlined"
-            app:strokeColor="@color/blue_action" />
+            <TextView
+                android:id="@+id/orderNumberHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_title"
+                android:textStyle="bold"
+                tools:text="ORD1-20261108164216-6F65" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/payButton"
-            style="@style/Widget.KopiHarmoni.Button.Primary"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/height_button_large"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:minWidth="@dimen/width_dialog_button_small"
-            android:text="@string/pay"
-            android:textSize="@dimen/text_size_dialog_button"
-            android:stateListAnimator="@animator/button_press"
-            app:backgroundTint="@color/accent" />
+            <TextView
+                android:id="@+id/orderMetaHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_small"
+                tools:text="2026-11-08 16:42 • Dine In" />
+        </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/voidButton"
-            style="@style/Widget.KopiHarmoni.Button.Primary"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/height_button_large"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:minWidth="@dimen/width_dialog_button_small"
-            android:text="@string/void_order"
-            android:textSize="@dimen/text_size_dialog_button"
-            android:stateListAnimator="@animator/button_press"
-            app:backgroundTint="@color/status_void" />
+        <TextView
+            android:id="@+id/statusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/bg_table_badge"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:textAppearance="@style/TextAppearance.KopiHarmoni.Badge"
+            tools:text="CONFIRMED" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/closeButton"
-            style="@style/Widget.KopiHarmoni.Button.Outlined"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:contentDescription="@string/close"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:text=""
+            app:icon="@drawable/ic_close"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/text_primary" />
+    </LinearLayout>
+
+    <!-- Summary -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="@color/md_surface_container_low"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/md_outline"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="14dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/customer"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_size_badge" />
+
+                <TextView
+                    android:id="@+id/customerHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_caption"
+                    android:textStyle="bold"
+                    tools:text="Walk-in" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_size_badge" />
+
+                <TextView
+                    android:id="@+id/paymentHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_caption"
+                    android:textStyle="bold"
+                    tools:text="CASH" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_size_badge" />
+
+                <TextView
+                    android:id="@+id/totalHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.Total"
+                    android:textColor="@color/accent"
+                    android:textSize="20sp"
+                    tools:text="Rp58.000" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Preview toggle -->
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/previewToggle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="24dp"
+        app:checkedButton="@id/previewItemsButton"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/previewItemsButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
-            android:layout_height="@dimen/height_button_large"
+            android:layout_height="44dp"
             android:layout_weight="1"
-            android:minWidth="@dimen/width_dialog_button_small"
-            android:text="@string/close"
-            android:textSize="@dimen/text_size_dialog_button"
-            android:stateListAnimator="@animator/button_press_outlined"
-            app:strokeColor="@color/gray_button" />
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/preview_items"
+            android:textAllCaps="false"
+            android:textColor="@color/order_type_text"
+            app:backgroundTint="@color/order_type_bg"
+            app:strokeColor="@color/md_outline" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/previewReceiptButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/preview_receipt"
+            android:textAllCaps="false"
+            android:textColor="@color/order_type_text"
+            app:backgroundTint="@color/order_type_bg"
+            app:strokeColor="@color/md_outline" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/previewKitchenButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/preview_kitchen"
+            android:textAllCaps="false"
+            android:textColor="@color/order_type_text"
+            app:backgroundTint="@color/order_type_bg"
+            app:strokeColor="@color/md_outline" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <!-- Content -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:layout_weight="1">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="@color/md_surface"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/md_outline"
+            app:strokeWidth="1dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/itemsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/textScrollContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/md_surface"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/md_outline"
+            app:strokeWidth="1dp">
+
+            <ScrollView
+                android:id="@+id/textScroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/detailText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:lineSpacingExtra="2dp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_size_dialog_body" />
+            </ScrollView>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+
+    <!-- Actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/printButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="110dp"
+            android:text="@string/print"
+            android:textAllCaps="false"
+            android:textColor="@color/text_primary"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_printer"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            app:iconTint="@color/text_primary"
+            app:strokeColor="@color/md_outline" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/kitchenButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="140dp"
+            android:text="@string/kitchen_print"
+            android:textAllCaps="false"
+            android:textColor="@color/accent"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_receipt"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            app:iconTint="@color/accent"
+            app:strokeColor="@color/accent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/voidButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="110dp"
+            android:text="@string/void_order"
+            android:textAllCaps="false"
+            android:textColor="@color/status_void"
+            app:cornerRadius="10dp"
+            app:strokeColor="@color/status_void" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/payButton"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="140dp"
+            android:text="@string/pay"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/accent"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_cash"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            app:iconTint="@color/white" />
     </LinearLayout>
 </LinearLayout>

@@ -2,7 +2,7 @@ package com.harmoni.pos.order.data.model;
 
 import java.util.Map;
 
-public class Settlement {
+public class Settlement implements java.io.Serializable {
     private int totalOrders;
     private double totalSales;
     private double totalDiscounts;

@@ -2,26 +2,18 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="32dp"
-    android:background="@color/md_surface_container_high"
+    android:layout_height="36dp"
+    android:background="@color/md_surface_container_low"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="12dp"
     android:paddingEnd="12dp">
 
-    <View
-        android:layout_width="4dp"
-        android:layout_height="16dp"
-        android:background="@drawable/bg_header_accent"
-        android:importantForAccessibility="no" />
-
     <TextView
         android:id="@+id/headerDateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
-        android:textColor="@color/text_primary"
-        android:textStyle="bold" />
+        android:textAppearance="@style/TextAppearance.KopiHarmoni.TableHeader"
+        android:textColor="@color/text_secondary" />
 
 </LinearLayout>

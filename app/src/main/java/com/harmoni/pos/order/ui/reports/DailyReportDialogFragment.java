@@ -39,7 +39,7 @@ public class DailyReportDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentDailyReportBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        return com.harmoni.pos.order.util.DialogFrame.wrap(inflater.getContext(), binding.getRoot());
     }
 
     @Override
@@ -91,11 +91,14 @@ public class DailyReportDialogFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT);
-            getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
+        if (getDialog() == null || getDialog().getWindow() == null) return;
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        float density = getResources().getDisplayMetrics().density;
+        int width = Math.min((int) (screenWidth * 0.92f), (int) (1180 * density));
+        int height = Math.min((int) (screenHeight * 0.90f), (int) (820 * density));
+        getDialog().getWindow().setLayout(width, height);
+        com.harmoni.pos.order.util.DialogFrame.dimBehind(getDialog().getWindow(), 0.35f);
     }
 
     private void observe() {

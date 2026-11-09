@@ -1,13 +1,19 @@
 package com.harmoni.pos.order.util;
 
+import android.content.Context;
+
+import com.harmoni.pos.order.PosApplication;
 import com.harmoni.pos.order.data.model.Order;
+import com.harmoni.pos.order.data.model.OrderCustomizationLine;
 import com.harmoni.pos.order.data.model.OrderDetail;
 import com.harmoni.pos.order.data.model.OrderDetailSku;
 import com.harmoni.pos.order.data.model.Settlement;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 public final class PrintUtils {
 
@@ -16,34 +22,6 @@ public final class PrintUtils {
     private static final int WIDTH = 32;
     private static final int AMOUNT_WIDTH = 10;
     private static final int ITEM_GAP = 1;
-
-    private static final String[] THANK_YOU_MESSAGES = {
-            "Terima kasih",
-            "Matur nuwun",
-            "Matur suwun",
-            "Suksma",
-            "Hatur nuhun",
-            "Kurre sumanga",
-            "Tabea",
-            "Tarima kasih",
-            "Mauliate",
-            "Matur tengkyu",
-            "Thank you",
-            "Arigatou",
-            "Gracias",
-            "Merci",
-            "Danke",
-            "Grazie",
-            "Obrigado",
-            "Xièxiè",
-            "Kamsahamnida",
-            "Shukran",
-            "Dhanyavaad",
-            "Salamat",
-            "Tack",
-            "Tak"
-    };
-    private static final Random RANDOM = new Random();
 
     public static String buildReceiptText(Order order) {
         if (order == null) return "";
@@ -70,10 +48,16 @@ public final class PrintUtils {
 
                 appendWrappedLine(sb, detail.getProductName());
 
-                if (detail.getOrderDetailSkus() != null) {
-                    for (OrderDetailSku sku : detail.getOrderDetailSkus()) {
-                        if (sku != null) appendSku(sb, sku);
+                for (OrderDetailSku sku : detail.getOrderDetailSkus()) {
+                    if (sku == null) continue;
+                    appendSku(sb, sku);
+                    for (OrderCustomizationLine line : detail.getCustomizationsForSku(sku)) {
+                        appendCustomizationLine(sb, line, true);
                     }
+                }
+                // Older orders stored the choices against the product line only.
+                for (OrderCustomizationLine line : detail.getUnattachedCustomizations()) {
+                    appendCustomizationLine(sb, line, true);
                 }
             }
         }
@@ -99,39 +83,80 @@ public final class PrintUtils {
         }
 
         sb.append(divider()).append('\n');
-        sb.append(center(randomThankYou())).append('\n');
+        String[] footer = footerText();
+        sb.append(center(footer[0])).append('\n');
+        sb.append(center(footer[1])).append('\n');
 
         return sb.toString();
     }
 
-    public static String buildKitchenText(Order order) {
-        if (order == null) return "";
+    /**
+     * One kitchen ticket per category, each with the customer, service type, note and
+     * the customization choices (without prices, which the kitchen does not need).
+     */
+    public static List<String> buildKitchenTexts(Order order) {
+        List<String> tickets = new ArrayList<>();
+        if (order == null || order.getOrderDetails() == null || order.getOrderDetails().isEmpty()) {
+            return tickets;
+        }
+        Map<Integer, List<OrderDetail>> grouped = new LinkedHashMap<>();
+        for (OrderDetail detail : order.getOrderDetails()) {
+            if (detail == null) continue;
+            grouped.computeIfAbsent(detail.getCategoryId(), k -> new ArrayList<>()).add(detail);
+        }
+        for (Map.Entry<Integer, List<OrderDetail>> entry : grouped.entrySet()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(center("KOPI HARMONI - KP")).append('\n');
+            sb.append(divider()).append('\n');
+            appendInfo(sb, "Order", order.getOrderNo());
+            appendInfo(sb, "Type", order.getServiceTypeName());
+            appendInfo(sb, "Cust", order.getCustomerName());
+            String remark = safe(order.getRemark());
+            if (!remark.isEmpty()) appendWrappedInfo(sb, "Note", remark);
+            sb.append(divider()).append('\n');
 
-        StringBuilder sb = new StringBuilder();
+            String categoryName = entry.getValue().isEmpty()
+                    ? "" : entry.getValue().get(0).getCategoryName();
+            if (categoryName.isEmpty()) categoryName = "CATEGORY " + entry.getKey();
+            sb.append(center("== " + categoryName + " ==")).append('\n');
 
-        sb.append(center("KOPI HARMONI - KP")).append('\n');
-        sb.append(divider()).append('\n');
-
-        appendInfo(sb, "Order", order.getOrderNo());
-        sb.append(divider()).append('\n');
-
-        if (order.getOrderDetails() != null) {
-            for (OrderDetail detail : order.getOrderDetails()) {
-                if (detail == null) continue;
-
+            for (OrderDetail detail : entry.getValue()) {
                 appendWrappedLine(sb, detail.getProductName());
-
-                if (detail.getOrderDetailSkus() != null) {
-                    for (OrderDetailSku sku : detail.getOrderDetailSkus()) {
-                        if (sku == null) continue;
-                        String line = "  " + safe(sku.getSkuName())
-                                + " x " + quantity(sku.getQuantity());
-                        appendWrappedLine(sb, line);
+                String detailNote = safe(detail.getRemark());
+                if (!detailNote.isEmpty()) appendWrappedInfo(sb, "  Note", detailNote);
+                for (OrderDetailSku sku : detail.getOrderDetailSkus()) {
+                    if (sku == null) continue;
+                    appendWrappedLine(sb, "  " + safe(sku.getSkuName())
+                            + " x " + quantity(sku.getQuantity()));
+                    for (OrderCustomizationLine line : detail.getCustomizationsForSku(sku)) {
+                        appendCustomizationLine(sb, line, false);
                     }
                 }
+                for (OrderCustomizationLine line : detail.getUnattachedCustomizations()) {
+                    appendCustomizationLine(sb, line, false);
+                }
             }
+            sb.append(divider()).append('\n');
+            tickets.add(sb.toString());
         }
+        return tickets;
+    }
 
+    /** Combined kitchen text for preview (all category tickets joined). */
+    public static String buildKitchenText(Order order) {
+        List<String> tickets = buildKitchenTexts(order);
+        if (!tickets.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (String ticket : tickets) sb.append(ticket);
+            return sb.toString();
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(center("KOPI HARMONI - KP")).append('\n');
+        sb.append(divider()).append('\n');
+        if (order != null) {
+            appendInfo(sb, "Order", order.getOrderNo());
+            appendInfo(sb, "Type", order.getServiceTypeName());
+        }
         sb.append(divider()).append('\n');
         return sb.toString();
     }
@@ -198,6 +223,22 @@ public final class PrintUtils {
         sb.append(spaces(ITEM_GAP));
         sb.append(padLeft(amount, AMOUNT_WIDTH));
         sb.append('\n');
+    }
+
+    /** Group header, e.g. "    * Sugar", then the option line under it. */
+    private static void appendCustomizationLine(StringBuilder sb, OrderCustomizationLine line,
+                                                boolean showPrice) {
+        String indent = "    - ";
+        String text = indent + line.getGroupedDisplayName();
+        if (showPrice && line.getAmount() > 0) {
+            String right = "+" + plainCurrency(line.getAmount());
+            int leftWidth = WIDTH - right.length() - 1;
+            if (text.length() <= leftWidth) {
+                sb.append(padRight(text, leftWidth)).append(' ').append(right).append('\n');
+                return;
+            }
+        }
+        appendWrappedLine(sb, text);
     }
 
     private static void appendInfo(StringBuilder sb, String label, String value) {
@@ -314,7 +355,13 @@ public final class PrintUtils {
         return padRight(label, labelWidth) + padLeft(amount, AMOUNT_WIDTH);
     }
 
-    private static String randomThankYou() {
-        return THANK_YOU_MESSAGES[RANDOM.nextInt(THANK_YOU_MESSAGES.length)];
+    private static String[] footerText() {
+        Context context = null;
+        try {
+            context = PosApplication.getAppContext();
+        } catch (Exception ignored) {
+            // Not running under the application (e.g. a unit test): fall back to the default.
+        }
+        return ReceiptLanguage.footer(context);
     }
 }

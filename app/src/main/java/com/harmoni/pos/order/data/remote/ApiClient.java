@@ -24,6 +24,7 @@ public final class ApiClient {
     private static volatile Retrofit authRetrofit;
     private static volatile Retrofit menuRetrofit;
     private static volatile Retrofit orderRetrofit;
+    private static volatile Retrofit customerRetrofit;
     private static final Object LOCK = new Object();
 
     private ApiClient() {}
@@ -97,6 +98,18 @@ public final class ApiClient {
         }
     }
 
+    private static Retrofit getCustomerRetrofit() {
+        Retrofit r = customerRetrofit;
+        if (r != null) return r;
+        synchronized (LOCK) {
+            r = customerRetrofit;
+            if (r != null) return r;
+            r = buildRetrofit(ConfigManager.getBaseCustomer());
+            customerRetrofit = r;
+            return r;
+        }
+    }
+
     /**
      * Clears cached clients after server config change or logout.
      * Also shuts down previous OkHttp resources to avoid leaks.
@@ -111,6 +124,7 @@ public final class ApiClient {
             authRetrofit = null;
             menuRetrofit = null;
             orderRetrofit = null;
+            customerRetrofit = null;
         }
     }
 
@@ -132,6 +146,10 @@ public final class ApiClient {
 
     public static OrderService orderService() {
         return getOrderRetrofit().create(OrderService.class);
+    }
+
+    public static CustomerService customerService() {
+        return getCustomerRetrofit().create(CustomerService.class);
     }
 
     private static class AuthInterceptor implements Interceptor {

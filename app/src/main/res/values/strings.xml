@@ -22,6 +22,11 @@
     <string name="no_open_orders">No open orders. Tap + NEW ORDER to start.</string>
     <string name="no_open_orders_subtitle">Your completed orders will appear here.</string>
     <string name="refresh">Refresh</string>
+    <string name="filter_all">All</string>
+    <string name="filter_paid">Paid</string>
+    <string name="filter_confirmed">Confirmed</string>
+    <string name="filter_void">Void</string>
+    <string name="no_orders_match">No orders match the search or filter.</string>
 
     <string name="daily_report">Daily Report</string>
     <string name="sales_report">Sales Report</string>
@@ -30,6 +35,17 @@
 
     <string name="order_summary">Order Summary</string>
     <string name="customer_name">Customer Name</string>
+    <string name="customer_phone">Phone</string>
+    <string name="customer_email_optional">Email (optional)</string>
+    <string name="customer_search_hint">Search name or phone</string>
+    <string name="customer_search_prompt">Type at least 3 characters to search.</string>
+    <string name="customer_no_results">No customers found.</string>
+    <string name="customer_register_new">Register new customer</string>
+    <string name="customer_register">Register</string>
+    <string name="customer_walk_in">Walk-in</string>
+    <string name="customer_name_required">Customer name is required.</string>
+    <string name="customer_phone_invalid">Enter a valid phone (5-30 digits).</string>
+    <string name="customer_register_failed">Could not register customer.</string>
     <string name="sub_total">Sub Total</string>
     <string name="discount">Discount</string>
     <string name="total">Total</string>
@@ -43,6 +59,9 @@
     <string name="cart_empty_subtitle">Tap a product to start.</string>
 
     <string name="order_detail">Order Detail</string>
+    <string name="preview_items">Items</string>
+    <string name="preview_receipt">Receipt</string>
+    <string name="preview_kitchen">Kitchen</string>
     <string name="kitchen_print">Kitchen Print</string>
     <string name="pay">Pay</string>
     <string name="void_order">Void</string>
@@ -86,6 +105,17 @@
     <string name="all_categories">All Categories</string>
     <string name="select_category">Select Category</string>
     <string name="select_variant">Select Variant</string>
+    <string name="customize">Customize</string>
+    <string name="customize_select_variant_hint">Select a variant above to choose options</string>
+    <string name="kitchen_note">Item note</string>
+    <string name="kitchen_note_hint">e.g. don\'t char the chicken</string>
+    <string name="add_to_order">Add to order</string>
+    <string name="free">Free</string>
+    <string name="group_hint_optional">Optional</string>
+    <string name="group_hint_choose_one">Choose 1</string>
+    <string name="group_hint_choose_range">Choose %1$d–%2$d</string>
+    <string name="group_hint_choose_up_to">Choose up to %1$d</string>
+    <string name="group_hint_required">Required</string>
     <string name="confirm_order">Confirm Order</string>
     <string name="review_before_pay">Review your order before paying</string>
     <string name="order_num">Order #%1$d</string>
@@ -104,6 +134,17 @@
     <string name="network">Network</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="usb">USB</string>
+    <string name="app_language">App language</string>
+    <string name="app_language_system">System</string>
+    <string name="app_language_english">English</string>
+    <string name="app_language_indonesia">Bahasa Indonesia</string>
+    <string name="receipt_language">Receipt language</string>
+    <string name="language_random">Random</string>
+    <string name="language_indonesia">Indonesia</string>
+    <string name="language_english">English</string>
+    <string name="language_javanese">Jawa</string>
+    <string name="language_sundanese">Sunda</string>
+    <string name="language_balinese">Bali</string>
     <string name="loading">Loading</string>
     <string name="expand">Expand</string>
     <string name="collapse">Collapse</string>
@@ -114,9 +155,105 @@
     <string name="clear">CLEAR</string>
     <string name="exact">EXACT</string>
 
+    <!-- Common dialogs and status messages -->
+    <string name="grant">Grant</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="bluetooth_permission_title">Bluetooth Permission Required</string>
+    <string name="bluetooth_permission_permanently_denied">Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow</string>
+    <string name="bluetooth_permission_needed">Bluetooth printing needs \"Nearby devices\" (BLUETOOTH_CONNECT) permission.\n\nPlease grant it to continue.</string>
+    <string name="bluetooth_permission_denied">Bluetooth permission denied – enable in App Settings > Permissions</string>
+    <string name="bluetooth_permission_requesting">Requesting Bluetooth permission…</string>
+    <string name="bluetooth_permission_granted">Bluetooth permission granted – printing enabled</string>
+    <string name="bluetooth_devices">Bluetooth Devices</string>
+    <string name="bluetooth_is_off">Bluetooth is OFF</string>
+    <string name="open_bluetooth_settings">Open Bluetooth Settings</string>
+    <string name="select_bluetooth_printer">Select Bluetooth Printer</string>
+    <string name="select_usb_printer">Select USB Printer</string>
+    <string name="bluetooth_printer_not_selected">Bluetooth Printer Not Selected</string>
+    <string name="bluetooth_printer_not_selected_body">No Bluetooth MAC saved.\n\nTap \"Bluetooth Devices\" to pick a paired printer, then tap Test Print again.</string>
+    <string name="no_bluetooth_devices">No bonded Bluetooth devices found</string>
+    <string name="no_usb_printer">No USB printer detected</string>
+    <string name="usb_permission_denied">USB permission denied</string>
+    <string name="usb_printer_granted">USB printer granted</string>
+    <string name="nothing_to_print">Nothing to print</string>
+    <string name="cart_is_empty">Cart is empty</string>
+    <string name="insufficient_cash">Insufficient cash entered!</string>
+    <string name="receipt_sent">Receipt sent to printer</string>
+    <string name="print_failed">Print failed: %1$s</string>
+    <string name="printing">Printing...</string>
+    <string name="print_sent">Print sent successfully</string>
+    <string name="void_this_order">Void this order?</string>
+    <string name="store_label">Store : %1$s</string>
+    <string name="brand_label">Brand : %1$s</string>
+    <string name="server_saved">Saved. Server: %1$s</string>
+    <string name="printer_saved">Printer saved: %1$s</string>
+    <string name="discount_value">Discount: %1$s</string>
+    <string name="order_total_info">Order : %1$s\nTotal : %2$s</string>
+    <string name="total_info">Total : %1$s</string>
+    <string name="connected_to">Connected to %1$s</string>
+    <string name="bluetooth_printer_selected">Bluetooth printer selected: %1$s</string>
+    <string name="login_required_title">Login Required</string>
+    <string name="login_required_body">Please login again to continue.</string>
+
     <!-- Session / 403 handling -->
     <string name="session_expired_title">Session Expired</string>
     <string name="session_expired_body">Your session has expired. Please login again to continue.</string>
     <string name="session_forbidden_title">Access Denied</string>
     <string name="session_forbidden_body">You don\'t have permission to perform this action (403). Please login again or contact your administrator.</string>
+
+    <!-- Cashier redesign -->
+    <string name="sold_out">Sold out</string>
+    <string name="status_online">Online</string>
+    <string name="status_offline">Offline</string>
+    <string name="printer_ready">Printer ready</string>
+    <string name="printer_not_ready">Printer not ready</string>
+    <string name="qty_times_price">%1$d × %2$s</string>
+
+    <string name="item_note_format">Note: %1$s</string>
+    <string name="summary_discount_format">Disc:%1$s</string>
+
+    <!-- Orders redesign -->
+    <string name="orders_subtitle">Manage your orders and transactions</string>
+    <string name="date_time">Date &amp; Time</string>
+    <string name="no_more_orders">No more orders</string>
+    <string name="no_more_orders_subtitle">Start a new order to get started</string>
+    <string name="nav_menu">Menu</string>
+    <string name="nav_store">Store</string>
+    <string name="nav_settings">Settings</string>
+    <string name="store_info_title">Store</string>
+    <string name="store_switching_unavailable">Store switching is not available in this build yet.</string>
+    <string name="payment_unpaid">UNPAID</string>
+    <string name="payment_cash">CASH</string>
+    <string name="payment_card">CARD</string>
+    <string name="payment_qris">QRIS</string>
+    <string name="sidebar_brand">Kopi Harmoni</string>
+    <string name="walk_in">Walk-in</string>
+    <string name="sidebar_subtitle">POS</string>
+    <string name="search_product">Search product...</string>
+    <string name="grid_view">Grid view</string>
+    <string name="report_subtitle_sales_by_day">Sales by day, product and discount</string>
+    <string name="report_subtitle_sales_by_product">Sales by product and category</string>
+    <string name="settings_subtitle">Server, printer and app preferences</string>
+    <string name="login_welcome">Welcome back</string>
+    <string name="login_sign_in_subtitle">Sign in to start your shift</string>
+    <string name="login_brand_tagline">A calmer way to run your cafe.</string>
+    <string name="login_feature_orders">Fast order taking</string>
+    <string name="login_feature_printing">Kitchen printing</string>
+    <string name="login_feature_reports">Daily sales reports</string>
+    <string name="login_help">Need help? Contact your administrator.</string>
+    <string name="login_brand_footer">Kopi Harmoni • Point of Sale</string>
+    <string name="total_orders">Total Orders</string>
+    <string name="total_sales">Total Sales</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="amount">Amount</string>
+    <string name="tax">Tax</string>
+    <string name="no_data">No data</string>
+    <string name="qty_format">%1$d×</string>
+    <string name="cash_received">Cash received</string>
+    <string name="total_to_pay">Total to pay</string>
+    <string name="printer_not_ready_receipt">Printer not ready: receipt won\'t print</string>
+    <string name="printer_ready_receipt">Printer ready</string>
+    <string name="pay_amount">Pay %1$s</string>
+    <string name="payment_order_title">Payment · Order %1$s</string>
+    <string name="payment_type_count">%1$s · %2$s</string>
 </resources>

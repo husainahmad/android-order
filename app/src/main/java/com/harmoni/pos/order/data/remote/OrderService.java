@@ -3,6 +3,7 @@ package com.harmoni.pos.order.data.remote;
 import com.harmoni.pos.order.data.model.ApiResponse;
 import com.harmoni.pos.order.data.model.DailyReportRow;
 import com.harmoni.pos.order.data.model.Order;
+import com.harmoni.pos.order.data.model.OrderPageResponse;
 import com.harmoni.pos.order.data.model.OrderRequest;
 import com.harmoni.pos.order.data.model.OrderVolume;
 import com.harmoni.pos.order.data.model.PaymentRequest;
@@ -14,6 +15,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -24,8 +26,16 @@ public interface OrderService {
     @GET("api/v1/order")
     Call<ApiResponse<List<Order>>> dailyOrders();
 
+    @GET("api/v1/order/page")
+    Call<ApiResponse<OrderPageResponse>> dailyOrdersPage(@Query("limit") int limit,
+                                                         @Query("beforeId") Integer beforeId);
+
     @POST("api/v1/order")
     Call<ApiResponse<Order>> confirmOrder(@Body OrderRequest request);
+
+    @POST("api/v1/order")
+    Call<ApiResponse<Order>> confirmOrder(@Body OrderRequest request,
+                                          @Header("Idempotency-Key") String idempotencyKey);
 
     @PUT("api/v1/order")
     Call<ApiResponse<Order>> payOrder(@Body PaymentRequest request);

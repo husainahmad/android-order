@@ -1,7 +1,6 @@
 package com.harmoni.pos.order.ui.payment;
 
 import android.content.DialogInterface;
-import android.graphics.Typeface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.harmoni.pos.order.R;
@@ -57,6 +56,7 @@ public class PaymentDialog extends DialogFragment {
     private static final int PAYMENT_CARD = 3;
 
     private DialogPaymentBinding binding;
+    private PaymentLineAdapter summaryAdapter;
     private Order order;
     private String customerName = "";
     private String discountStr = "0";
@@ -76,19 +76,19 @@ public class PaymentDialog extends DialogFragment {
                     boolean permanentlyDenied = !shouldShowRequestPermissionRationale(android.Manifest.permission.BLUETOOTH_CONNECT);
                     if (permanentlyDenied) {
                         new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Bluetooth Permission Required")
-                                .setMessage("Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow")
-                                .setPositiveButton("Open Settings", (d, w) -> {
+                                .setTitle(getString(R.string.bluetooth_permission_title))
+                                .setMessage(getString(R.string.bluetooth_permission_permanently_denied))
+                                .setPositiveButton(getString(R.string.open_settings), (d, w) -> {
                                     try {
                                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                         intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null));
                                         startActivity(intent);
                                     } catch (Exception e) { startActivity(new Intent(Settings.ACTION_SETTINGS)); }
                                 })
-                                .setNegativeButton("Cancel", null)
+                                .setNegativeButton(getString(R.string.cancel), null)
                                 .show();
                     } else {
-                        Toast.makeText(requireContext(), "Bluetooth permission denied – enable in App Settings > Permissions", Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_denied), Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -117,7 +117,7 @@ public class PaymentDialog extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = DialogPaymentBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        return com.harmoni.pos.order.util.DialogFrame.wrap(inflater.getContext(), binding.getRoot());
     }
 
     @Override
@@ -130,34 +130,79 @@ public class PaymentDialog extends DialogFragment {
             note = getArguments().getString(ARG_NOTE, "");
         }
 
-        binding.customerSummaryText.setText(TextUtils.isEmpty(customerName) ?
-                "Customer: -" : "Customer: " + customerName);
-        binding.discountSummaryText.setText("Discount: " + CurrencyUtils.formatRp2(parseDiscount(discountStr)));
-        binding.noteSummaryText.setText(TextUtils.isEmpty(note) ?
-                "Note: -" : "Note: " + note);
+        binding.paymentTitleText.setText(getString(R.string.payment_order_title, order.getOrderNo()));
+        int itemCount = 0;
+        if (order.getOrderDetails() != null) {
+            for (com.harmoni.pos.order.data.model.OrderDetail detail : order.getOrderDetails()) {
+                if (detail == null) continue;
+                if (detail.getOrderDetailSkus() != null && !detail.getOrderDetailSkus().isEmpty()) {
+                    for (com.harmoni.pos.order.data.model.OrderDetailSku sku : detail.getOrderDetailSkus()) {
+                        itemCount += (int) sku.getQuantity();
+                    }
+                } else {
+                    itemCount++;
+                }
+            }
+        }
+        binding.paymentItemsText.setText(getString(R.string.payment_type_count,
+                "Takeaway".equalsIgnoreCase(order.getServiceTypeName())
+                        ? getString(R.string.takeaway) : getString(R.string.dine_in),
+                getString(R.string.item_count, itemCount)));
+        binding.subtotalSummaryText.setText(CurrencyUtils.formatRp(order.getSubTotal()));
+        double discount = Math.max(0, parseDiscount(discountStr));
+        binding.discountSummaryText.setText(discount > 0
+                ? CurrencyUtils.formatRp(discount) : "-");
+        binding.totalToPayText.setText(CurrencyUtils.formatRp(order.getGrandTotal()));
+        binding.cashReceivedText.setText(CurrencyUtils.formatRp(0));
+        binding.cashChangeText.setText(CurrencyUtils.formatRp(0));
 
-        binding.orderInfoText.setText(String.format("Order : %s\nTotal : %s",
-                order.getOrderNo(), CurrencyUtils.formatRp(order.getGrandTotal())));
-        binding.cashTotalText.setText(CurrencyUtils.formatRp(order.getGrandTotal()));
-        updateCash();
+        summaryAdapter = new PaymentLineAdapter();
+        binding.summaryRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.summaryRecycler.setHasFixedSize(true);
+        binding.summaryRecycler.setAdapter(summaryAdapter);
+        summaryAdapter.submit(order);
 
-        binding.qrCard.setOnClickListener(v -> selectPayment(PAYMENT_QR));
-        binding.cardCard.setOnClickListener(v -> selectPayment(PAYMENT_CARD));
-        binding.cashCard.setOnClickListener(v -> selectPayment(PAYMENT_CASH));
+        updatePrinterStatus();
+
+        binding.paymentMethodGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (!isChecked) return;
+            if (checkedId == R.id.qrButton) selectPayment(PAYMENT_QR);
+            else if (checkedId == R.id.cardButton) selectPayment(PAYMENT_CARD);
+            else selectPayment(PAYMENT_CASH);
+        });
+        binding.paymentMethodGroup.check(R.id.cashButton);
         selectPayment(PAYMENT_CASH);
 
         setupCashGrid();
-        binding.clearButton.setOnClickListener(v -> {
-            cashReceived = 0;
-            updateCash();
-        });
+        setupQuickAmounts();
         binding.exactButton.setOnClickListener(v -> {
             cashReceived = order.getGrandTotal();
             updateCash();
         });
+        binding.backspaceButton.setOnClickListener(v -> {
+            long current = (long) cashReceived;
+            cashReceived = current / 10;
+            updateCash();
+        });
         binding.payButton.setOnClickListener(v -> onPay());
-        binding.bayarButton.setOnClickListener(v -> onPay());
+        binding.cancelButton.setOnClickListener(v -> dismiss());
         binding.closeButton.setOnClickListener(v -> dismiss());
+    }
+
+    private void updatePrinterStatus() {
+        // TODO: replace with a real printer connection state when PrinterManager exposes it.
+        String address = PrinterManager.getAddress();
+        boolean ready = address != null && !address.trim().isEmpty();
+        boolean bluetooth = PrinterManager.TYPE_BLUETOOTH.equals(PrinterManager.getType());
+        if (bluetooth) {
+            ready = PrinterManager.isBluetoothPermissionGranted() && ready;
+        }
+        binding.printerStatusText.setText(ready
+                ? R.string.printer_ready_receipt : R.string.printer_not_ready_receipt);
+        binding.printerStatusText.setTextColor(ContextCompat.getColor(requireContext(),
+                ready ? R.color.status_paid : R.color.status_confirmed));
+        binding.printerStatusContainer.setBackgroundResource(ready
+                ? R.drawable.bg_printer_ready : R.drawable.bg_printer_warning);
     }
 
     @Override
@@ -168,6 +213,7 @@ public class PaymentDialog extends DialogFragment {
             int width = (int) (metrics.widthPixels * 0.88);
             int height = (int) (metrics.heightPixels * 0.92);
             getDialog().getWindow().setLayout(width, height);
+            com.harmoni.pos.order.util.DialogFrame.dimBehind(getDialog().getWindow(), 0.35f);
         }
     }
 
@@ -182,25 +228,34 @@ public class PaymentDialog extends DialogFragment {
     private void selectPayment(int payment) {
         selectedPayment = payment;
         boolean cash = payment == PAYMENT_CASH;
-        updateCard(binding.qrCard, binding.qrImage, binding.qrLabel, payment == PAYMENT_QR);
-        updateCard(binding.cardCard, binding.cardImage, binding.cardLabel, payment == PAYMENT_CARD);
-        updateCard(binding.cashCard, binding.cashImage, binding.cashLabel, cash);
         binding.cashPanel.setVisibility(cash ? View.VISIBLE : View.GONE);
-        binding.payButton.setVisibility(cash ? View.GONE : View.VISIBLE);
+        binding.printerStatusContainer.setVisibility(View.VISIBLE);
         if (cash) {
             cashReceived = 0;
             updateCash();
         }
+        updatePayButtonLabel();
     }
 
-    private void updateCard(LinearLayout card, ImageView image, TextView label, boolean selected) {
-        card.setBackgroundResource(selected ? R.drawable.bg_payment_option_selected
-                : R.drawable.bg_payment_option);
-        image.setColorFilter(ContextCompat.getColor(requireContext(),
-                selected ? R.color.accent : R.color.gray_button));
-        label.setTextColor(ContextCompat.getColor(requireContext(),
-                selected ? R.color.text_primary : R.color.text_secondary));
-        label.setTypeface(null, selected ? Typeface.BOLD : Typeface.NORMAL);
+    private void updatePayButtonLabel() {
+        String amount = CurrencyUtils.formatRp(order.getGrandTotal());
+        binding.payButton.setText(getString(R.string.pay_amount, amount));
+    }
+
+    private void setupQuickAmounts() {
+        android.view.ViewGroup row = binding.quickAmountScroll.getChildAt(0) instanceof android.view.ViewGroup
+                ? (android.view.ViewGroup) binding.quickAmountScroll.getChildAt(0) : null;
+        if (row == null) return;
+        for (int i = 0; i < row.getChildCount(); i++) {
+            View child = row.getChildAt(i);
+            if (child.getId() == R.id.exactButton) continue;
+            Object tag = child.getTag();
+            if (tag == null) continue;
+            child.setOnClickListener(v -> {
+                cashReceived = parseLongTag(v.getTag());
+                updateCash();
+            });
+        }
     }
 
     private void setupCashGrid() {
@@ -208,12 +263,25 @@ public class PaymentDialog extends DialogFragment {
         for (int i = 0; i < grid.getChildCount(); i++) {
             View child = grid.getChildAt(i);
             child.setOnClickListener(v -> {
+                String key = String.valueOf(v.getTag());
+                if (!key.matches("\\d+")) return;
+                long current = (long) cashReceived;
+                String next = (current <= 0 ? "" : String.valueOf(current)) + key;
                 try {
-                    cashReceived += Integer.parseInt(String.valueOf(v.getTag()));
+                    cashReceived = Long.parseLong(next);
                 } catch (NumberFormatException ignored) {
+                    // Keep the previous amount rather than resetting the entry.
                 }
                 updateCash();
             });
+        }
+    }
+
+    private long parseLongTag(Object tag) {
+        try {
+            return Long.parseLong(String.valueOf(tag));
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 
@@ -225,18 +293,16 @@ public class PaymentDialog extends DialogFragment {
 
     private void onPay() {
         if (selectedPayment == PAYMENT_CASH && cashReceived < order.getGrandTotal()) {
-            Toast.makeText(requireContext(), "Insufficient cash entered!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.insufficient_cash), Toast.LENGTH_SHORT).show();
             return;
         }
 
         binding.payButton.setEnabled(false);
-        binding.bayarButton.setEnabled(false);
         ApiClient.orderService().payOrder(new PaymentRequest(order.getId(), selectedPayment))
                 .enqueue(new Callback<ApiResponse<Order>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<Order>> call, Response<ApiResponse<Order>> response) {
                         binding.payButton.setEnabled(true);
-                        binding.bayarButton.setEnabled(true);
                         if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                             Order paidOrder = response.body().getData();
                             printReceipt(paidOrder);
@@ -251,7 +317,6 @@ public class PaymentDialog extends DialogFragment {
                     @Override
                     public void onFailure(Call<ApiResponse<Order>> call, Throwable t) {
                         binding.payButton.setEnabled(true);
-                        binding.bayarButton.setEnabled(true);
                         error("Network error: " + t.getMessage());
                     }
                 });
@@ -262,7 +327,7 @@ public class PaymentDialog extends DialogFragment {
                 && !PrinterManager.isBluetoothPermissionGranted()) {
             pendingPrintOrder = paidOrder;
             bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
-            Toast.makeText(requireContext(), "Requesting Bluetooth permission…", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_requesting), Toast.LENGTH_SHORT).show();
             return;
         }
         doPrintReceipt(paidOrder);
@@ -274,7 +339,7 @@ public class PaymentDialog extends DialogFragment {
                     @Override
                     public void onSuccess() {
                         if (isAdded()) {
-                            Toast.makeText(requireContext(), "Receipt sent to printer",
+                            Toast.makeText(requireContext(), getString(R.string.receipt_sent),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -282,7 +347,7 @@ public class PaymentDialog extends DialogFragment {
                     @Override
                     public void onError(String message) {
                         if (isAdded()) {
-                            Toast.makeText(requireContext(), "Print failed: " + message,
+                            Toast.makeText(requireContext(), getString(R.string.print_failed, message),
                                     Toast.LENGTH_LONG).show();
                         }
                     }

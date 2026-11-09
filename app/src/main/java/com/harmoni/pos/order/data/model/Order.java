@@ -7,6 +7,7 @@ public class Order implements Serializable {
     private int id;
     private String orderNo;
     private String customerName;
+    private String customerPhone;
     private String remark;
     private String status;
     private double subTotal;
@@ -20,6 +21,7 @@ public class Order implements Serializable {
     public int getId() { return id; }
     public String getOrderNo() { return orderNo == null ? "" : orderNo; }
     public String getCustomerName() { return customerName == null ? "" : customerName; }
+    public String getCustomerPhone() { return customerPhone == null ? "" : customerPhone; }
     public String getRemark() { return remark == null ? "" : remark; }
     public String getStatus() { return status == null ? "" : status; }
     public double getSubTotal() { return subTotal; }
@@ -46,5 +48,33 @@ public class Order implements Serializable {
             case 3: return "CARD";
             default: return "UNPAID";
         }
+    }
+
+    /** Whether any line in the order carries customization choices. */
+    public boolean hasCustomizations() {
+        if (orderDetails == null) return false;
+        for (OrderDetail detail : orderDetails) {
+            if (detail != null && detail.hasCustomizations()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * A one-line description of what was ordered, with each product's choices in
+     * brackets, e.g. "Kopi (Sugar: Less, Milk: Oat) • Americano".
+     */
+    public String getItemsSummary() {
+        if (orderDetails == null) return "";
+        StringBuilder sb = new StringBuilder();
+        for (OrderDetail detail : orderDetails) {
+            if (detail == null) continue;
+            String product = detail.getProductName().trim();
+            if (product.isEmpty()) continue;
+            String choices = detail.getGroupedCustomizationNames();
+            String chunk = choices.isEmpty() ? product : product + " (" + choices + ")";
+            if (sb.length() > 0) sb.append(" • ");
+            sb.append(chunk);
+        }
+        return sb.toString();
     }
 }

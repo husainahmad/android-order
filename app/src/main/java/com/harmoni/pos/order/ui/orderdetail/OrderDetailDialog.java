@@ -16,6 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -27,6 +29,8 @@ import com.harmoni.pos.order.databinding.DialogOrderDetailBinding;
 import com.harmoni.pos.order.print.PrinterManager;
 import com.harmoni.pos.order.ui.payment.PaymentDialog;
 import com.harmoni.pos.order.util.PrintUtils;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,30 +47,35 @@ public class OrderDetailDialog extends DialogFragment {
     private DialogOrderDetailBinding binding;
     private Order order;
     private OnOrderChangedListener listener;
+    private OrderLineAdapter lineAdapter;
 
     private String pendingPrintText;
     private String pendingPrintLabel;
+    private List<String> pendingKitchenTexts;
     private final ActivityResultLauncher<String> bluetoothPrintPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
-                if (granted && pendingPrintText != null) {
+                if (granted && pendingKitchenTexts != null) {
+                    doPrintKitchen(pendingKitchenTexts, 0);
+                    pendingKitchenTexts = null;
+                } else if (granted && pendingPrintText != null) {
                     doPrint(pendingPrintLabel, pendingPrintText);
                 } else if (!granted) {
                     boolean permanentlyDenied = !shouldShowRequestPermissionRationale(android.Manifest.permission.BLUETOOTH_CONNECT);
                     if (permanentlyDenied) {
                         new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Bluetooth Permission Required")
-                                .setMessage("Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow")
-                                .setPositiveButton("Open Settings", (d, w) -> {
+                                .setTitle(getString(R.string.bluetooth_permission_title))
+                                .setMessage(getString(R.string.bluetooth_permission_permanently_denied))
+                                .setPositiveButton(getString(R.string.open_settings), (d, w) -> {
                                     try {
                                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                         intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null));
                                         startActivity(intent);
                                     } catch (Exception e) { startActivity(new Intent(Settings.ACTION_SETTINGS)); }
                                 })
-                                .setNegativeButton("Cancel", null)
+                                .setNegativeButton(getString(R.string.cancel), null)
                                 .show();
                     } else {
-                        Toast.makeText(requireContext(), "Bluetooth permission denied – enable in App Settings > Permissions", Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_denied), Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -102,8 +111,17 @@ public class OrderDetailDialog extends DialogFragment {
             return;
         }
 
-        TextView detailText = binding.detailText;
-        detailText.setText(PrintUtils.buildReceiptText(order));
+        bindHeader();
+
+        lineAdapter = new OrderLineAdapter();
+        binding.itemsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.itemsRecycler.setHasFixedSize(true);
+        binding.itemsRecycler.setAdapter(lineAdapter);
+
+        binding.previewToggle.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) renderPreview(checkedId);
+        });
+        renderPreview(R.id.previewItemsButton);
 
         MaterialButton payButton = binding.payButton;
         MaterialButton voidButton = binding.voidButton;
@@ -112,21 +130,95 @@ public class OrderDetailDialog extends DialogFragment {
 
         binding.printButton.setOnClickListener(v ->
                 printText(getString(R.string.print), PrintUtils.buildReceiptText(order)));
-        binding.kitchenButton.setOnClickListener(v ->
-                printText(getString(R.string.kitchen_print), PrintUtils.buildKitchenText(order)));
+        binding.kitchenButton.setOnClickListener(v -> printKitchen());
         payButton.setOnClickListener(v -> openPayment());
         voidButton.setOnClickListener(v -> confirmVoid());
         binding.closeButton.setOnClickListener(v -> dismiss());
     }
 
+    private void bindHeader() {
+        binding.orderNumberHeader.setText(order.getOrderNo());
+        String meta = com.harmoni.pos.order.util.TimeUtils.toJakarta(order.getCreatedAt())
+                + " • " + ("Takeaway".equalsIgnoreCase(order.getServiceTypeName())
+                ? getString(R.string.takeaway) : getString(R.string.dine_in));
+        binding.orderMetaHeader.setText(meta);
+        binding.customerHeader.setText(order.getCustomerName().trim().isEmpty()
+                ? getString(R.string.walk_in) : order.getCustomerName());
+        String payment = order.getPaymentName();
+        if ("QR".equalsIgnoreCase(payment)) payment = getString(R.string.payment_qris);
+        binding.paymentHeader.setText(payment);
+        binding.totalHeader.setText(com.harmoni.pos.order.util.CurrencyUtils.formatRp(order.getGrandTotal()));
+
+        boolean paid = order.isPaid();
+        boolean voided = order.isVoid();
+        int bg = paid ? R.color.status_paid_bg
+                : voided ? R.color.status_void_bg : R.color.status_confirmed_bg;
+        int fg = paid ? R.color.status_paid
+                : voided ? R.color.status_void : R.color.status_confirmed;
+        binding.statusBadge.setText(order.getStatus());
+        binding.statusBadge.setTextColor(requireContext().getColor(fg));
+        binding.statusBadge.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(requireContext().getColor(bg)));
+    }
+
+    private void renderPreview(int checkedId) {
+        boolean items = checkedId == R.id.previewItemsButton;
+        binding.itemsRecycler.setVisibility(items ? View.VISIBLE : View.GONE);
+        binding.textScrollContainer.setVisibility(items ? View.GONE : View.VISIBLE);
+        if (items) {
+            lineAdapter.submit(order);
+        } else if (checkedId == R.id.previewReceiptButton) {
+            binding.detailText.setText(PrintUtils.buildReceiptText(order));
+        } else {
+            binding.detailText.setText(PrintUtils.buildKitchenText(order));
+        }
+    }
+
+    private void printKitchen() {
+        List<String> texts = PrintUtils.buildKitchenTexts(order);
+        if (texts.isEmpty()) {
+            Toast.makeText(requireContext(), getString(R.string.nothing_to_print), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (PrinterManager.TYPE_BLUETOOTH.equals(PrinterManager.getType())
+                && !PrinterManager.isBluetoothPermissionGranted()) {
+            pendingKitchenTexts = texts;
+            bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
+            Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_requesting), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        doPrintKitchen(texts, 0);
+    }
+
+    private void doPrintKitchen(List<String> texts, int index) {
+        if (index >= texts.size()) {
+            Toast.makeText(requireContext(), R.string.kitchen_print + " sent", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        PrinterManager.print(texts.get(index), new PrinterManager.PrintCallback() {
+            @Override
+            public void onSuccess() {
+                doPrintKitchen(texts, index + 1);
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(requireContext(), getString(R.string.print_failed, message), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            int width = (int) (requireContext().getResources().getDisplayMetrics().widthPixels * 0.5);
-            int height = (int) (requireContext().getResources().getDisplayMetrics().heightPixels * 0.8);
-            getDialog().getWindow().setLayout(width, height);
-        }
+        if (getDialog() == null || getDialog().getWindow() == null) return;
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        float density = getResources().getDisplayMetrics().density;
+        int width = Math.min((int) (screenWidth * 0.86f), (int) (1080 * density));
+        int height = Math.min((int) (screenHeight * 0.90f), (int) (800 * density));
+        getDialog().getWindow().setLayout(width, height);
+        getDialog().getWindow().setBackgroundDrawableResource(R.drawable.bg_confirm_dialog);
     }
 
     private void printText(String label, String text) {
@@ -135,7 +227,7 @@ public class OrderDetailDialog extends DialogFragment {
             pendingPrintLabel = label;
             pendingPrintText = text;
             bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
-            Toast.makeText(requireContext(), "Requesting Bluetooth permission…", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_requesting), Toast.LENGTH_SHORT).show();
             return;
         }
         doPrint(label, text);
@@ -169,7 +261,7 @@ public class OrderDetailDialog extends DialogFragment {
     private void confirmVoid() {
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.void_order)
-                .setMessage("Void this order?")
+                .setMessage(getString(R.string.void_this_order))
                 .setPositiveButton(R.string.void_order, (d, w) -> voidOrder())
                 .setNegativeButton(R.string.cancel, null)
                 .show();

@@ -26,7 +26,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.harmoni.pos.order.R;
 import com.harmoni.pos.order.data.model.CartItem;
 import com.harmoni.pos.order.data.model.Category;
+import com.harmoni.pos.order.data.model.Customer;
 import com.harmoni.pos.order.data.model.Product;
+import com.harmoni.pos.order.data.model.ProductCustomization;
+import com.harmoni.pos.order.data.model.SelectedCustomization;
 import com.harmoni.pos.order.data.model.Sku;
 import com.harmoni.pos.order.data.repository.MenuRepository;
 import com.harmoni.pos.order.databinding.FragmentOrderFormBinding;
@@ -57,10 +60,14 @@ public class OrderFormFragment extends Fragment {
     private int tabId;
     private ProductAdapter productAdapter;
     private CartAdapter cartAdapter;
-    private CategoryAdapter categoryAdapter;
+    private CategoryVerticalAdapter categoryAdapter;
     private List<Category> categories = new ArrayList<>();
-    private List<Product> allProducts = new ArrayList<>();
+    private final List<Product> allProducts = new ArrayList<>();
     private int selectedCategoryId = -1;
+    private static final int PRODUCT_PAGE_SIZE = 50;
+    private Integer productsNextCursor;
+    private boolean productsHasMore = true;
+    private boolean loadingMoreProducts = false;
 
     private String pendingKitchenText;
     private final ActivityResultLauncher<String> bluetoothPrintPermissionLauncher =
@@ -71,19 +78,19 @@ public class OrderFormFragment extends Fragment {
                     boolean permanentlyDenied = !shouldShowRequestPermissionRationale(android.Manifest.permission.BLUETOOTH_CONNECT);
                     if (permanentlyDenied) {
                         new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Bluetooth Permission Required")
-                                .setMessage("Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow")
-                                .setPositiveButton("Open Settings", (d, w) -> {
+                                .setTitle(getString(R.string.bluetooth_permission_title))
+                                .setMessage(getString(R.string.bluetooth_permission_permanently_denied))
+                                .setPositiveButton(getString(R.string.open_settings), (d, w) -> {
                                     try {
                                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                         intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null));
                                         startActivity(intent);
                                     } catch (Exception e) { startActivity(new Intent(Settings.ACTION_SETTINGS)); }
                                 })
-                                .setNegativeButton("Cancel", null)
+                                .setNegativeButton(getString(R.string.cancel), null)
                                 .show();
                     } else {
-                        Toast.makeText(requireContext(), "Bluetooth permission denied – enable in App Settings > Permissions", Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_denied), Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -109,6 +116,7 @@ public class OrderFormFragment extends Fragment {
 
         setupRecyclers();
         setupActions();
+        setupCatalogTools();
         observe();
         viewModel.ensureActiveTab();
         loadCategories();
@@ -117,25 +125,42 @@ public class OrderFormFragment extends Fragment {
     private void setupRecyclers() {
         productAdapter = new ProductAdapter(this::onProductClick);
         RecyclerView productsRecycler = binding.productsRecycler;
-        productsRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 4));
+        GridLayoutManager productLayout = new GridLayoutManager(requireContext(), 4);
+        productsRecycler.setLayoutManager(productLayout);
         productsRecycler.setHasFixedSize(true);
         productsRecycler.setAdapter(productAdapter);
+        productsRecycler.post(() -> applyAdaptiveSpans(productLayout, productsRecycler.getWidth()));
+        productsRecycler.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) ->
+                applyAdaptiveSpans(productLayout, r - l));
+        productsRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy <= 0) return;
+                GridLayoutManager layoutManager =
+                        (GridLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager == null) return;
+                int lastVisible = layoutManager.findLastVisibleItemPosition();
+                if (lastVisible >= productAdapter.getItemCount() - 8) {
+                    loadNextProductPage();
+                }
+            }
+        });
 
-        categoryAdapter = new CategoryAdapter(category -> selectCategory(category));
-        RecyclerView categoryRecycler = binding.categoryRecycler;
-        categoryRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        categoryAdapter = new CategoryVerticalAdapter(category -> selectCategory(category));
+        RecyclerView categoryRecycler = binding.categoryChipsRecycler;
+        categoryRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
         categoryRecycler.setHasFixedSize(true);
         categoryRecycler.setAdapter(categoryAdapter);
 
         cartAdapter = new CartAdapter(new CartAdapter.OnQuantityChangeListener() {
             @Override
-            public void onIncrement(int productId, int skuId) {
-                viewModel.increment(productId, skuId);
+            public void onIncrement(String lineKey) {
+                viewModel.increment(lineKey);
             }
 
             @Override
-            public void onDecrement(int productId, int skuId) {
-                viewModel.decrement(productId, skuId);
+            public void onDecrement(String lineKey) {
+                viewModel.decrement(lineKey);
             }
         });
         binding.cartRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -144,9 +169,50 @@ public class OrderFormFragment extends Fragment {
         binding.cartRecycler.setAdapter(cartAdapter);
     }
 
+    /** 150dp minimum card width, so tablets show more columns and phones show fewer. */
+    private void applyAdaptiveSpans(GridLayoutManager layoutManager, int widthPx) {
+        if (layoutManager == null || widthPx <= 0) return;
+        float density = getResources().getDisplayMetrics().density;
+        int widthDp = (int) (widthPx / density);
+        int spans = Math.max(2, Math.min(4, widthDp / 150));
+        if (layoutManager.getSpanCount() != spans) {
+            layoutManager.setSpanCount(spans);
+        }
+    }
+
+    private void setupCatalogTools() {
+        binding.productSearchInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                applyProductQuery(s == null ? "" : s.toString());
+            }
+        });
+        binding.viewModeButton.setOnClickListener(v ->
+                Toast.makeText(requireContext(), R.string.grid_view, Toast.LENGTH_SHORT).show());
+    }
+
+    /** Client-side filter over the currently loaded category page. No API or pricing change. */
+    private void applyProductQuery(String query) {
+        if (productAdapter == null) return;
+        String needle = query == null ? "" : query.trim().toLowerCase(java.util.Locale.ROOT);
+        if (needle.isEmpty()) {
+            productAdapter.submitList(new ArrayList<>(allProducts));
+            return;
+        }
+        List<Product> filtered = new ArrayList<>();
+        for (Product product : allProducts) {
+            if (product.getName().toLowerCase(java.util.Locale.ROOT).contains(needle)) {
+                filtered.add(product);
+            }
+        }
+        productAdapter.submitList(filtered);
+    }
+
     private void setupActions() {
         binding.confirmButton.setOnClickListener(v -> onConfirm());
         binding.printButton.setOnClickListener(v -> onPrint());
+        binding.customerInputLayout.setEndIconOnClickListener(v -> openCustomerPicker());
         binding.orderSummaryHeader.setOnClickListener(v -> showPreviewOrderDialog());
         // also make badge itself tappable (propagates to header)
         binding.cartCountText.setOnClickListener(v -> showPreviewOrderDialog());
@@ -164,7 +230,15 @@ public class OrderFormFragment extends Fragment {
             @Override public void afterTextChanged(android.text.Editable s) { updateCheckoutSummary(); }
         };
         binding.customerInput.addTextChangedListener(summaryWatcher);
-        binding.discountInput.addTextChangedListener(summaryWatcher);
+        binding.discountInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                updateCheckoutSummary();
+                viewModel.setDiscount(s == null ? "0" : s.toString());
+                updateTotals();
+            }
+        });
         binding.remarkInput.addTextChangedListener(summaryWatcher);
         binding.orderTypeGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) updateCheckoutSummary();
@@ -186,11 +260,14 @@ public class OrderFormFragment extends Fragment {
         String customer = binding.customerInput.getText() != null ? binding.customerInput.getText().toString().trim() : "";
         String discount = binding.discountInput.getText() != null ? binding.discountInput.getText().toString().trim() : "0";
         String remark = binding.remarkInput.getText() != null ? binding.remarkInput.getText().toString().trim() : "";
-        String type = binding.orderTypeGroup.getCheckedButtonId() == R.id.takeawayButton ? "Takeaway" : "Dine In";
+        String type = binding.orderTypeGroup.getCheckedButtonId() == R.id.takeawayButton
+                ? getString(R.string.takeaway) : getString(R.string.dine_in);
         StringBuilder sb = new StringBuilder();
         if (!customer.isEmpty()) sb.append(customer).append(" • ");
         sb.append(type);
-        if (!"0".equals(discount) && !discount.isEmpty()) sb.append(" • Disc:").append(discount);
+        if (!"0".equals(discount) && !discount.isEmpty()) {
+            sb.append(" • ").append(getString(R.string.summary_discount_format, discount));
+        }
         if (!remark.isEmpty()) sb.append(" • ").append(remark.length() > 12 ? remark.substring(0,12)+"…" : remark);
         String summary = sb.toString();
         if (summary.length() > 28) summary = summary.substring(0,28)+"…";
@@ -268,6 +345,7 @@ public class OrderFormFragment extends Fragment {
                     binding.cartRecycler.post(() -> binding.cartRecycler.smoothScrollToPosition(last));
                 }
             });
+            productAdapter.setCartQuantities(cart);
             binding.cartRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
             binding.cartEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
             if (empty) {
@@ -282,7 +360,7 @@ public class OrderFormFragment extends Fragment {
                     for (CartItem item : cart) totalQty += item.getQuantity();
                 }
                 binding.cartCountText.setText(String.valueOf(totalQty));
-                binding.cartCountText.setVisibility(View.VISIBLE);
+                binding.cartCountText.setVisibility(totalQty > 0 ? View.VISIBLE : View.GONE);
             } catch (Exception ignored) {
                 // Header remains functional without count
             }
@@ -354,61 +432,123 @@ public class OrderFormFragment extends Fragment {
     }
 
     private void loadProducts(int categoryId) {
+        allProducts.clear();
+        productsNextCursor = null;
+        productsHasMore = true;
+        loadingMoreProducts = false;
+        productAdapter.submitList(new ArrayList<>());
+        loadProductsPage(categoryId, null, true);
+    }
+
+    private void loadNextProductPage() {
+        if (!productsHasMore || loadingMoreProducts || productsNextCursor == null) return;
+        loadProductsPage(selectedCategoryId, productsNextCursor, false);
+    }
+
+    private void loadProductsPage(int categoryId, Integer beforeId, boolean reset) {
+        if (!reset && (!productsHasMore || loadingMoreProducts)) return;
+        final int requestedCategory = categoryId;
+        loadingMoreProducts = !reset;
         binding.errorText.setVisibility(View.GONE);
         binding.productProgressBar.setVisibility(View.VISIBLE);
-        menuRepository.getProducts(categoryId, new MenuRepository.RepositoryCallback<List<Product>>() {
+
+        menuRepository.getProductsPage(categoryId, beforeId, PRODUCT_PAGE_SIZE,
+                new MenuRepository.RepositoryCallback<com.harmoni.pos.order.data.model.ProductPageResponse>() {
+                    @Override
+                    public void onSuccess(com.harmoni.pos.order.data.model.ProductPageResponse page) {
+                        if (requestedCategory != selectedCategoryId) return;
+                        loadingMoreProducts = false;
+                        binding.productProgressBar.setVisibility(View.GONE);
+                        if (reset) allProducts.clear();
+                        allProducts.addAll(page.getProducts());
+                        productsNextCursor = page.getNextCursor();
+                        productsHasMore = page.hasMore();
+                        applyProductQuery(binding.productSearchInput.getText() == null
+                                ? "" : binding.productSearchInput.getText().toString());
+                        boolean empty = allProducts.isEmpty();
+                        binding.productsRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
+                        binding.productsEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
+                        if (empty) {
+                            binding.productsEmptyView.emptyIcon.setImageResource(R.drawable.ic_empty_products);
+                            binding.productsEmptyView.emptyTitle.setText(R.string.no_products);
+                            binding.productsEmptyView.emptySubtitle.setText(R.string.no_products_subtitle);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        if (requestedCategory != selectedCategoryId) return;
+                        loadingMoreProducts = false;
+                        binding.productProgressBar.setVisibility(View.GONE);
+                        if (message != null && (message.contains("401") || message.contains("403") || message.contains("Session expired") || message.contains("Access denied"))) {
+                            return;
+                        }
+                        showError(message);
+                    }
+                });
+    }
+
+    private void openCustomerPicker() {
+        CustomerPickerDialogFragment dialog = new CustomerPickerDialogFragment();
+        dialog.setOnCustomerListener(new CustomerPickerDialogFragment.OnCustomerListener() {
             @Override
-            public void onSuccess(List<Product> data) {
-                allProducts = data;
-                productAdapter.submitList(allProducts);
-                binding.productProgressBar.setVisibility(View.GONE);
-                boolean empty = data == null || data.isEmpty();
-                binding.productsRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
-                binding.productsEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
-                if (empty) {
-                    binding.productsEmptyView.emptyIcon.setImageResource(R.drawable.ic_empty_products);
-                    binding.productsEmptyView.emptyTitle.setText(R.string.no_products);
-                    binding.productsEmptyView.emptySubtitle.setText(R.string.no_products_subtitle);
-                }
+            public void onSelect(Customer customer) {
+                viewModel.selectCustomer(customer);
+                binding.customerInput.setText(customer.getDisplayName());
+                updateCheckoutSummary();
+            }
+
+            @Override
+            public void onClear() {
+                viewModel.clearCustomer();
+                binding.customerInput.setText("");
+                updateCheckoutSummary();
+            }
+        });
+        dialog.show(getParentFragmentManager(), "customer_picker");
+    }
+
+    private void onProductClick(Product product) {
+        viewModel.loadCustomizations(product.getId(), new OrderFormViewModel.CustomizationCallback() {
+            @Override
+            public void onSuccess(List<ProductCustomization> data) {
+                openProduct(product, data);
             }
 
             @Override
             public void onError(String message) {
-                binding.productProgressBar.setVisibility(View.GONE);
-                if (message != null && (message.contains("401") || message.contains("403") || message.contains("Session expired") || message.contains("Access denied"))) {
-                    return;
-                }
-                showError(message);
+                // Customizations are optional to the sale; if they cannot be loaded the
+                // product can still be added plainly rather than blocking the cashier.
+                openProduct(product, new ArrayList<>());
             }
         });
     }
 
-    private void onProductClick(Product product) {
+    private void openProduct(Product product, List<ProductCustomization> customizations) {
         List<Sku> skus = product.getSkus();
-        if (skus != null && skus.size() == 1 && skus.get(0) != null) {
+        boolean hasCustomizations = customizations != null && !customizations.isEmpty();
+        if (!hasCustomizations && skus != null && skus.size() == 1 && skus.get(0) != null) {
             viewModel.addToCart(product, skus.get(0));
             return;
         }
         ProductDetailDialog dialog = new ProductDetailDialog();
         dialog.setProduct(product);
-        dialog.setOnSkuListener(new ProductDetailDialog.OnSkuListener() {
-            @Override
-            public void onAdd(Product p, Sku s) {
-                viewModel.addToCart(p, s);
-            }
-
-            @Override
-            public void onRemove(Product p, Sku s) {
-                viewModel.decrement(p.getId(), s.getId());
-            }
-        });
+        dialog.setCustomizations(customizations);
+        // The note in the product dialog belongs to the line being added, not to
+        // the whole order. The order-level note stays in the Order Details field.
+        dialog.setInitialNote("");
+        dialog.setOnSkuListener((p, s, selected, qty, note) ->
+                viewModel.addToCart(p, s, selected, qty, note));
         dialog.show(getParentFragmentManager(), "product_detail");
     }
 
     private void updateTotals() {
         double subtotal = viewModel.getSubtotal();
+        double discount = viewModel.getActiveDiscount();
+        double total = Math.max(0, subtotal - discount);
         binding.subtotalText.setText(CurrencyUtils.formatRp(subtotal));
-        binding.totalText.setText(CurrencyUtils.formatRp(subtotal));
+        binding.discountTotalText.setText(CurrencyUtils.formatRp(discount));
+        binding.totalText.setText(CurrencyUtils.formatRp(total));
     }
 
     private void onConfirm() {
@@ -447,7 +587,7 @@ public class OrderFormFragment extends Fragment {
                 && !PrinterManager.isBluetoothPermissionGranted()) {
             pendingKitchenText = kitchenText;
             bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
-            Toast.makeText(requireContext(), "Requesting Bluetooth permission…", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_requesting), Toast.LENGTH_SHORT).show();
             return;
         }
         doPrintWithText(kitchenText);
@@ -464,7 +604,7 @@ public class OrderFormFragment extends Fragment {
 
             @Override
             public void onError(String message) {
-                Toast.makeText(requireContext(), "Print failed: " + message,
+                Toast.makeText(requireContext(), getString(R.string.print_failed, message),
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -486,6 +626,10 @@ public class OrderFormFragment extends Fragment {
             for (CartItem item : group) {
                 sb.append("  ").append(item.getSkuName()).append(" x ")
                         .append(item.getQuantity()).append("\n");
+                String summary = item.getCustomizationSummary();
+                if (!summary.isEmpty()) {
+                    sb.append("    - ").append(summary).append("\n");
+                }
             }
         }
         sb.append("----------------------------\n");

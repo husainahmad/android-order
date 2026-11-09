@@ -107,6 +107,40 @@ public class MenuRepository {
         });
     }
 
+    /**
+     * One cursor page of products for a category. Pages are not cached individually;
+     * the first page is written to the disk cache so a cold start still has content.
+     */
+    public void getProductsPage(int categoryId, Integer beforeId, int limit,
+                                RepositoryCallback<com.harmoni.pos.order.data.model.ProductPageResponse> callback) {
+        final boolean firstPage = beforeId == null;
+        ApiClient.menuService().productsByCategoryPage(categoryId, limit, beforeId)
+                .enqueue(new Callback<ApiResponse<com.harmoni.pos.order.data.model.ProductPageResponse>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<com.harmoni.pos.order.data.model.ProductPageResponse>> call,
+                                           Response<ApiResponse<com.harmoni.pos.order.data.model.ProductPageResponse>> response) {
+                        if (response.isSuccessful() && response.body() != null
+                                && response.body().getData() != null) {
+                            com.harmoni.pos.order.data.model.ProductPageResponse page = response.body().getData();
+                            if (firstPage) {
+                                List<com.harmoni.pos.order.data.model.Product> products = page.getProducts();
+                                EXECUTOR.execute(() -> JsonCache.writeProducts(
+                                        PosApplication.getAppContext(), categoryId, products));
+                            }
+                            callback.onSuccess(page);
+                        } else {
+                            callback.onError(errorMessage(response));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<com.harmoni.pos.order.data.model.ProductPageResponse>> call,
+                                          Throwable t) {
+                        callback.onError(t.getMessage());
+                    }
+                });
+    }
+
     public void clearCache() {
         EXECUTOR.execute(() -> JsonCache.clear(PosApplication.getAppContext()));
     }

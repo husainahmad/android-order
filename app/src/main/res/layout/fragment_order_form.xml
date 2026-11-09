@@ -6,67 +6,46 @@
     android:layout_height="match_parent"
     android:background="@color/md_surface">
 
-    <!-- Guidelines: 17% category / 48% product / 35% order summary — balanced, order enlarged -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineCategoryEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.17" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineProductEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.66" />
 
-    <!-- Category column (Guideline 0 -> 0.20) -->
+    <!-- Vertical category rail -->
     <LinearLayout
-        android:id="@+id/categoryColumn"
+        android:id="@+id/categoryRail"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bg_category_column"
+        android:background="@color/md_background"
         android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guidelineCategoryEnd"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_section_header"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
-
-            <View
-                android:layout_width="4dp"
-                android:layout_height="24dp"
-                android:background="@drawable/bg_header_accent"
-                android:importantForAccessibility="no" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@string/categories"
-                android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleSmall"
-                android:textColor="@color/text_primary" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="10dp"
+            android:text="@string/categories"
+            android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleMedium"
+            android:textColor="@color/text_primary" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/categoryRecycler"
+            android:id="@+id/categoryChipsRecycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingStart="@dimen/spacing_small"
-            android:paddingTop="@dimen/spacing_xsmall"
-            android:paddingEnd="@dimen/spacing_small"
-            android:paddingBottom="@dimen/spacing_xsmall" />
+            android:scrollbars="none" />
 
         <ProgressBar
             android:id="@+id/categoryProgressBar"
@@ -77,7 +56,14 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Product list column (0.17 -> 0.65) — 48% width -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCategoryEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.16" />
+
+    <!-- Product area: search bar, category title and adaptive product grid -->
     <LinearLayout
         android:id="@+id/productColumn"
         android:layout_width="0dp"
@@ -91,49 +77,68 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_section_header"
+            android:layout_height="wrap_content"
+            android:background="@color/md_surface"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
+            android:paddingStart="16dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp">
 
-            <View
-                android:layout_width="4dp"
-                android:layout_height="24dp"
-                android:background="@drawable/bg_header_accent"
-                android:importantForAccessibility="no" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@string/products_label"
-                android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelMedium"
-                android:textColor="@color/text_secondary" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
-                android:alpha="0.6"
-                android:text="•"
-                android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelSmall"
-                android:textColor="@color/text_secondary"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/categoryTitleText"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.KopiHarmoni.InputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/all_categories"
-                android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleSmall"
-                android:textColor="@color/text_primary" />
+                android:hint="@string/search_product"
+                app:startIconDrawable="@drawable/ic_search"
+                app:startIconTint="@color/text_secondary"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusBottomEnd="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/productSearchInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_caption" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/viewModeButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="52dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:contentDescription="@string/grid_view"
+                app:backgroundTint="@color/md_surface"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_grid"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/accent"
+                app:strokeColor="@color/md_outline" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/categoryTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="6dp"
+            android:text="@string/all_categories"
+            android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleMedium"
+            android:textColor="@color/text_primary" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/productsRecycler"
@@ -174,7 +179,7 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Order summary column (0.65 -> end) — 35% width -->
+    <!-- Order summary column (66% -> end) — fixed 34% width -->
     <LinearLayout
         android:id="@+id/orderColumn"
         android:layout_width="0dp"
@@ -200,11 +205,12 @@
             android:paddingStart="12dp"
             android:paddingEnd="12dp">
 
-            <View
-                android:layout_width="4dp"
-                android:layout_height="24dp"
-                android:background="@drawable/bg_header_accent"
-                android:importantForAccessibility="no" />
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/order_summary"
+                android:src="@drawable/ic_receipt"
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="0dp"
@@ -214,7 +220,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@string/order_summary"
-                android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleSmall"
+                android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleMedium"
                 android:textColor="@color/white" />
 
             <TextView
@@ -249,18 +255,10 @@
             android:paddingEnd="12dp"
             android:paddingBottom="8dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/order_type"
-                android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelSmall"
-                android:textColor="@color/text_secondary" />
-
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/orderTypeGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 app:checkedButton="@id/dineInButton"
                 app:selectionRequired="true"
                 app:singleSelection="true">
@@ -275,11 +273,14 @@
                     android:insetBottom="0dp"
                     android:text="@string/dine_in"
                     android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
+                    android:textColor="@color/order_type_text"
+                    app:backgroundTint="@color/order_type_bg"
                     app:icon="@drawable/ic_dine_in"
                     app:iconGravity="textStart"
                     app:iconPadding="6dp"
-                    app:strokeColor="@color/accent"
-                    app:strokeWidth="1.5dp" />
+                    app:iconTint="@color/order_type_text"
+                    app:strokeColor="@color/md_outline"
+                    app:strokeWidth="1dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/takeawayButton"
@@ -291,11 +292,14 @@
                     android:insetBottom="0dp"
                     android:text="@string/takeaway"
                     android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
+                    android:textColor="@color/order_type_text"
+                    app:backgroundTint="@color/order_type_bg"
                     app:icon="@drawable/ic_takeaway"
                     app:iconGravity="textStart"
                     app:iconPadding="6dp"
-                    app:strokeColor="@color/accent"
-                    app:strokeWidth="1.5dp" />
+                    app:iconTint="@color/order_type_text"
+                    app:strokeColor="@color/md_outline"
+                    app:strokeWidth="1dp" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
         </LinearLayout>
 
@@ -315,7 +319,7 @@
 
             <include
                 android:id="@+id/cartEmptyView"
-                layout="@layout/view_empty_state"
+                layout="@layout/view_empty_cart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone" />
@@ -396,10 +400,14 @@
                     android:visibility="gone">
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/customerInputLayout"
                         style="@style/Widget.KopiHarmoni.InputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/customer_name">
+                        android:hint="@string/customer_name"
+                        app:endIconMode="custom"
+                        app:endIconDrawable="@drawable/ic_search"
+                        app:endIconContentDescription="@string/customer">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/customerInput"
@@ -460,122 +468,157 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <!-- Divider above totals — tight -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@color/divider"
-                    android:importantForAccessibility="no" />
-
-                <!-- Subtotal — tight -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center_vertical"
-                    android:minHeight="32dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/sub_total"
-                        android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelMedium"
-                        android:textColor="@color/text_secondary" />
-
-                    <TextView
-                        android:id="@+id/subtotalText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rp.0"
-                        android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
-                        android:textColor="@color/text_primary"
-                        tools:ignore="HardcodedText" />
-                </LinearLayout>
-
-                <!-- Total - prominent — tight -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="2dp"
-                    android:background="@drawable/bg_total_highlight"
-                    android:gravity="center_vertical"
-                    android:minHeight="36dp"
-                    android:orientation="horizontal"
-                    android:padding="6dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/total"
-                        android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleMedium"
-                        android:textColor="@color/primary" />
-
-                    <TextView
-                        android:id="@+id/totalText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rp.0"
-                        android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleLarge"
-                        android:textColor="@color/primary"
-                        tools:ignore="HardcodedText" />
-                </LinearLayout>
-
-                <!-- Buttons - compact for narrower column -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_xsmall"
-                    android:orientation="horizontal"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/confirmButton"
-                        style="@style/Widget.KopiHarmoni.Button.Primary"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/height_button"
-                        android:layout_marginEnd="@dimen/spacing_small"
-                        android:layout_weight="1"
-                        android:minHeight="48dp"
-                        android:text="@string/confirm"
-                        android:textColor="@color/white"
-                        android:stateListAnimator="@animator/button_press"
-                        app:backgroundTint="@color/accent" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/printButton"
-                        style="@style/Widget.KopiHarmoni.Button.Outlined"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/height_button"
-                        android:layout_marginStart="@dimen/spacing_small"
-                        android:layout_weight="1"
-                        android:minHeight="48dp"
-                        android:text="@string/print"
-                        android:textColor="@color/blue_action"
-                        android:stateListAnimator="@animator/button_press_outlined"
-                        app:strokeColor="@color/blue_action" />
-                </LinearLayout>
-
-                <!-- Submit (confirm order) progress — separate from category/product to avoid race -->
-                <ProgressBar
-                    android:id="@+id/submitProgressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:contentDescription="@string/loading"
-                    android:visibility="gone" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <!-- Fixed checkout footer: totals and actions never scroll away -->
+        <LinearLayout
+            android:id="@+id/checkoutFooter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/md_surface"
+            android:orientation="vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="10dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider"
+                android:importantForAccessibility="no" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:minHeight="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/sub_total"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelMedium"
+                    android:textColor="@color/text_secondary" />
+
+                <TextView
+                    android:id="@+id/subtotalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rp0"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
+                    android:textColor="@color/text_primary"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical"
+                android:minHeight="28dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/discount"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelMedium"
+                    android:textColor="@color/status_void" />
+
+                <TextView
+                    android:id="@+id/discountTotalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rp0"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
+                    android:textColor="@color/status_void"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_total_highlight"
+                android:gravity="center_vertical"
+                android:minHeight="52dp"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/total"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleMedium"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:id="@+id/totalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rp0"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.Total"
+                    android:textColor="@color/accent"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/printButton"
+                    style="@style/Widget.KopiHarmoni.Button.Outlined"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/height_button"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:minHeight="48dp"
+                    android:text="@string/print"
+                    android:textColor="@color/accent"
+                    android:stateListAnimator="@animator/button_press_outlined"
+                    app:icon="@drawable/ic_printer"
+                    app:iconGravity="textStart"
+                    app:iconPadding="6dp"
+                    app:iconTint="@color/accent"
+                    app:strokeColor="@color/accent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/confirmButton"
+                    style="@style/Widget.KopiHarmoni.Button.Primary"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/height_button"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1.5"
+                    android:minHeight="48dp"
+                    android:text="@string/confirm"
+                    android:textColor="@color/white"
+                    android:stateListAnimator="@animator/button_press"
+                    app:backgroundTint="@color/accent"
+                    app:icon="@drawable/ic_check_circle"
+                    app:iconGravity="textStart"
+                    app:iconPadding="6dp"
+                    app:iconTint="@color/white" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/submitProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:contentDescription="@string/loading"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

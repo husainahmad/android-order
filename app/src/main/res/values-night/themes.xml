@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Light-on-dark system bars in night mode. The activity uses
+         Theme.KopiHarmoni.NoActionBar, which implicitly inherits the main theme. -->
+    <style name="Theme.KopiHarmoni.NoActionBar">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>

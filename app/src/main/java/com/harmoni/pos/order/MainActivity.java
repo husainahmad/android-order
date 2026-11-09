@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
@@ -26,7 +25,7 @@ import com.harmoni.pos.order.data.remote.TokenManager;
 import com.harmoni.pos.order.databinding.ActivityMainBinding;
 import com.harmoni.pos.order.print.PrinterManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends LocalizedActivity {
 
     private ActivityResultLauncher<String> bluetoothPermissionLauncher;
     private ActivityResultLauncher<String[]> bluetoothMultipleLauncher;
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private void initBluetoothLauncher() {
         bluetoothPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
             if (granted) {
-                Toast.makeText(this, "Bluetooth permission granted – printing enabled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.bluetooth_permission_granted), Toast.LENGTH_SHORT).show();
             } else {
                 boolean permanentlyDenied = !shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_CONNECT);
                 String msg = permanentlyDenied
@@ -42,17 +41,17 @@ public class MainActivity extends AppCompatActivity {
                         : "Bluetooth permission denied.\nOn Android 12+ this is \"Nearby devices\" (BLUETOOTH_CONNECT).";
                 com.google.android.material.dialog.MaterialAlertDialogBuilder builder =
                         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-                            .setTitle("Bluetooth Permission Required")
+                            .setTitle(getString(R.string.bluetooth_permission_title))
                             .setMessage(msg + "\n\nDevice: Android " + android.os.Build.VERSION.RELEASE + " (API " + android.os.Build.VERSION.SDK_INT + ")"
                                     + "\nRequired: " + (PrinterManager.isBluetoothPermissionRequired() ? "Yes (12+)" : "No (<12 normal)"))
-                            .setNegativeButton("Cancel", null);
+                            .setNegativeButton(getString(R.string.cancel), null);
                 if (permanentlyDenied) {
-                    builder.setPositiveButton("Open Settings", (d, w) -> openAppSettings());
+                    builder.setPositiveButton(getString(R.string.open_settings), (d, w) -> openAppSettings());
                 } else {
                     builder.setPositiveButton("Try Again", (d, w) -> {
                         if (bluetoothPermissionLauncher != null) bluetoothPermissionLauncher.launch(Manifest.permission.BLUETOOTH_CONNECT);
                     });
-                    builder.setNeutralButton("Open Settings", (d, w) -> openAppSettings());
+                    builder.setNeutralButton(getString(R.string.open_settings), (d, w) -> openAppSettings());
                 }
                 builder.show();
                 if (!PrinterManager.isBluetoothPermissionRequired()) {
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             Boolean c = result.get(Manifest.permission.BLUETOOTH_CONNECT);
             boolean granted = c != null && c;
             if (granted) {
-                Toast.makeText(this, "Bluetooth permission granted – printing enabled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.bluetooth_permission_granted), Toast.LENGTH_SHORT).show();
             } else {
                 // reuse same dialog
                 boolean permanentlyDenied = !shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_CONNECT);
@@ -72,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
                         ? "Bluetooth permission was denied permanently.\n\nOn Android 12+ this is \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow"
                         : "Bluetooth permission denied.";
                 new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-                        .setTitle("Bluetooth Permission Required")
+                        .setTitle(getString(R.string.bluetooth_permission_title))
                         .setMessage(msg)
-                        .setPositiveButton("Open Settings", (d, w) -> openAppSettings())
-                        .setNegativeButton("Cancel", null)
+                        .setPositiveButton(getString(R.string.open_settings), (d, w) -> openAppSettings())
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show();
             }
         });
@@ -229,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         if (controller != null) {
             controller.setAppearanceLightNavigationBars(false); // white icons on dark nav bar (md_inverse_surface bg via insets)
-            controller.setAppearanceLightStatusBars(true); // dark icons on light status bar
+            controller.setAppearanceLightStatusBars(false); // light icons on the dark top frame
         }
         // Navigation bar scrim handled by theme + insets, not window color (fixes overdraw)
     }

@@ -35,7 +35,7 @@ public class ConfirmItemAdapter extends ListAdapter<Object, RecyclerView.ViewHol
             if (o1 instanceof CartItem && o2 instanceof CartItem) {
                 CartItem a = (CartItem) o1;
                 CartItem b = (CartItem) o2;
-                return a.getProductId() == b.getProductId() && a.getSkuId() == b.getSkuId();
+                return Objects.equals(a.getLineKey(), b.getLineKey());
             }
             if (o1 instanceof ProductHeader && o2 instanceof ProductHeader) {
                 return Objects.equals(((ProductHeader) o1).productName, ((ProductHeader) o2).productName);
@@ -50,7 +50,8 @@ public class ConfirmItemAdapter extends ListAdapter<Object, RecyclerView.ViewHol
                 CartItem b = (CartItem) o2;
                 return a.getQuantity() == b.getQuantity()
                         && Objects.equals(a.getSkuName(), b.getSkuName())
-                        && Objects.equals(a.getPrice(), b.getPrice())
+                        && Objects.equals(a.getUnitPrice(), b.getUnitPrice())
+                        && Objects.equals(a.getCustomizationSummary(), b.getCustomizationSummary())
                         && Objects.equals(a.getLineTotal(), b.getLineTotal());
             }
             return true;
@@ -108,7 +109,9 @@ public class ConfirmItemAdapter extends ListAdapter<Object, RecyclerView.ViewHol
             CartItem ci = (CartItem) item;
             SkuHolder skuHolder = (SkuHolder) holder;
             skuHolder.skuName.setText(ci.getSkuName());
-            skuHolder.skuPrice.setText(CurrencyUtils.formatRp(ci.getPrice()));
+            String summary = ci.getCustomizationSummary();
+            String priceText = CurrencyUtils.formatRp(ci.getUnitPrice());
+            skuHolder.skuPrice.setText(summary.isEmpty() ? priceText : priceText + " · " + summary);
             skuHolder.quantity.setText("x" + ci.getQuantity());
             skuHolder.lineTotal.setText(CurrencyUtils.formatRp(ci.getLineTotal()));
         }

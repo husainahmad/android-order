@@ -15,6 +15,15 @@
         android:paddingEnd="8dp"
         android:paddingStart="16dp">
 
+        <ImageView
+            android:id="@+id/tabIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="6dp"
+            android:contentDescription="@null"
+            android:importantForAccessibility="no"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tabLabel"
             android:layout_width="wrap_content"

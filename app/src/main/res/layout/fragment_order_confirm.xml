@@ -35,7 +35,7 @@
         <ImageButton
             android:id="@+id/backButton"
             android:layout_width="@dimen/size_back_button"
-            android:layout_height="@dimen/height_button_small"
+            android:layout_height="44dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/close"
             android:src="@drawable/ic_close"
@@ -285,7 +285,7 @@
                             android:id="@+id/subtotalText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Rp.0"
+                            android:text="Rp0"
                             android:textColor="@color/text_primary"
                             android:textSize="@dimen/text_caption"
                             android:textStyle="bold" />
@@ -310,7 +310,7 @@
                             android:id="@+id/discountText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Rp.0"
+                            android:text="Rp0"
                             android:textColor="@color/status_void"
                             android:textSize="@dimen/text_caption"
                             android:textStyle="bold" />
@@ -342,7 +342,7 @@
                             android:id="@+id/totalText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Rp.0"
+                            android:text="Rp0"
                             android:textColor="@color/primary"
                             android:textSize="@dimen/text_title"
                             android:textStyle="bold" />
@@ -373,11 +373,11 @@
                     android:id="@+id/paymentTitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginStart="@dimen/spacing_xsmall"
                     android:text="@string/select_payment_method"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/text_title"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -393,7 +393,7 @@
                     android:id="@+id/paymentSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingEnd="@dimen/spacing_xsmall">
@@ -402,19 +402,19 @@
                         android:id="@+id/qrCard"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:background="@drawable/bg_payment_option"
                         android:clickable="true"
                         android:elevation="1dp"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="10dp">
 
                         <ImageView
                             android:id="@+id/qrImage"
-                            android:layout_width="@dimen/size_payment_icon"
-                            android:layout_height="@dimen/height_button_small"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:contentDescription="@string/qris"
                             android:src="@drawable/ic_qr"
                             android:tint="@color/accent" />
@@ -423,10 +423,10 @@
                             android:id="@+id/qrLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/qris"
                             android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_size_dialog_label"
+                            android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -434,19 +434,19 @@
                         android:id="@+id/cardCard"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:background="@drawable/bg_payment_option"
                         android:clickable="true"
                         android:elevation="1dp"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="10dp">
 
                         <ImageView
                             android:id="@+id/cardImage"
-                            android:layout_width="@dimen/size_payment_icon"
-                            android:layout_height="@dimen/height_button_small"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:contentDescription="@string/card"
                             android:src="@drawable/ic_card"
                             android:tint="@color/gray_button" />
@@ -455,10 +455,10 @@
                             android:id="@+id/cardLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/card"
                             android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_size_dialog_label" />
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -471,12 +471,12 @@
                         android:elevation="1dp"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="10dp">
 
                         <ImageView
                             android:id="@+id/cashImage"
-                            android:layout_width="@dimen/size_payment_icon"
-                            android:layout_height="@dimen/height_button_small"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:contentDescription="@string/cash"
                             android:src="@drawable/ic_cash"
                             android:tint="@color/gray_button" />
@@ -485,10 +485,10 @@
                             android:id="@+id/cashLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/cash"
                             android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_size_dialog_label" />
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -499,8 +499,8 @@
                     android:background="@drawable/bg_stepper"
                     android:elevation="1dp"
                     android:orientation="vertical"
-                    android:padding="@dimen/spacing_medium"
-                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:padding="12dp"
+                    android:layout_marginBottom="10dp"
                     android:visibility="gone">
 
                     <TextView
@@ -509,13 +509,13 @@
                         android:layout_height="wrap_content"
                         android:text="CASH PAYMENT"
                         android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_size_payment_subtitle"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="6dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -531,7 +531,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="TOTAL"
                                 android:textColor="@color/text_secondary"
-                                android:textSize="@dimen/text_size_payment_cash_label" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/cashTotalText"
@@ -539,14 +539,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:textColor="@color/text_primary"
-                                android:textSize="@dimen/text_size_payment_cash_amount"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <GridLayout
                                 android:id="@+id/cashGrid"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="8dp"
                                 android:alignmentMode="alignBounds"
                                 android:columnCount="3"
                                 android:useDefaultMargins="false">
@@ -554,117 +554,189 @@
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_medium"
+                                    android:layout_height="44dp"
                                     android:layout_columnWeight="1"
                                     android:layout_gravity="fill_horizontal"
-                                    android:layout_margin="4dp"
+                                    android:layout_margin="3dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:paddingStart="2dp"
+                                    android:paddingEnd="2dp"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="9sp"
+                                    app:autoSizeMaxTextSize="13sp"
+                                    app:autoSizeStepGranularity="1sp"
                                     android:tag="1000"
                                     android:text="1.000"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="12dp" />
 
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_medium"
+                                    android:layout_height="44dp"
                                     android:layout_columnWeight="1"
                                     android:layout_gravity="fill_horizontal"
-                                    android:layout_margin="4dp"
+                                    android:layout_margin="3dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:paddingStart="2dp"
+                                    android:paddingEnd="2dp"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="9sp"
+                                    app:autoSizeMaxTextSize="13sp"
+                                    app:autoSizeStepGranularity="1sp"
                                     android:tag="2000"
                                     android:text="2.000"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="12dp" />
 
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_medium"
+                                    android:layout_height="44dp"
                                     android:layout_columnWeight="1"
                                     android:layout_gravity="fill_horizontal"
-                                    android:layout_margin="4dp"
+                                    android:layout_margin="3dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:paddingStart="2dp"
+                                    android:paddingEnd="2dp"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="9sp"
+                                    app:autoSizeMaxTextSize="13sp"
+                                    app:autoSizeStepGranularity="1sp"
                                     android:tag="5000"
                                     android:text="5.000"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="12dp" />
 
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_medium"
+                                    android:layout_height="44dp"
                                     android:layout_columnWeight="1"
                                     android:layout_gravity="fill_horizontal"
-                                    android:layout_margin="4dp"
+                                    android:layout_margin="3dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:paddingStart="2dp"
+                                    android:paddingEnd="2dp"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="9sp"
+                                    app:autoSizeMaxTextSize="13sp"
+                                    app:autoSizeStepGranularity="1sp"
                                     android:tag="10000"
                                     android:text="10.000"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="12dp" />
 
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_medium"
+                                    android:layout_height="44dp"
                                     android:layout_columnWeight="1"
                                     android:layout_gravity="fill_horizontal"
-                                    android:layout_margin="4dp"
+                                    android:layout_margin="3dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:paddingStart="2dp"
+                                    android:paddingEnd="2dp"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="9sp"
+                                    app:autoSizeMaxTextSize="13sp"
+                                    app:autoSizeStepGranularity="1sp"
                                     android:tag="20000"
                                     android:text="20.000"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="12dp" />
 
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_medium"
+                                    android:layout_height="44dp"
                                     android:layout_columnWeight="1"
                                     android:layout_gravity="fill_horizontal"
-                                    android:layout_margin="4dp"
+                                    android:layout_margin="3dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:paddingStart="2dp"
+                                    android:paddingEnd="2dp"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="9sp"
+                                    app:autoSizeMaxTextSize="13sp"
+                                    app:autoSizeStepGranularity="1sp"
                                     android:tag="50000"
                                     android:text="50.000"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="12dp" />
 
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_medium"
+                                    android:layout_height="44dp"
                                     android:layout_columnWeight="1"
                                     android:layout_gravity="fill_horizontal"
-                                    android:layout_margin="4dp"
+                                    android:layout_margin="3dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:paddingStart="2dp"
+                                    android:paddingEnd="2dp"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="9sp"
+                                    app:autoSizeMaxTextSize="13sp"
+                                    app:autoSizeStepGranularity="1sp"
                                     android:tag="100000"
                                     android:text="100.000"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="12dp" />
 
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_medium"
+                                    android:layout_height="44dp"
                                     android:layout_columnWeight="1"
                                     android:layout_gravity="fill_horizontal"
-                                    android:layout_margin="4dp"
+                                    android:layout_margin="3dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:paddingStart="2dp"
+                                    android:paddingEnd="2dp"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="9sp"
+                                    app:autoSizeMaxTextSize="13sp"
+                                    app:autoSizeStepGranularity="1sp"
                                     android:tag="200000"
                                     android:text="200.000"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="12dp" />
 
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_medium"
+                                    android:layout_height="44dp"
                                     android:layout_columnWeight="1"
                                     android:layout_gravity="fill_horizontal"
-                                    android:layout_margin="4dp"
+                                    android:layout_margin="3dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:paddingStart="2dp"
+                                    android:paddingEnd="2dp"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="9sp"
+                                    app:autoSizeMaxTextSize="13sp"
+                                    app:autoSizeStepGranularity="1sp"
                                     android:tag="500000"
                                     android:text="500.000"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="12dp" />
                             </GridLayout>
@@ -679,12 +751,12 @@
                                     android:id="@+id/clearButton"
                                     style="@style/Widget.Material3.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_small"
+                                    android:layout_height="44dp"
                                     android:layout_marginEnd="8dp"
                                     android:layout_weight="1"
                                     android:text="CLEAR"
                                     android:textColor="@color/status_void"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press_outlined"
                                     app:cornerRadius="10dp"
                                     app:strokeColor="@color/status_void" />
@@ -693,11 +765,11 @@
                                     android:id="@+id/exactButton"
                                     style="@style/Widget.Material3.Button"
                                     android:layout_width="0dp"
-                                    android:layout_height="@dimen/height_button_small"
+                                    android:layout_height="44dp"
                                     android:layout_weight="1"
                                     android:text="EXACT"
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/text_size_dialog_button"
+                                    android:textSize="13sp"
                                     android:stateListAnimator="@animator/button_press"
                                     app:backgroundTint="@color/accent"
                                     app:cornerRadius="10dp" />
@@ -716,7 +788,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="UANG DITERIMA"
                                 android:textColor="@color/text_secondary"
-                                android:textSize="@dimen/text_size_payment_cash_label" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/cashReceivedText"
@@ -724,16 +796,16 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:textColor="@color/text_primary"
-                                android:textSize="@dimen/text_size_payment_cash_amount"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginTop="10dp"
                                 android:text="KEMBALIAN"
                                 android:textColor="@color/text_secondary"
-                                android:textSize="@dimen/text_size_payment_cash_label" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/cashChangeText"
@@ -741,7 +813,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:textColor="@color/accent"
-                                android:textSize="@dimen/text_size_payment_cash_amount"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -755,17 +827,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="end|center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/spacing_medium">
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingEnd="@dimen/spacing_medium"
+        android:paddingBottom="@dimen/spacing_medium">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/cancelButton"
             style="@style/Widget.KopiHarmoni.Button.Outlined"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/height_button"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
             android:layout_marginEnd="@dimen/spacing_small"
-            android:layout_weight="1"
+            android:minWidth="120dp"
             android:text="@string/cancel"
             android:textColor="@color/text_primary"
             android:textSize="@dimen/text_button"
@@ -775,11 +850,11 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/proceedButton"
             style="@style/Widget.KopiHarmoni.Button.Primary"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/height_button"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
             android:layout_marginStart="@dimen/spacing_small"
-            android:layout_weight="1"
             android:enabled="true"
+            android:minWidth="160dp"
             android:text="@string/pay"
             android:textColor="@color/white"
             android:textSize="@dimen/text_button"

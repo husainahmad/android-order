@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ===== Cafe POS palette (dark) ===== -->
+    <color name="md_primary">#FFB59A</color>
+    <color name="md_on_primary">#3A1A12</color>
+    <color name="md_primary_container">#5A2418</color>
+    <color name="md_on_primary_container">#FFEDE5</color>
+    <color name="md_secondary">#E0C2B5</color>
+    <color name="md_on_secondary">#3A2318</color>
+    <color name="md_secondary_container">#4A2E20</color>
+    <color name="md_on_secondary_container">#FFEDE5</color>
+    <color name="md_tertiary">#FF8A65</color>
+    <color name="md_on_tertiary">#3B0D00</color>
+    <color name="md_tertiary_container">#5A1F00</color>
+    <color name="md_on_tertiary_container">#FFDBC8</color>
+    <color name="md_error">#FFB4AB</color>
+    <color name="md_on_error">#690005</color>
+    <color name="md_error_container">#93000A</color>
+    <color name="md_on_error_container">#FFDAD6</color>
+
+    <color name="md_surface">#1F1815</color>
+    <color name="md_on_surface">#F7F0EB</color>
+    <color name="md_surface_variant">#2C221E</color>
+    <color name="md_on_surface_variant">#C9B8AE</color>
+    <color name="md_outline">#3D302A</color>
+    <color name="md_outline_variant">#332823</color>
+    <color name="outline_strong">#4A3A33</color>
+    <color name="md_background">#15100E</color>
+    <color name="md_on_background">#F7F0EB</color>
+    <color name="md_inverse_surface">#F7F0EB</color>
+    <color name="md_inverse_on_surface">#171311</color>
+    <color name="md_inverse_primary">#8A4A2A</color>
+
+    <color name="md_surface_dim">#15100E</color>
+    <color name="md_surface_bright">#3A312B</color>
+    <color name="md_surface_container_lowest">#171311</color>
+    <color name="md_surface_container_low">#241C18</color>
+    <color name="md_surface_container">#2A211D</color>
+    <color name="md_surface_container_high">#332823</color>
+    <color name="md_surface_container_highest">#3D302A</color>
+
+    <color name="shadow">#000000</color>
+    <color name="scrim">#000000</color>
+
+    <!-- ===== Brand / legacy palette ===== -->
+    <color name="primary">#3E2A25</color>
+    <color name="primary_dark">#1E1210</color>
+    <color name="primary_light">#7A5E54</color>
+    <color name="secondary">#C9B8AE</color>
+    <color name="secondary_dark">#2A1810</color>
+    <color name="accent">#FF8A65</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="text_primary">#F7F0EB</color>
+    <color name="text_secondary">#C9B8AE</color>
+    <color name="divider">#3D302A</color>
+    <color name="bg_light">#15100E</color>
+    <color name="bg_white">#1F1815</color>
+    <color name="row_even">#1F1815</color>
+    <color name="row_odd">#241C18</color>
+    <color name="status_confirmed">#FFB74D</color>
+    <color name="status_paid">#6FCF97</color>
+    <color name="status_void">#FF6B6B</color>
+    <color name="blue_action">#C9B8AE</color>
+    <color name="gray_button">#8C7A70</color>
+
+    <!-- Overlay tints -->
+    <color name="scrim_overlay">#99000000</color>
+    <color name="accent_container">#5A2418</color>
+
+    <!-- Orders screen tokens -->
+    <color name="sidebar_bg">#14100E</color>
+    <color name="sidebar_text">#F7F0EB</color>
+    <color name="sidebar_text_muted">#C9B8AE</color>
+    <color name="payment_unpaid_bg">#4A3A1E</color>
+    <color name="payment_badge_bg">#332823</color>
+    <color name="status_paid_bg">#1E3A2A</color>
+    <color name="status_confirmed_bg">#4A3A1E</color>
+    <color name="status_void_bg">#4A1E1E</color>
+</resources>

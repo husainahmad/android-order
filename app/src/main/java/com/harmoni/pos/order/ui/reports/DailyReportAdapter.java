@@ -85,7 +85,6 @@ public class DailyReportAdapter extends RecyclerView.Adapter<DailyReportAdapter.
         }
 
         void bind(DailyReportViewModel.Row row, int position) {
-            itemView.setBackgroundResource(position % 2 == 0 ? R.color.row_even : R.color.row_odd);
             date.setText(row.date);
             product.setText(row.productName);
             product.setTooltipText(row.productName);

@@ -14,13 +14,13 @@
     <dimen name="width_button_icon_dense">44dp</dimen>
 
     <!-- Category - enlarged touch target -->
-    <dimen name="height_category_card">112dp</dimen>
-    <dimen name="size_category_icon">54dp</dimen>
+    <dimen name="height_category_card">96dp</dimen>
+    <dimen name="size_category_icon">44dp</dimen>
     <dimen name="height_category_name">36dp</dimen>
     <dimen name="size_selected_icon">20dp</dimen>
 
     <!-- Order tab -->
-    <dimen name="height_order_tab">52dp</dimen>
+    <dimen name="height_order_tab">44dp</dimen>
 
     <!-- Product -->
     <dimen name="height_product_name">52dp</dimen>
@@ -49,8 +49,8 @@
     <dimen name="size_empty_state_icon">96dp</dimen>
 
     <!-- Login -->
-    <dimen name="size_login_logo">112dp</dimen>
-    <dimen name="size_login_logo_inner">64dp</dimen>
+    <dimen name="size_login_logo">88dp</dimen>
+    <dimen name="size_login_logo_inner">44dp</dimen>
 
     <!-- Order confirm -->
     <dimen name="size_back_button">52dp</dimen>
@@ -60,12 +60,12 @@
     <dimen name="height_payment_action_button">60dp</dimen>
 
     <!-- Item rows -->
-    <dimen name="height_cart_row">68dp</dimen>
-    <dimen name="height_cart_qty_container">52dp</dimen>
-    <dimen name="width_cart_quantity">60dp</dimen>
-    <dimen name="width_cart_line_total">112dp</dimen>
+    <dimen name="height_cart_row">60dp</dimen>
+    <dimen name="height_cart_qty_container">48dp</dimen>
+    <dimen name="width_cart_quantity">48dp</dimen>
+    <dimen name="width_cart_line_total">96dp</dimen>
     <dimen name="height_sku_row">64dp</dimen>
-    <dimen name="height_order_item">60dp</dimen>
+    <dimen name="height_order_item">62dp</dimen>
     <dimen name="height_daily_report_item">52dp</dimen>
     <dimen name="height_sales_report_item">52dp</dimen>
 
@@ -128,4 +128,5 @@
 
     <!-- Category column wider for tablet -->
     <dimen name="width_tab">96dp</dimen>
+    <dimen name="sidebar_width">112dp</dimen>
 </resources>

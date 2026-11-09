@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Large 10"+ tablets / Desktop mode (800dp+ smallest width) -->
-    <dimen name="height_product_image">168dp</dimen>
+    <dimen name="height_product_image">156dp</dimen>
     <dimen name="height_card">112dp</dimen>
     <dimen name="height_button">64dp</dimen>
     <dimen name="height_button_large">64dp</dimen>
@@ -14,13 +14,13 @@
     <dimen name="width_button_icon_dense">48dp</dimen>
 
     <!-- Category - enlarged touch target -->
-    <dimen name="height_category_card">118dp</dimen>
-    <dimen name="size_category_icon">58dp</dimen>
+    <dimen name="height_category_card">100dp</dimen>
+    <dimen name="size_category_icon">46dp</dimen>
     <dimen name="height_category_name">38dp</dimen>
     <dimen name="size_selected_icon">20dp</dimen>
 
     <!-- Order tab -->
-    <dimen name="height_order_tab">56dp</dimen>
+    <dimen name="height_order_tab">44dp</dimen>
 
     <!-- Product -->
     <dimen name="height_product_name">56dp</dimen>
@@ -49,8 +49,8 @@
     <dimen name="size_empty_state_icon">112dp</dimen>
 
     <!-- Login -->
-    <dimen name="size_login_logo">128dp</dimen>
-    <dimen name="size_login_logo_inner">72dp</dimen>
+    <dimen name="size_login_logo">88dp</dimen>
+    <dimen name="size_login_logo_inner">44dp</dimen>
 
     <!-- Order confirm -->
     <dimen name="size_back_button">56dp</dimen>
@@ -60,10 +60,10 @@
     <dimen name="height_payment_action_button">64dp</dimen>
 
     <!-- Item rows -->
-    <dimen name="height_cart_row">72dp</dimen>
-    <dimen name="height_cart_qty_container">56dp</dimen>
-    <dimen name="width_cart_quantity">64dp</dimen>
-    <dimen name="width_cart_line_total">120dp</dimen>
+    <dimen name="height_cart_row">62dp</dimen>
+    <dimen name="height_cart_qty_container">48dp</dimen>
+    <dimen name="width_cart_quantity">48dp</dimen>
+    <dimen name="width_cart_line_total">100dp</dimen>
     <dimen name="height_sku_row">68dp</dimen>
     <dimen name="height_order_item">64dp</dimen>
     <dimen name="height_daily_report_item">56dp</dimen>
@@ -128,4 +128,5 @@
 
     <!-- Category column wider -->
     <dimen name="width_tab">104dp</dimen>
+    <dimen name="sidebar_width">112dp</dimen>
 </resources>

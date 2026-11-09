@@ -31,7 +31,9 @@ import com.harmoni.pos.order.data.remote.ApiClient;
 import com.harmoni.pos.order.data.remote.ConfigManager;
 import com.harmoni.pos.order.data.remote.TokenManager;
 import com.harmoni.pos.order.databinding.FragmentSettingsBinding;
+import com.harmoni.pos.order.LocalizedActivity;
 import com.harmoni.pos.order.print.PrinterManager;
+import com.harmoni.pos.order.util.LanguageManager;
 
 import androidx.navigation.Navigation;
 
@@ -47,7 +49,7 @@ public class SettingsDialogFragment extends DialogFragment {
                     if (granted) {
                         showBluetoothDevices();
                     } else {
-                        setPrinterStatus("Bluetooth permission denied");
+                        setPrinterStatus(getString(R.string.bluetooth_permission_denied));
                         showBluetoothPermissionDeniedDialog(false);
                     }
                 }
@@ -59,7 +61,7 @@ public class SettingsDialogFragment extends DialogFragment {
                 if (granted && pendingPrintText != null) {
                     doPrint(pendingPrintText);
                 } else if (binding != null) {
-                    setPrinterStatus("Bluetooth permission denied – tap Open Settings to enable");
+                    setPrinterStatus(getString(R.string.bluetooth_permission_denied));
                     showBluetoothPermissionDeniedDialog(true);
                 }
             });
@@ -73,20 +75,20 @@ public class SettingsDialogFragment extends DialogFragment {
                 ? "Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\" (not \"Permissions\").\n\nPlease enable it in:\nApp info → Permissions → Nearby devices → Allow"
                 : "Bluetooth printing needs \"Nearby devices\" (BLUETOOTH_CONNECT) permission.\n\nPlease grant it to continue.";
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Bluetooth Permission Required")
+                .setTitle(getString(R.string.bluetooth_permission_title))
                 .setMessage(message)
-                .setNegativeButton("Cancel", null);
+                .setNegativeButton(getString(R.string.cancel), null);
         if (permanentlyDenied) {
-            builder.setPositiveButton("Open Settings", (d, w) -> openAppSettings());
+            builder.setPositiveButton(getString(R.string.open_settings), (d, w) -> openAppSettings());
         } else {
-            builder.setPositiveButton("Grant", (d, w) -> {
+            builder.setPositiveButton(getString(R.string.grant), (d, w) -> {
                 if (forPrint) {
                     if (pendingPrintText != null) bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
                 } else {
                     bluetoothPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
                 }
             });
-            builder.setNeutralButton("Open Settings", (d, w) -> openAppSettings());
+            builder.setNeutralButton(getString(R.string.open_settings), (d, w) -> openAppSettings());
         }
         builder.show();
         // Also explain why Settings might say "No permission requested"
@@ -111,7 +113,7 @@ public class SettingsDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        return com.harmoni.pos.order.util.DialogFrame.wrap(inflater.getContext(), binding.getRoot());
     }
 
     @Override
@@ -154,11 +156,12 @@ public class SettingsDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.usernameText.setText(TokenManager.getUsername());
-        binding.storeText.setText("Store : " + TokenManager.getStoreName());
-        binding.brandText.setText("Brand : " + TokenManager.getBrandName());
+        binding.storeText.setText(getString(R.string.store_label, TokenManager.getStoreName()));
+        binding.brandText.setText(getString(R.string.brand_label, TokenManager.getBrandName()));
 
         loadServerConfig();
         loadPrinterConfig();
+        loadAppLanguage();
         setupActions();
         setupHideKeyboardOnTapOutside();
         updatePermissionStatus();
@@ -167,16 +170,43 @@ public class SettingsDialogFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT);
-            getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
+        if (getDialog() == null || getDialog().getWindow() == null) return;
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        float density = getResources().getDisplayMetrics().density;
+        int width = Math.min((int) (screenWidth * 0.86f), (int) (960 * density));
+        int height = Math.min((int) (screenHeight * 0.90f), (int) (860 * density));
+        getDialog().getWindow().setLayout(width, height);
+        com.harmoni.pos.order.util.DialogFrame.dimBehind(getDialog().getWindow(), 0.35f);
     }
 
     private void loadServerConfig() {
         binding.serverHostInput.setText(ConfigManager.getHost());
         binding.serverPortInput.setText(String.valueOf(ConfigManager.getPort()));
+    }
+
+    private void loadAppLanguage() {
+        String code = LanguageManager.get(requireContext());
+        int checkedId;
+        switch (code) {
+            case "en": checkedId = R.id.appLangEn; break;
+            case "in": checkedId = R.id.appLangIn; break;
+            default: checkedId = R.id.appLangSystem; break;
+        }
+        binding.appLanguageGroup.check(checkedId);
+        binding.appLanguageGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            String selected = LanguageManager.SYSTEM;
+            if (checkedIds.contains(R.id.appLangEn)) selected = "en";
+            else if (checkedIds.contains(R.id.appLangIn)) selected = "in";
+            if (selected.equals(LanguageManager.get(requireContext()))) return;
+            LanguageManager.set(requireContext(), selected);
+            // Rebuild the screen in the new language. The dialog itself closes so the
+            // activity behind it is recreated against the new resources.
+            if (getActivity() instanceof LocalizedActivity) {
+                dismiss();
+                ((LocalizedActivity) getActivity()).applyLanguageChange();
+            }
+        });
     }
 
     private void loadPrinterConfig() {
@@ -338,7 +368,7 @@ public class SettingsDialogFragment extends DialogFragment {
         int port = parseInt(binding.serverPortInput, 8080);
         ConfigManager.save(host, port);
         ApiClient.reset();
-        binding.serverStatusText.setText("Saved. Server: " + ConfigManager.getBaseOrder());
+        binding.serverStatusText.setText(getString(R.string.server_saved, ConfigManager.getBaseOrder()));
     }
 
     private void savePrinter() {
@@ -346,7 +376,7 @@ public class SettingsDialogFragment extends DialogFragment {
         String address = text(binding.printerAddressInput);
         int port = parseInt(binding.printerPortInput, 9100);
         PrinterManager.save(type, address, port);
-        binding.printerStatusText.setText("Printer saved: " + type);
+        binding.printerStatusText.setText(getString(R.string.printer_saved, type));
     }
 
     private String currentPrinterType() {
@@ -369,7 +399,7 @@ public class SettingsDialogFragment extends DialogFragment {
     private void showBluetoothDevices() {
         List<BluetoothDevice> devices = PrinterManager.getBondedBluetoothDevices();
         if (devices.isEmpty()) {
-            setPrinterStatus("No bonded Bluetooth devices found");
+            setPrinterStatus(getString(R.string.no_bluetooth_devices));
             return;
         }
         String[] names = new String[devices.size()];
@@ -377,13 +407,13 @@ public class SettingsDialogFragment extends DialogFragment {
             names[i] = devices.get(i).getName() + "\n" + devices.get(i).getAddress();
         }
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Select Bluetooth Printer")
+                .setTitle(getString(R.string.select_bluetooth_printer))
                 .setItems(names, (d, which) -> {
                     String address = devices.get(which).getAddress();
                     binding.printerAddressInput.setText(address);
                     binding.printerTypeGroup.check(R.id.bluetoothChip);
                     savePrinter();
-                    setPrinterStatus("Bluetooth printer selected: " + address);
+                    setPrinterStatus(getString(R.string.bluetooth_printer_selected, address));
                 })
                 .show();
     }
@@ -391,7 +421,7 @@ public class SettingsDialogFragment extends DialogFragment {
     private void onUsbClick() {
         List<UsbDevice> devices = PrinterManager.getUsbPrinterDevices();
         if (devices.isEmpty()) {
-            setPrinterStatus("No USB printer detected");
+            setPrinterStatus(getString(R.string.no_usb_printer));
             return;
         }
         String[] names = new String[devices.size()];
@@ -399,7 +429,7 @@ public class SettingsDialogFragment extends DialogFragment {
             names[i] = PrinterManager.usbDeviceDescription(devices.get(i));
         }
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Select USB Printer")
+                .setTitle(getString(R.string.select_usb_printer))
                 .setItems(names, (d, which) -> {
                     UsbDevice device = devices.get(which);
                     PrinterManager.saveUsbDevice(PrinterManager.usbDeviceDescription(device));
@@ -407,7 +437,7 @@ public class SettingsDialogFragment extends DialogFragment {
                     binding.printerAddressInput.setText(PrinterManager.usbDeviceDescription(device));
                     savePrinter();
                     requestUsbThen(device, () ->
-                            setPrinterStatus("USB printer granted"));
+                            setPrinterStatus(getString(R.string.usb_printer_granted)));
                 })
                 .show();
     }
@@ -419,7 +449,7 @@ public class SettingsDialogFragment extends DialogFragment {
         }
         PrinterManager.requestUsbPermission(requireActivity(), device,
                 onGranted,
-                () -> setPrinterStatus("USB permission denied"));
+                () -> setPrinterStatus(getString(R.string.usb_permission_denied)));
     }
 
     private void onTestPrint() {
@@ -452,12 +482,12 @@ public class SettingsDialogFragment extends DialogFragment {
                 if (mac == null || mac.trim().isEmpty()) mac = inputMac;
             }
             if (mac == null || mac.trim().isEmpty()) {
-                setPrinterStatus("Bluetooth printer not selected");
+                setPrinterStatus(getString(R.string.bluetooth_printer_not_selected));
                 new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Bluetooth Printer Not Selected")
+                        .setTitle(getString(R.string.bluetooth_printer_not_selected))
                         .setMessage("No Bluetooth MAC saved.\n\nTap \"Bluetooth Devices\" to pick a paired printer (ensure printer is paired in Android Settings → Bluetooth), then tap Test Print again.\n\nNearby bonded: " + getBondedNamesForMessage())
-                        .setPositiveButton("Bluetooth Devices", (d, w) -> onBluetoothClick())
-                        .setNegativeButton("Cancel", null)
+                        .setPositiveButton(getString(R.string.bluetooth_devices), (d, w) -> onBluetoothClick())
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show();
                 return;
             }
@@ -482,31 +512,31 @@ public class SettingsDialogFragment extends DialogFragment {
     }
 
     private void doPrint(String text) {
-        setPrinterStatus("Printing...");
+        setPrinterStatus(getString(R.string.printing));
         PrinterManager.print(text, new PrinterManager.PrintCallback() {
             @Override
             public void onSuccess() {
-                setPrinterStatus("Print sent successfully");
+                setPrinterStatus(getString(R.string.print_sent));
             }
 
             @Override
             public void onError(String message) {
-                setPrinterStatus("Print failed: " + message);
+                setPrinterStatus(getString(R.string.print_failed, message));
                 if (message != null && message.toLowerCase().contains("not selected")) {
                     new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Bluetooth Printer Not Selected")
+                            .setTitle(getString(R.string.bluetooth_printer_not_selected))
                             .setMessage(message + "\n\nGo to Bluetooth Devices to select a paired printer.")
-                            .setPositiveButton("Bluetooth Devices", (d, w) -> onBluetoothClick())
-                            .setNegativeButton("Close", null)
+                            .setPositiveButton(getString(R.string.bluetooth_devices), (d, w) -> onBluetoothClick())
+                            .setNegativeButton(getString(R.string.close), null)
                             .show();
                 } else if (message != null && message.toLowerCase().contains("bluetooth is off")) {
                     new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Bluetooth is OFF")
+                            .setTitle(getString(R.string.bluetooth_is_off))
                             .setMessage(message)
-                            .setPositiveButton("Open Bluetooth Settings", (d, w) -> {
+                            .setPositiveButton(getString(R.string.open_bluetooth_settings), (d, w) -> {
                                 try { startActivity(new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS)); } catch (Exception ignored) {}
                             })
-                            .setNegativeButton("Close", null)
+                            .setNegativeButton(getString(R.string.close), null)
                             .show();
                 }
             }

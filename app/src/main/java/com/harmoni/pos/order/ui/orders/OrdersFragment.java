@@ -33,14 +33,21 @@ import com.harmoni.pos.order.ui.reports.SalesReportDialogFragment;
 import com.harmoni.pos.order.ui.settings.SettingsDialogFragment;
 import com.harmoni.pos.order.util.CurrencyUtils;
 
+import com.google.android.material.chip.ChipGroup;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class OrdersFragment extends Fragment {
 
+    private enum OrderFilter { ALL, PAID, CONFIRMED, VOID }
+
     private FragmentOrdersBinding binding;
     private OrdersViewModel viewModel;
     private OrderAdapter orderAdapter;
+    private final List<Order> allOrders = new ArrayList<>();
+    private OrderFilter selectedFilter = OrderFilter.ALL;
 
     private String pendingSettlementText;
     private final ActivityResultLauncher<String> bluetoothPrintPermissionLauncher =
@@ -51,19 +58,19 @@ public class OrdersFragment extends Fragment {
                     boolean permanentlyDenied = !shouldShowRequestPermissionRationale(android.Manifest.permission.BLUETOOTH_CONNECT);
                     if (permanentlyDenied) {
                         new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Bluetooth Permission Required")
-                                .setMessage("Bluetooth permission was denied permanently.\n\nOn Android 12+ this appears as \"Nearby devices\".\nEnable in: App info → Permissions → Nearby devices → Allow")
-                                .setPositiveButton("Open Settings", (d, w) -> {
+                                .setTitle(getString(R.string.bluetooth_permission_title))
+                                .setMessage(getString(R.string.bluetooth_permission_permanently_denied))
+                                .setPositiveButton(getString(R.string.open_settings), (d, w) -> {
                                     try {
                                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                         intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null));
                                         startActivity(intent);
                                     } catch (Exception e) { startActivity(new Intent(Settings.ACTION_SETTINGS)); }
                                 })
-                                .setNegativeButton("Cancel", null)
+                                .setNegativeButton(getString(R.string.cancel), null)
                                 .show();
                     } else {
-                        Toast.makeText(requireContext(), "Bluetooth permission denied – enable in App Settings > Permissions", Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_denied), Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -81,9 +88,10 @@ public class OrdersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(OrdersViewModel.class);
 
-        com.harmoni.pos.order.util.UiUtils.applyStatusBarTopInset(binding.ordersToolbar);
         setupRecyclers();
         setupButtons();
+        setupFilters();
+        setupScrollListener();
         observe();
     }
 
@@ -109,15 +117,71 @@ public class OrdersFragment extends Fragment {
         binding.salesReportButton.setOnClickListener(v ->
                 new SalesReportDialogFragment().show(getParentFragmentManager(), "sales_report"));
         binding.settlementButton.setOnClickListener(v -> loadSettlement());
-        binding.refreshButton.setOnClickListener(v -> viewModel.loadOrders());
+        binding.refreshButton.setOnClickListener(v -> viewModel.refresh());
         binding.settingsButton.setOnClickListener(v ->
                 new SettingsDialogFragment().show(getParentFragmentManager(), "settings"));
         binding.logoutButton.setOnClickListener(v -> logout());
     }
 
+    private void setupFilters() {
+        binding.orderFilterGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            if (checkedIds.contains(R.id.filterPaid)) selectedFilter = OrderFilter.PAID;
+            else if (checkedIds.contains(R.id.filterConfirmed)) selectedFilter = OrderFilter.CONFIRMED;
+            else if (checkedIds.contains(R.id.filterVoid)) selectedFilter = OrderFilter.VOID;
+            else selectedFilter = OrderFilter.ALL;
+            applyFilters();
+        });
+    }
+
+    private void setupScrollListener() {
+        binding.ordersRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy <= 0) return;
+                LinearLayoutManager layoutManager =
+                        (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager == null) return;
+                int lastVisible = layoutManager.findLastVisibleItemPosition();
+                if (lastVisible >= orderAdapter.getItemCount() - 5) {
+                    viewModel.loadMore();
+                }
+            }
+        });
+    }
+
+    private void applyFilters() {
+        List<Order> filtered = new ArrayList<>();
+        for (Order order : allOrders) {
+            if (matchesFilter(order)) filtered.add(order);
+        }
+        orderAdapter.submitList(filtered);
+        boolean empty = filtered.isEmpty();
+        binding.ordersRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
+        binding.ordersEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
+        if (empty) {
+            boolean filtering = selectedFilter != OrderFilter.ALL;
+            binding.ordersEmptyView.emptyTitle.setText(filtering
+                    ? R.string.no_orders_match : R.string.no_more_orders);
+            binding.ordersEmptyView.emptySubtitle.setText(filtering
+                    ? "" : getString(R.string.no_more_orders_subtitle));
+        }
+    }
+
+    private boolean matchesFilter(Order order) {
+        switch (selectedFilter) {
+            case PAID: return order.isPaid();
+            case CONFIRMED: return order.isConfirmed();
+            case VOID: return order.isVoid();
+            default: return true;
+        }
+    }
+
     private void observe() {
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading -> {
             binding.progressBar.setVisibility(Boolean.TRUE.equals(loading) ? View.VISIBLE : View.GONE);
+        });
+        viewModel.getLoadingMore().observe(getViewLifecycleOwner(), loadingMore -> {
+            binding.progressBar.setVisibility(Boolean.TRUE.equals(loadingMore) ? View.VISIBLE : View.GONE);
         });
 
         viewModel.getError().observe(getViewLifecycleOwner(), message -> {
@@ -137,15 +201,9 @@ public class OrdersFragment extends Fragment {
     }
 
     private void onOrdersLoaded(List<Order> orders) {
-        orderAdapter.submitList(orders);
-        boolean empty = orders == null || orders.isEmpty();
-        binding.ordersRecycler.setVisibility(empty ? View.GONE : View.VISIBLE);
-        binding.ordersEmptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
-        if (empty) {
-            binding.ordersEmptyView.emptyIcon.setImageResource(R.drawable.ic_empty_orders);
-            binding.ordersEmptyView.emptyTitle.setText(R.string.no_open_orders);
-            binding.ordersEmptyView.emptySubtitle.setText(R.string.no_open_orders_subtitle);
-        }
+        allOrders.clear();
+        if (orders != null) allOrders.addAll(orders);
+        applyFilters();
     }
 
     private void openOrderDetail(Order order) {
@@ -158,25 +216,9 @@ public class OrdersFragment extends Fragment {
         viewModel.loadSettlement(new OrdersViewModel.LoadCallback<Settlement>() {
             @Override
             public void onSuccess(Settlement data) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Total Orders : ").append(data.getTotalOrders()).append("\n");
-                sb.append("Total Sales : ").append(CurrencyUtils.formatRp2(data.getTotalSales())).append("\n");
-                sb.append("Total Discounts : ").append(CurrencyUtils.formatRp2(data.getTotalDiscounts())).append("\n");
-                sb.append("Total Tax : ").append(CurrencyUtils.formatRp2(data.getTotalTax())).append("\n");
-                sb.append("Total Net Sales : ").append(CurrencyUtils.formatRp2(data.getTotalNetSales())).append("\n\n");
-                if (data.getPaymentBreakdown() != null) {
-                    for (Map.Entry<String, Double> entry : data.getPaymentBreakdown().entrySet()) {
-                        sb.append(entry.getKey()).append(" : ")
-                                .append(CurrencyUtils.formatRp2(entry.getValue())).append("\n");
-                    }
-                }
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.settlement)
-                        .setMessage(sb.toString())
-                        .setPositiveButton(R.string.print, (d, w) ->
-                                printSettlement(data))
-                        .setNegativeButton(R.string.close, null)
-                        .show();
+                SettlementDialog dialog = SettlementDialog.newInstance(data);
+                dialog.setOnPrintListener(OrdersFragment.this::printSettlement);
+                dialog.show(getParentFragmentManager(), "settlement");
             }
 
             @Override
@@ -210,7 +252,7 @@ public class OrdersFragment extends Fragment {
                 && !PrinterManager.isBluetoothPermissionGranted()) {
             pendingSettlementText = text;
             bluetoothPrintPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
-            Toast.makeText(requireContext(), "Requesting Bluetooth permission…", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.bluetooth_permission_requesting), Toast.LENGTH_SHORT).show();
             return;
         }
         doPrintSettlement(text);
@@ -226,7 +268,7 @@ public class OrdersFragment extends Fragment {
 
             @Override
             public void onError(String message) {
-                Toast.makeText(requireContext(), "Print failed: " + message,
+                Toast.makeText(requireContext(), getString(R.string.print_failed, message),
                         Toast.LENGTH_LONG).show();
             }
         });

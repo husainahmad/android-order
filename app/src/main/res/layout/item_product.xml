@@ -3,18 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/productCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/spacing_xsmall"
+    android:layout_margin="4dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    app:cardBackgroundColor="@color/md_surface_container_high"
+    app:cardBackgroundColor="@color/md_surface"
     app:cardCornerRadius="12dp"
-    app:cardElevation="1dp"
+    app:cardElevation="0dp"
     app:rippleColor="@color/md_primary_container"
-    app:strokeColor="@color/md_outline_variant"
-    app:strokeWidth="1dp">
+    app:strokeColor="@color/md_outline"
+    app:strokeWidth="0.5dp">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -25,7 +26,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Product Image with Shimmer — hardware accelerated via Facebook Shimmer -->
+            <!-- Product image -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_product_image"
@@ -41,7 +42,7 @@
                     app:shimmer_base_alpha="1.0"
                     app:shimmer_base_color="@color/md_surface_variant"
                     app:shimmer_highlight_alpha="0.7"
-                    app:shimmer_highlight_color="@color/white"
+                    app:shimmer_highlight_color="@color/md_surface"
                     app:shimmer_duration="1100"
                     app:shimmer_direction="left_to_right"
                     app:shimmer_shape="linear"
@@ -53,7 +54,6 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/shimmer_bg" />
 
-                    <!-- inner highlight view kept for code compat (hidden, shimmer driven by FrameLayout) -->
                     <View
                         android:id="@+id/shimmerHighlight"
                         android:layout_width="0dp"
@@ -66,11 +66,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/product"
-                    android:padding="6dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_default_product"
                     android:visibility="gone"
                     tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/productMonogram"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_product_monogram"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:importantForAccessibility="no"
+                    android:textColor="@color/accent"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:text="CM" />
 
                 <ProgressBar
                     android:id="@+id/imageProgress"
@@ -81,74 +94,89 @@
                     android:contentDescription="@string/loading"
                     android:visibility="gone" />
 
-                <!-- Badge overlay -->
                 <TextView
                     android:id="@+id/productBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|start"
-                    android:layout_margin="@dimen/spacing_small"
+                    android:layout_margin="6dp"
                     android:background="@drawable/bg_badge_new"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"
                     android:text="@string/badge_new"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_badge"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
-                <!-- Variant dots overlay -->
-                <LinearLayout
-                    android:id="@+id/variantDotsContainer"
+                <TextView
+                    android:id="@+id/productQtyBadge"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|start"
-                    android:layout_margin="@dimen/spacing_small"
-                    android:background="@drawable/bg_variant_overlay"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="gone" />
+                    android:layout_height="24dp"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_qty_badge"
+                    android:gravity="center"
+                    android:minWidth="24dp"
+                    android:paddingHorizontal="6dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_small"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:text="2" />
 
             </FrameLayout>
 
-            <!-- Product Name — compact -->
+            <!-- Name: fixed two lines -->
             <TextView
                 android:id="@+id/productName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="@dimen/spacing_xsmall"
-                android:layout_marginEnd="@dimen/spacing_small"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="8dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:minHeight="32dp"
+                android:minHeight="36dp"
                 android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleSmall"
                 android:textColor="@color/text_primary"
                 android:tooltipText="@string/product" />
 
-            <!-- Price + Add — compact -->
-            <RelativeLayout
+            <!-- Price and add action on one row; price never truncates -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginEnd="@dimen/spacing_small"
-                android:layout_marginBottom="6dp">
+                android:layout_marginEnd="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/productPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.KopiHarmoni.Price"
+                    android:textColor="@color/accent"
+                    android:tooltipText="@string/product" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/productAddButton"
                     style="@style/Widget.Material3.Button"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="6dp"
+                    android:contentDescription="@string/add_to_cart"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:minWidth="40dp"
                     android:minHeight="40dp"
-                    android:text=""
-                    android:contentDescription="@string/add_to_cart"
-                    android:tooltipText="@string/add_to_cart"
                     android:stateListAnimator="@animator/button_press"
+                    android:text=""
+                    android:tooltipText="@string/add_to_cart"
                     app:backgroundTint="@color/accent"
                     app:cornerRadius="10dp"
                     app:icon="@drawable/ic_add"
@@ -156,31 +184,31 @@
                     app:iconPadding="0dp"
                     app:iconSize="18dp"
                     app:iconTint="@color/white" />
+            </LinearLayout>
 
-                <TextView
-                    android:id="@+id/productPrice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/productAddButton"
-                    android:layout_marginEnd="@dimen/spacing_xsmall"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
-                    android:textColor="@color/accent"
-                    android:textStyle="bold"
-                    android:tooltipText="@string/product" />
-
-            </RelativeLayout>
+            <!-- Variant info as text, e.g. "Hot / Ice" -->
+            <TextView
+                android:id="@+id/productVariantInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:minHeight="16dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_small" />
 
         </LinearLayout>
 
-        <!-- Out of stock overlay -->
+        <!-- Sold out overlay -->
         <View
             android:id="@+id/outOfStockOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/scrim_overlay"
+            android:background="@drawable/bg_sold_out_overlay"
             android:importantForAccessibility="no"
             android:visibility="gone" />
 
@@ -190,9 +218,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:accessibilityLiveRegion="polite"
-            android:text="@string/out_of_stock"
-            android:textAppearance="@style/TextAppearance.KopiHarmoni.TitleMedium"
-            android:textColor="@color/white"
+            android:background="@color/md_surface"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="@string/sold_out"
+            android:textAppearance="@style/TextAppearance.KopiHarmoni.LabelLarge"
+            android:textColor="@color/status_void"
+            android:textStyle="bold"
             android:visibility="gone" />
 
     </FrameLayout>

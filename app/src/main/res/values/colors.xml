@@ -1,70 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- ===== Material 3 color roles (warm coffee / latte palette) ===== -->
-    <color name="md_primary">#4E342E</color>
+    <!-- ===== Cafe POS palette (light) ===== -->
+    <color name="md_primary">#B23F20</color>
     <color name="md_on_primary">#FFFFFF</color>
-    <color name="md_primary_container">#D7CCC8</color>
-    <color name="md_on_primary_container">#36201A</color>
-    <color name="md_secondary">#795548</color>
+    <color name="md_primary_container">#F6D9D0</color>
+    <color name="md_on_primary_container">#3A1A12</color>
+    <color name="md_secondary">#7A5E54</color>
     <color name="md_on_secondary">#FFFFFF</color>
-    <color name="md_secondary_container">#E3D7D2</color>
-    <color name="md_on_secondary_container">#3B2B25</color>
-    <color name="md_tertiary">#BF360C</color>
+    <color name="md_secondary_container">#F0DCD2</color>
+    <color name="md_on_secondary_container">#2A1810</color>
+    <color name="md_tertiary">#B23F20</color>
     <color name="md_on_tertiary">#FFFFFF</color>
-    <color name="md_tertiary_container">#FFDBC8</color>
-    <color name="md_on_tertiary_container">#3B0D00</color>
-    <color name="md_error">#BA1A1A</color>
+    <color name="md_tertiary_container">#F6D9D0</color>
+    <color name="md_on_tertiary_container">#3A1A12</color>
+    <color name="md_error">#A32D2D</color>
     <color name="md_on_error">#FFFFFF</color>
-    <color name="md_error_container">#FFDAD6</color>
-    <color name="md_on_error_container">#410002</color>
-    <color name="md_surface">#FFF8F5</color>
-    <color name="md_on_surface">#221A17</color>
-    <color name="md_surface_variant">#F0E1DA</color>
-    <color name="md_on_surface_variant">#50443F</color>
-    <color name="md_outline">#83736C</color>
-    <color name="md_outline_variant">#D4C3BB</color>
-    <color name="md_background">#FFF8F5</color>
-    <color name="md_on_background">#221A17</color>
-    <color name="md_inverse_surface">#382E2A</color>
-    <color name="md_inverse_on_surface">#FFEDE5</color>
+    <color name="md_error_container">#F9DEDC</color>
+    <color name="md_on_error_container">#410E0B</color>
+
+    <color name="md_surface">#FFFFFF</color>
+    <color name="md_on_surface">#3A2620</color>
+    <color name="md_surface_variant">#EDE0DB</color>
+    <color name="md_on_surface_variant">#7A5E54</color>
+    <color name="md_outline">#E6D3CB</color>
+    <color name="md_outline_variant">#E6D3CB</color>
+    <color name="outline_strong">#D9C2B8</color>
+    <color name="md_background">#FCF6F3</color>
+    <color name="md_on_background">#3A2620</color>
+    <color name="md_inverse_surface">#3E2A25</color>
+    <color name="md_inverse_on_surface">#FCF6F3</color>
     <color name="md_inverse_primary">#FFB59A</color>
 
-    <!-- Tonal surface elevations (M3 surfaceContainer scale) -->
-    <color name="md_surface_dim">#E8D9D3</color>
-    <color name="md_surface_bright">#FFF8F5</color>
+    <color name="md_surface_dim">#E6D3CB</color>
+    <color name="md_surface_bright">#FFFFFF</color>
     <color name="md_surface_container_lowest">#FFFFFF</color>
-    <color name="md_surface_container_low">#FFF1EB</color>
-    <color name="md_surface_container">#F9E9E2</color>
-    <color name="md_surface_container_high">#F3E3DC</color>
-    <color name="md_surface_container_highest">#EDDED7</color>
+    <color name="md_surface_container_low">#FCF6F3</color>
+    <color name="md_surface_container">#F7ECE7</color>
+    <color name="md_surface_container_high">#EDE0DB</color>
+    <color name="md_surface_container_highest">#E6D3CB</color>
 
     <color name="shadow">#000000</color>
     <color name="scrim">#000000</color>
 
-    <!-- ===== Brand / legacy palette (kept in sync with the M3 roles) ===== -->
-    <color name="primary">#4E342E</color>
-    <color name="primary_dark">#36201A</color>
-    <color name="primary_light">#8D6E63</color>
-    <color name="secondary">#795548</color>
-    <color name="secondary_dark">#4E342E</color>
-    <color name="accent">#BF360C</color>
+    <!-- ===== Brand / legacy palette ===== -->
+    <color name="primary">#3E2A25</color>
+    <color name="primary_dark">#2B1B17</color>
+    <color name="primary_light">#7A5E54</color>
+    <color name="secondary">#7A5E54</color>
+    <color name="secondary_dark">#3E2A25</color>
+    <color name="accent">#B23F20</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="text_primary">#221A17</color>
-    <color name="text_secondary">#6E5D56</color>
-    <color name="divider">#E0D0C8</color>
-    <color name="bg_light">#F6EAE3</color>
+    <color name="text_primary">#3A2620</color>
+    <color name="text_secondary">#7A5E54</color>
+    <color name="divider">#E6D3CB</color>
+    <color name="bg_light">#FCF6F3</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="row_even">#FFFFFF</color>
-    <color name="row_odd">#F5E9E2</color>
+    <color name="row_odd">#FCF6F3</color>
     <color name="status_confirmed">#B26A00</color>
-    <color name="status_paid">#2E7D32</color>
-    <color name="status_void">#BA1A1A</color>
-    <color name="blue_action">#00639B</color>
-    <color name="gray_button">#83736B</color>
+    <color name="status_paid">#2E7D4F</color>
+    <color name="status_void">#A32D2D</color>
+    <color name="blue_action">#7A5E54</color>
+    <color name="gray_button">#7A5E54</color>
 
     <!-- Overlay tints -->
-    <color name="scrim_overlay">#4D000000</color>
-    <color name="accent_container">#FFDBC8</color>
+    <color name="scrim_overlay">#66000000</color>
+    <color name="accent_container">#F6D9D0</color>
+
+    <!-- Orders screen tokens -->
+    <color name="sidebar_bg">#2B2422</color>
+    <color name="sidebar_text">#F7F0EB</color>
+    <color name="sidebar_text_muted">#C9B8AE</color>
+    <color name="payment_unpaid_bg">#FFF1D6</color>
+    <color name="payment_badge_bg">#F3ECE6</color>
+    <color name="status_paid_bg">#E3F3E8</color>
+    <color name="status_confirmed_bg">#FFF1D6</color>
+    <color name="status_void_bg">#F9DEDC</color>
 </resources>

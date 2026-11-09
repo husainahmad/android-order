@@ -38,7 +38,6 @@ public class SalesReportAdapter extends RecyclerView.Adapter<SalesReportAdapter.
     @Override
     public void onBindViewHolder(@NonNull ReportHolder holder, int position) {
         SalesReportRow row = rows.get(position);
-        holder.itemView.setBackgroundResource(position % 2 == 0 ? R.color.row_even : R.color.row_odd);
         holder.category.setText(row.getCategoryName());
         holder.product.setText(row.getProductName());
         holder.qty.setText(String.valueOf(row.getQuantity()));
